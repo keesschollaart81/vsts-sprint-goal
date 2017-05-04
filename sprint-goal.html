@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <title>Web Context</title>
+    <script src="node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <style>
+        .form-inline {
+            display: table;
+            font-size: 14px;
+        }
+        
+        .form-inline .form-pair {
+            display: table-row;
+        }
+        
+        .form-inline .form-key {
+            display: table-cell;
+            vertical-align: top;
+            padding: 6px 16px 0px 10px;
+            font-weight: bold
+        }
+        
+        .form-inline .form-value {
+            display: table-cell;
+            padding-top: 6px;
+        }
+        
+        .notes-grid-container {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .notes-grid {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformScripts: true,
+            usePlatformStyles: true,
+            moduleLoaderConfig: {
+                paths: {
+                    "dataStorage": "scripts"
+                }
+            }
+        });
+ 
+        VSS.ready(function () {
+
+            require(["dataStorage/sprint-goal"], function (sg) {
+                var asd = new sg.SprintGoal();
+
+                VSS.notifyLoadSucceeded();
+            });
+
+        });
+    </script>
+    <div class="sprintGoalInTabLabel">
+        <label>Show sprint goal in tab label</label>
+        <input id="sprintGoalInTabLabel" type="checkbox" />
+    </div>
+
+    <div class="goal">
+        <label>Goal</label>
+        <input id="goal" />
+    </div>
+
+    <br />
+    <button class="saveButton">Save</button>
+    </div>
+</body>
+
+</html>

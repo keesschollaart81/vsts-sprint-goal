@@ -1,0 +1,90 @@
+{
+    "manifestVersion": 1,
+    "id": "sprint-goal",
+    "name": "Sprint Goal",
+    "version": "1.0.35",
+    "publisher": "keesschollaart",
+    "public": false,
+    "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "description": "This extension enables you to set a sprint goal",
+    "categories": [
+        "Plan and track"
+    ],
+    "tags": [
+        "sprint",
+        "goal"
+    ],
+    "screenshots": [ 
+    ],
+    "content": {
+        "details": {
+            "path": "readme.md"
+        },
+        "license": {
+            "path": "LICENSE"
+        }
+    },
+    "links": {
+        "getstarted": {
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+        },
+        "support": {
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+        }
+    },
+    "branding": {
+        "color": "rgb(216, 224, 240)",
+        "theme": "light"
+    },
+    "icons": {
+        "default": "images/icon.png",
+        "large":"images/icon-large.png"
+    },
+    "files": [
+        {
+            "path": "sprint-goal.html",
+            "addressable": true
+        }, 
+        {
+            "path": "images/icon.png",
+            "addressable": true
+        },
+        {
+            "path": "images/icon-large.png",
+            "addressable": true
+        },     
+        {
+            "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true
+        }   ,     
+        {
+            "path": "scripts",
+            "addressable": true
+        }    
+    ],
+    "contributions": [
+        {
+            "id": "iteration-backlog-tab",
+            "type": "ms.vss-web.tab",
+            "description": "Adds a tab to the Iteration Backlog page.",
+            "targets": [
+                "ms.vss-work-web.iteration-backlog-tabs"
+            ],
+            "properties": {
+                "name": "Sprint Goal",
+                "title": "Sprint Goal Tab",
+                "uri": "sprint-goal.html",
+                "dynamic": true
+            }
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+    }
+}
