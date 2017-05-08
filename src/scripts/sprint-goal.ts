@@ -5,7 +5,10 @@ import TFS_Build_Contracts = require("TFS/Build/Contracts");
 import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 
 export class SprintGoal {
+    private iterationId: number;
+
     constructor() {
+        console.log('constructor');
         if (VSS.getContribution().type === "ms.vss-web.tab") {
             VSS.register(VSS.getContribution().id, {
                 pageTitle: this.getTabTitle,
@@ -17,13 +20,14 @@ export class SprintGoal {
         }
 
         $('.saveButton').on('click', (eventObject) => {
-            this.saveSettings(); 
+            this.saveSettings(this.iterationId);
         });
 
-        this.getSettings(); 
+        this.getSettings(this.iterationId);
 
     }
     public getTabTitle(tabContext) {
+        console.log('getTabTitle');
         if (tabContext && tabContext.iterationId) {
             return "Goal " + tabContext.iterationId.substr(0, 5) + "";
         } else {
@@ -31,31 +35,23 @@ export class SprintGoal {
             return "Goal";
         }
     }
-    public saveSettings() {
-        const sprintGoalInTabLabel = ;
-         const sprintConfig = {
-            val1: $("#sprintGoalInTabLabel").prop("checked"),
-            val2: $("#goal").val()
+    public saveSettings(iterationId: number) {
+        console.log('saveSettings');
+        const sprintConfig = {
+            sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
+            goal: $("#goal").val()
         };
         VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: Extension_Data.ExtensionDataService) => {
-            dataService.setValue("booleanValue", boolValue, { scopeType: scope }).then((value: boolean) => {
-            });
-            dataService.setValue("numberValue", numValue, { scopeType: scope }).then((value: number) => {
-            });
-            dataService.setValue("objectValue", objValue, { scopeType: scope }).then((value: any) => {
+            dataService.setValue("sprintConfig." + iterationId, sprintConfig).then((value: object) => {
             });
         });
     }
-    public getSettings(scope: string, selector: string) {
+    public getSettings(iterationId: number) {
+        console.log('getSettings');
         VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: Extension_Data.ExtensionDataService) => {
-            const boolPromise = dataService.getValue("booleanValue", { scopeType: scope });
-            const numPromise = dataService.getValue("numberValue", { scopeType: scope });
-            const objPromise = dataService.getValue("objectValue", { scopeType: scope });
-            Q.all([boolPromise, numPromise, objPromise]).spread((boolValue: boolean, numValue: number, objValue: any) => {
-                $(selector + " .booleanValue").prop("checked", boolValue);
-                $(selector + " .numberValue").val(numValue ? numValue.toString() : "");
-                $(selector + " .objectValue1").val(objValue ? objValue.val1 : "");
-                $(selector + " .objectValue2").val(objValue ? objValue.val2 : "");
+            Q.when(dataService.getValue("sprintConfig." + iterationId), (object: any) => {
+                $("#sprintGoalInTabLabel").prop("checked", object.sprintGoalInTabLabel);
+                    $("#goal").val(object.goal)
             });
         });
     }

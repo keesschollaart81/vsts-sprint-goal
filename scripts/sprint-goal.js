@@ -4,6 +4,7 @@ define(["require", "exports", "q"], function (require, exports, Q) {
     var SprintGoal = (function () {
         function SprintGoal() {
             var _this = this;
+            console.log('constructor');
             if (VSS.getContribution().type === "ms.vss-web.tab") {
                 VSS.register(VSS.getContribution().id, {
                     pageTitle: this.getTabTitle,
@@ -14,13 +15,12 @@ define(["require", "exports", "q"], function (require, exports, Q) {
                 });
             }
             $('.saveButton').on('click', function (eventObject) {
-                _this.saveSettings("User", ".user");
-                _this.saveSettings("Default", ".default");
+                _this.saveSettings(_this.iterationId);
             });
-            this.getSettings("User", ".user");
-            this.getSettings("Default", ".default");
+            this.getSettings(this.iterationId);
         }
         SprintGoal.prototype.getTabTitle = function (tabContext) {
+            console.log('getTabTitle');
             if (tabContext && tabContext.iterationId) {
                 return "Goal " + tabContext.iterationId.substr(0, 5) + "";
             }
@@ -29,32 +29,23 @@ define(["require", "exports", "q"], function (require, exports, Q) {
                 return "Goal";
             }
         };
-        SprintGoal.prototype.saveSettings = function (scope, selector) {
-            var boolValue = $(selector + " .booleanValue").prop("checked");
-            var numValue = parseInt($(selector + " .numberValue").val());
-            var objValue = {
-                val1: $(selector + " .objectValue1").val(),
-                val2: $(selector + " .objectValue2").val()
+        SprintGoal.prototype.saveSettings = function (iterationId) {
+            console.log('saveSettings');
+            var sprintConfig = {
+                sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
+                goal: $("#goal").val()
             };
             VSS.getService(VSS.ServiceIds.ExtensionData).then(function (dataService) {
-                dataService.setValue("booleanValue", boolValue, { scopeType: scope }).then(function (value) {
-                });
-                dataService.setValue("numberValue", numValue, { scopeType: scope }).then(function (value) {
-                });
-                dataService.setValue("objectValue", objValue, { scopeType: scope }).then(function (value) {
+                dataService.setValue("sprintConfig." + iterationId, sprintConfig).then(function (value) {
                 });
             });
         };
-        SprintGoal.prototype.getSettings = function (scope, selector) {
+        SprintGoal.prototype.getSettings = function (iterationId) {
+            console.log('getSettings');
             VSS.getService(VSS.ServiceIds.ExtensionData).then(function (dataService) {
-                var boolPromise = dataService.getValue("booleanValue", { scopeType: scope });
-                var numPromise = dataService.getValue("numberValue", { scopeType: scope });
-                var objPromise = dataService.getValue("objectValue", { scopeType: scope });
-                Q.all([boolPromise, numPromise, objPromise]).spread(function (boolValue, numValue, objValue) {
-                    $(selector + " .booleanValue").prop("checked", boolValue);
-                    $(selector + " .numberValue").val(numValue ? numValue.toString() : "");
-                    $(selector + " .objectValue1").val(objValue ? objValue.val1 : "");
-                    $(selector + " .objectValue2").val(objValue ? objValue.val2 : "");
+                Q.when(dataService.getValue("sprintConfig." + iterationId), function (object) {
+                    $("#sprintGoalInTabLabel").prop("checked", object.sprintGoalInTabLabel);
+                    $("#goal").val(object.goal);
                 });
             });
         };
