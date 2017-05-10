@@ -3,11 +3,6 @@
 <head>
     <title>Web Context</title>
     <script src="node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
-
-</head>
-
-<body>
-
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
@@ -30,20 +25,38 @@
 
         });
     </script>
-    <div id="vss-extension">
-        <div class="sprintGoalInTabLabel">
-            <label>Show sprint goal in tab label</label>
-            <input id="sprintGoalInTabLabel" type="checkbox" />
-        </div>
+    <style type="text/css">
+        #vss-extension {
+            padding: 20px;
+        }
 
-        <div class="goal">
-            <label>Goal</label>
-            <input id="goal" />
-        </div>
+        .goal {
+            margin-top: 20px;
+        }
 
-        <br />
-        <button class="saveButton">Save</button>
-    </div>
+        #goal {
+            padding: 10px;
+            font-weight: bold;
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sprint-goal">
+        <div class="toolbar"></div>
+        <div id="vss-extension">
+
+            <div class="sprintGoalInTabLabel">
+                <input id="sprintGoalInTabLabel" type="checkbox" />
+                <label for="sprintGoalInTabLabel">Show sprint goal in tab label <i>(Need to refresh page after save!)</i></label>
+            </div>
+
+            <div class="goal">
+                <label>Set your goal for this sprint:</label><br/>
+                <input id="goal" />
+            </div>
+        </div>
     </div>
 </body>
 

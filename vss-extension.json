@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "1.0.37",
+    "version": "1.0.55",
     "publisher": "keesschollaart",
     "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -17,9 +17,16 @@
     ],
     "tags": [
         "sprint",
-        "goal"
+        "goal",
+        "scrum"
     ],
-    "screenshots": [ 
+    "screenshots": [
+        {
+            "path": "images/screenshots-vsts-sprint-goal-1.png"
+        },
+        {
+            "path": "images/screenshots-vsts-sprint-goal-2.png"
+        }
     ],
     "content": {
         "details": {
@@ -43,13 +50,13 @@
     },
     "icons": {
         "default": "images/icon.png",
-        "large":"images/icon-large.png"
+        "large": "images/icon-large.png"
     },
     "files": [
         {
             "path": "sprint-goal.html",
             "addressable": true
-        }, 
+        },
         {
             "path": "images/icon.png",
             "addressable": true
@@ -57,15 +64,15 @@
         {
             "path": "images/icon-large.png",
             "addressable": true
-        },     
+        },
         {
             "path": "node_modules/vss-web-extension-sdk/lib",
             "addressable": true
-        }   ,     
+        },
         {
             "path": "scripts",
             "addressable": true
-        }    
+        }
     ],
     "contributions": [
         {
