@@ -39,17 +39,28 @@
             font-weight: bold;
             width: 500px;
         }
+
+        #saveMessage {
+            border: 1px solid #f4ce42;
+            background-color: #fff2c4;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 4px;
+            display: none;
+        }
     </style>
 </head>
 
 <body>
     <div id="sprint-goal">
         <div class="toolbar"></div>
+        <div id="saveMessage">Sprint Goal saved, you have to reload the page for changes to take effect.</div>
         <div id="vss-extension">
 
             <div class="sprintGoalInTabLabel">
                 <input id="sprintGoalInTabLabel" type="checkbox" />
-                <label for="sprintGoalInTabLabel">Show sprint goal in tab label <i>(Need to refresh page after save!)</i></label>
+                <label for="sprintGoalInTabLabel">Show sprint goal in tab label</label>
             </div>
 
             <div class="goal">
