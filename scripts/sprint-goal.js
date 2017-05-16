@@ -15,7 +15,7 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                     target: $("#sprint-goal"),
                     cancellable: false,
                     backgroundColor: "#ffffff",
-                    message: "Saving your Sprint Goal..",
+                    message: "Processing your Sprint Goal..",
                     showDelay: 0
                 };
                 _this.waitControl = Controls.create(StatusIndicator.WaitControl, $("#sprint-goal"), waitControlOptions);
