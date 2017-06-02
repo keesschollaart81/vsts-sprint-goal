@@ -20,14 +20,6 @@
         "goal",
         "scrum"
     ],
-    // "screenshots": [
-    //     {
-    //         "path": "images/screenshots-vsts-sprint-goal-3.png"
-    //     },
-    //     {
-    //         "path": "images/screenshots-vsts-sprint-goal-4.png"
-    //     }
-    // ],
     "content": {
         "details": {
             "path": "readme.md"
