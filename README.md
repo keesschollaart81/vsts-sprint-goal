@@ -17,6 +17,10 @@ After setting the sprint goal, the goal can is shown in the tabname on every pag
 ## Known Bugs
 
 - First time someone (else) loads the sprint page, the sprint goal is not shown in the tab label.
+- Tab title does not work in TFS (VSTS Only) and also only works when cookies are available
+
+## Links
 
 [VSTS Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.sprint-goal)
+
 [Github](https://github.com/keesschollaart81/vsts-sprint-goal)
