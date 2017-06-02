@@ -82,6 +82,10 @@ export class SprintGoal {
             this.log("getTabTitle: tabContext or tabContext.iterationId empty");
             return "Goal";
         }
+        if (!this.checkCookie()) {
+            this.log("getTabTitle: no cookie support: simple tab title!");
+            return "Goal";
+        }
         this.iterationId = tabContext.iterationId;
         var sprintGoalCookie = this.getSprintGoalFromCookie();
 
@@ -90,6 +94,7 @@ export class SprintGoal {
             // todo: this call will not return sync. And/but we cannot wait here for the result
             // because this code run every time the tab is visible (board, capacity, etc.) and we do not want to be blocking and slow down those pages
             // this way, we at least fetch the values from the server (in the 'background') and persist them in a cookie for the next page view
+
             var promise = this.getSettings(true)
                 .then((settings) => {
                     // if (settings.sprintGoalInTabLabel && settings.goal != null) {
@@ -99,7 +104,7 @@ export class SprintGoal {
             return "Goal";
         }
 
-        if (sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
+        if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
             this.log("getTabTitle: loaded title from cookie");
             return "Goal: " + sprintGoalCookie.goal.substr(0, 60);
         }
@@ -147,7 +152,9 @@ export class SprintGoal {
         if (this.waitControl) this.waitControl.startWait();
         var currentGoalInCookie = this.getSprintGoalFromCookie();
 
-        if (forceReload || !currentGoalInCookie) {
+        var cookieSupport = this.checkCookie();
+
+        if (forceReload || !currentGoalInCookie || !cookieSupport) {
             return VSS.getService(VSS.ServiceIds.ExtensionData)
                 .then((dataService: Extension_Data.ExtensionDataService) => {
                     this.log('getSettings: ExtensionData Service Loaded');
@@ -173,8 +180,18 @@ export class SprintGoal {
     }
 
     public fillForm = (sprintGoal: SprintGoalDto) => {
-        $("#sprintGoalInTabLabel").prop("checked", sprintGoal.sprintGoalInTabLabel);
-        $("#goal").val(sprintGoal.goal)
+        if (!this.checkCookie()) {
+            $("#cookieWarning").show();
+        }
+        if (!sprintGoal) {
+            $("#sprintGoalInTabLabel").prop("checked", false);
+            $("#goal").val("")
+        }
+        else {
+            $("#sprintGoalInTabLabel").prop("checked", sprintGoal.sprintGoalInTabLabel);
+            $("#goal").val(sprintGoal.goal)
+
+        }
     }
 
     public setCookie = (key, value) => {
@@ -188,6 +205,10 @@ export class SprintGoal {
         return keyValue ? keyValue[2] : null;
     }
 
+    public checkCookie = (): boolean => {
+        document.cookie = "testcookie";
+        return document.cookie.indexOf("testcookie") != -1;
+    }
     private log = (message: string, object: any = null) => {
         if (object) {
             console.log(message, object);
