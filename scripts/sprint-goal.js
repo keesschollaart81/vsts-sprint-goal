@@ -48,10 +48,10 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                     _this.log("getTabTitle: tabContext or tabContext.iterationId empty");
                     return "Goal";
                 }
-                if (!_this.checkCookie()) {
-                    _this.log("getTabTitle: no cookie support: simple tab title!");
-                    return "Goal";
-                }
+                // if (!this.checkCookie()) {
+                //     this.log("getTabTitle: no cookie support: simple tab title!");
+                //     return "Goal";
+                // }
                 _this.iterationId = tabContext.iterationId;
                 var sprintGoalCookie = _this.getSprintGoalFromCookie();
                 if (!sprintGoalCookie) {

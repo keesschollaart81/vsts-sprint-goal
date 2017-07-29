@@ -82,10 +82,10 @@ export class SprintGoal {
             this.log("getTabTitle: tabContext or tabContext.iterationId empty");
             return "Goal";
         }
-        if (!this.checkCookie()) {
-            this.log("getTabTitle: no cookie support: simple tab title!");
-            return "Goal";
-        }
+        // if (!this.checkCookie()) {
+        //     this.log("getTabTitle: no cookie support: simple tab title!");
+        //     return "Goal";
+        // }
         this.iterationId = tabContext.iterationId;
         var sprintGoalCookie = this.getSprintGoalFromCookie();
 
