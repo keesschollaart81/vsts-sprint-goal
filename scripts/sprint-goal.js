@@ -48,6 +48,10 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                     _this.log("getTabTitle: tabContext or tabContext.iterationId empty");
                     return "Goal";
                 }
+                if (!_this.checkCookie()) {
+                    _this.log("getTabTitle: no cookie support: simple tab title!");
+                    return "Goal";
+                }
                 _this.iterationId = tabContext.iterationId;
                 var sprintGoalCookie = _this.getSprintGoalFromCookie();
                 if (!sprintGoalCookie) {
@@ -63,7 +67,7 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                     });
                     return "Goal";
                 }
-                if (sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
+                if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
                     _this.log("getTabTitle: loaded title from cookie");
                     return "Goal: " + sprintGoalCookie.goal.substr(0, 60);
                 }
@@ -109,7 +113,8 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                 if (_this.waitControl)
                     _this.waitControl.startWait();
                 var currentGoalInCookie = _this.getSprintGoalFromCookie();
-                if (forceReload || !currentGoalInCookie) {
+                var cookieSupport = _this.checkCookie();
+                if (forceReload || !currentGoalInCookie || !cookieSupport) {
                     return VSS.getService(VSS.ServiceIds.ExtensionData)
                         .then(function (dataService) {
                         _this.log('getSettings: ExtensionData Service Loaded');
@@ -134,13 +139,26 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
                 }
             };
             this.fillForm = function (sprintGoal) {
-                $("#sprintGoalInTabLabel").prop("checked", sprintGoal.sprintGoalInTabLabel);
-                $("#goal").val(sprintGoal.goal);
+                if (!_this.checkCookie()) {
+                    $("#cookieWarning").show();
+                }
+                if (!sprintGoal) {
+                    $("#sprintGoalInTabLabel").prop("checked", false);
+                    $("#goal").val("");
+                }
+                else {
+                    $("#sprintGoalInTabLabel").prop("checked", sprintGoal.sprintGoalInTabLabel);
+                    $("#goal").val(sprintGoal.goal);
+                }
             };
             this.setCookie = function (key, value) {
                 var expires = new Date();
                 expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
                 document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=.vsassets.io;path=/';
+            };
+            this.checkCookie = function () {
+                document.cookie = "testcookie";
+                return document.cookie.indexOf("testcookie") != -1;
             };
             this.log = function (message, object) {
                 if (object === void 0) { object = null; }
