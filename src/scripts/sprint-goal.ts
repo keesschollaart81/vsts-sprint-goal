@@ -197,7 +197,7 @@ export class SprintGoal {
     public setCookie = (key, value) => {
         var expires = new Date();
         expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=.vsassets.io;path=/';
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=sprintgoaldev.blob.core.windows.net;path=/';
     }
 
     public getCookie(key) {
@@ -206,8 +206,9 @@ export class SprintGoal {
     }
 
     public checkCookie = (): boolean => {
-        document.cookie = "testcookie";
-        return document.cookie.indexOf("testcookie") != -1;
+        this.setCookie("testcookie", true);
+        var success = (this.getCookie("testcookie") == "true"); 
+        return success;
     }
     private log = (message: string, object: any = null) => {
         if (object) {

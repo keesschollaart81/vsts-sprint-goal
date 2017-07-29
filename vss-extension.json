@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "1.3.5",
+    "version": "1.3.7",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -62,7 +62,7 @@
             "addressable": true
         }
     ],
-     "baseUri": "http://sprintgoaldev.blob.core.windows.net/sprintgoaldev",
+     "baseUri": "https://sprintgoaldev.blob.core.windows.net/sprintgoaldev",
     "contributions": [
         {
             "id": "iteration-backlog-tab",
