@@ -82,23 +82,6 @@
                         ],
                         "isCompressionEnabled": true
                     },
-                    "resources": [
-                        {
-                            "type": "Microsoft.Cdn/profiles/endpoints/origins",
-                            "name": "[concat(variables('cdnProfileName'),'/',variables('cdnProfileEndpointName'),'/',variables('cdnProfileEndpointOriginName'))]",
-                            "apiVersion": "2016-04-02",
-                            "scale": null,
-                            "properties": {
-                                "hostName": "[concat(variables('storageAccountName'),'.blob.core.windows.net')]",
-                                "httpPort": null,
-                                "httpsPort": null
-                            },
-                            "dependsOn": [
-                                "[resourceId('Microsoft.Cdn/profiles', variables('cdnProfileName'))]",
-                                "[resourceId('Microsoft.Cdn/profiles/endpoints', variables('cdnProfileName'), variables('cdnProfileEndpointName'))]"
-                            ]
-                        }
-                    ],
                     "dependsOn": [
                         "[resourceId('Microsoft.Cdn/profiles', variables('cdnProfileName'))]"
                     ]
