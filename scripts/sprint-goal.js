@@ -154,7 +154,7 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
             this.setCookie = function (key, value) {
                 var expires = new Date();
                 expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-                document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
+                document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=sprintgoaldev.blob.core.windows.net;path=/';
             };
             this.checkCookie = function () {
                 _this.setCookie("testcookie", true);
