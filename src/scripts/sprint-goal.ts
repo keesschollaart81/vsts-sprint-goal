@@ -14,9 +14,12 @@ export class SprintGoalDto {
 
 export class SprintGoal {
     private iterationId: number;
+    private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
     constructor() {
+        var context = VSS.getExtensionContext();
+        this.storageUri = this.getLocation(context.baseUri).hostname;
 
         var config = VSS.getConfiguration();
         this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
@@ -50,6 +53,12 @@ export class SprintGoal {
             showDelay: 0
         };
         this.waitControl = Controls.create(StatusIndicator.WaitControl, $("#sprint-goal"), waitControlOptions);
+    }
+
+    private getLocation = (href: string): HTMLAnchorElement => {
+        var l = document.createElement("a");
+        l.href = href;
+        return l;
     }
 
     private buildMenuBar = () => {
@@ -197,7 +206,7 @@ export class SprintGoal {
     public setCookie = (key, value) => {
         var expires = new Date();
         expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=sprintgoaldev.blob.core.windows.net;path=/';
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=' + this.storageUri + ';path=/';
     }
 
     public getCookie(key) {
@@ -207,7 +216,7 @@ export class SprintGoal {
 
     public checkCookie = (): boolean => {
         this.setCookie("testcookie", true);
-        var success = (this.getCookie("testcookie") == "true"); 
+        var success = (this.getCookie("testcookie") == "true");
         return success;
     }
     private log = (message: string, object: any = null) => {
