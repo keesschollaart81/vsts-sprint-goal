@@ -62,7 +62,7 @@
             "addressable": true
         }
     ],
-     "baseUri": "https://sprintgoaldev.blob.core.windows.net/sprintgoaldev",
+     "baseUri": "<<baseuri>>",
     "contributions": [
         {
             "id": "iteration-backlog-tab",
