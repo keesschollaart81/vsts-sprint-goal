@@ -101,7 +101,7 @@
         },
         "cdnProfileEndpointHostname": {
             "type": "string",
-            "value": "[reference(concat(variables('cdnProfileName'),'/',variables('cdnProfileEndpointName'))).hostName]"
+            "value": "[reference(concat('Microsoft.Cdn/profiles/endpoints/',variables('cdnProfileName'),'/',variables('cdnProfileEndpointName'))).hostName]"
         }
     }
 }
