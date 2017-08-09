@@ -162,7 +162,7 @@ define(["require", "exports", "q", "VSS/Controls", "VSS/Controls/Menus", "VSS/Co
             };
             this.log = function (message, object) {
                 if (object === void 0) { object = null; }
-                if (object) {
+                if (object && window.console) {
                     console.log(message, object);
                     return;
                 }
