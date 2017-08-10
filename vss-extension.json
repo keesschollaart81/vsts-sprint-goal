@@ -46,7 +46,7 @@
     },
     "files": [
         {
-            "path": "sprint-goal.html",
+            "path": "src/sprint-goal.html",
             "addressable": true
         },
         {
@@ -74,7 +74,7 @@
             "properties": {
                 "name": "Sprint Goal",
                 "title": "Sprint Goal Tab",
-                "uri": "sprint-goal.html",
+                "uri": "src/sprint-goal.html",
                 "dynamic": true
             }
         }
