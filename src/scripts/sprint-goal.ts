@@ -220,6 +220,8 @@ export class SprintGoal {
         return success;
     }
     private log = (message: string, object: any = null) => {
+       if (!window.console) return;
+       
         if (object) {
             console.log(message, object);
             return;
