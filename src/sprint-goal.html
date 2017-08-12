@@ -30,17 +30,18 @@
             padding: 20px;
         }
 
-        .goal {
+        .goal,
+        .teamgoal {
             margin-top: 20px;
         }
 
-        #goal {
+        #goal,
+        #teamgoal {
             padding: 10px;
             font-weight: bold;
             width: 500px;
         }
 
-        #saveMessage,
         #cookieWarning {
             border: 1px solid #f4ce42;
             background-color: #fff2c4;
@@ -56,18 +57,19 @@
 <body>
     <div id="sprint-goal">
         <div class="toolbar"></div>
-        <div id="saveMessage">Sprint Goal saved, you have to reload the page for changes to take effect.</div>
         <div id="vss-extension">
-
             <div class="sprintGoalInTabLabel">
                 <input id="sprintGoalInTabLabel" type="checkbox" />
                 <label for="sprintGoalInTabLabel">Show sprint goal in tab label</label>
                 <span id="cookieWarning">This only work with VSTS and when Cookies are enabled!</span>
             </div>
-
             <div class="goal">
                 <label>Set your goal for this sprint:</label><br/>
                 <input id="goal" />
+            </div>
+            <div class="teamgoal">
+                <label>Set your goal for this sprint:</label><br/>
+                <input id="teamgoal" />
             </div>
         </div>
     </div>

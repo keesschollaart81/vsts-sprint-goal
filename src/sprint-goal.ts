@@ -14,12 +14,14 @@ export class SprintGoalDto {
 
 export class SprintGoal {
     private iterationId: number;
+    private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
     constructor() {
         var context = VSS.getExtensionContext();
         this.storageUri = this.getLocation(context.baseUri).hostname;
+        this.teamId = VSS.getWebContext().team.id;
 
         var config = VSS.getConfiguration();
         this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
@@ -72,7 +74,9 @@ export class SprintGoal {
                 switch (command) {
                     case "save":
                         this.saveSettings().then(() => {
-                            $("#saveMessage").show();
+                            VSS.getService(VSS.ServiceIds.Navigation).then((navigationService: IHostNavigationService) => {
+                                navigationService.reload();
+                            });
                         });
                         break;
                     default:
@@ -91,10 +95,7 @@ export class SprintGoal {
             this.log("getTabTitle: tabContext or tabContext.iterationId empty");
             return "Goal";
         }
-        // if (!this.checkCookie()) {
-        //     this.log("getTabTitle: no cookie support: simple tab title!");
-        //     return "Goal";
-        // }
+
         this.iterationId = tabContext.iterationId;
         var sprintGoalCookie = this.getSprintGoalFromCookie();
 
@@ -124,8 +125,16 @@ export class SprintGoal {
     }
 
     public getSprintGoalFromCookie = (): SprintGoalDto => {
-        var goal = this.getCookie(this.iterationId + "goalText");
-        var sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
+        var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
+        var sprintGoalInTabLabel = false;
+        if (!goal) {
+            //for backwards compatibility (older release were saved without team identifier)
+            goal = this.getCookie(this.iterationId + "goalText");
+            sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
+        }
+        else {
+            sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
+        }
 
         if (!goal) return undefined;
 
@@ -142,13 +151,16 @@ export class SprintGoal {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
         };
-        this.setCookie(this.iterationId + "goalText", sprintConfig.goal);
-        this.setCookie(this.iterationId + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
+
+        var configIdentifier: string = this.iterationId.toString() + this.teamId;
+
+        this.setCookie(configIdentifier + "goalText", sprintConfig.goal);
+        this.setCookie(configIdentifier + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('saveSettings: ExtensionData Service Loaded');
-                return dataService.setValue("sprintConfig." + this.iterationId, sprintConfig);;
+                return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);;
             })
             .then((value: object) => {
                 this.log('saveSettings: settings saved!');
@@ -164,20 +176,18 @@ export class SprintGoal {
         var cookieSupport = this.checkCookie();
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
-            return VSS.getService(VSS.ServiceIds.ExtensionData)
-                .then((dataService: Extension_Data.ExtensionDataService) => {
-                    this.log('getSettings: ExtensionData Service Loaded');
-                    return dataService.getValue("sprintConfig." + this.iterationId);
-                })
-                .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
-                    this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
-                    if (sprintGoalDto) {
-                        this.setCookie(this.iterationId + "goalText", sprintGoalDto.goal);
-                        this.setCookie(this.iterationId + "sprintGoalInTabLabel", sprintGoalDto.sprintGoalInTabLabel);
-                    }
-                    if (this.waitControl) this.waitControl.endWait();
-                    return sprintGoalDto;
-                });
+            return this.fetchSettingsFromExtensionDataService(this.iterationId.toString() + this.teamId).then((teamSettings: SprintGoalDto): IPromise<SprintGoalDto> => {
+                if (teamSettings) {
+                    return Q.fcall((): SprintGoalDto => {
+                        // team settings
+                        return teamSettings;
+                    });
+                }
+                else {
+                    // project settings
+                    return this.fetchSettingsFromExtensionDataService(this.iterationId.toString());
+                }
+            });
         }
         else {
             return Q.fcall((): SprintGoalDto => {
@@ -186,6 +196,22 @@ export class SprintGoal {
             });
 
         }
+    }
+    private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
+        return VSS.getService(VSS.ServiceIds.ExtensionData)
+            .then((dataService: Extension_Data.ExtensionDataService) => {
+                this.log('getSettings: ExtensionData Service Loaded, get value by key: '+ key);
+                return dataService.getValue("sprintConfig." + key);
+            })
+            .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
+                this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
+                if (sprintGoalDto) {
+                    this.setCookie(key + "goalText", sprintGoalDto.goal);
+                    this.setCookie(key + "sprintGoalInTabLabel", sprintGoalDto.sprintGoalInTabLabel);
+                }
+                if (this.waitControl) this.waitControl.endWait();
+                return sprintGoalDto;
+            });
     }
 
     public fillForm = (sprintGoal: SprintGoalDto) => {
@@ -220,8 +246,8 @@ export class SprintGoal {
         return success;
     }
     private log = (message: string, object: any = null) => {
-       if (!window.console) return;
-       
+        if (!window.console) return;
+
         if (object) {
             console.log(message, object);
             return;
