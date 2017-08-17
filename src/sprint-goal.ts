@@ -157,10 +157,8 @@ export class SprintGoal {
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
 
-        this.setCookie(configIdentifier + "goalText", sprintConfig.goal);
-        this.setCookie(configIdentifier + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
-        this.setCookie(configIdentifierWithTeam + "goalText", sprintConfig.goal);
-        this.setCookie(configIdentifierWithTeam + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
+        this.updateSprintGoalCookie(configIdentifier, sprintConfig);
+        this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
@@ -187,16 +185,22 @@ export class SprintGoal {
             var configIdentifier = this.iterationId.toString();
             var configIdentifierWithTeam = this.iterationId.toString() + this.teamId;
 
-            return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamSettings: SprintGoalDto): IPromise<SprintGoalDto> => {
-                if (teamSettings) {
+            return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto): IPromise<SprintGoalDto> => {
+                if (teamGoal) {
+                    this.updateSprintGoalCookie(configIdentifier, teamGoal);
+                    this.updateSprintGoalCookie(configIdentifierWithTeam, teamGoal);
+
                     return Q.fcall((): SprintGoalDto => {
                         // team settings
-                        return teamSettings;
+                        return teamGoal;
                     });
                 }
                 else {
-                    // fallback, also for backward compatibility: project level settings
-                    return this.fetchSettingsFromExtensionDataService(configIdentifier);
+                    // fallback, also for backward compatibility: project/iteration level settings
+                    return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                        this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                        return iterationGoal;
+                    });
                 }
             });
         }
@@ -217,15 +221,14 @@ export class SprintGoal {
             })
             .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
                 this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
-                if (sprintGoalDto) {
-                    this.setCookie(key + "goalText", sprintGoalDto.goal);
-                    this.setCookie(key + "sprintGoalInTabLabel", sprintGoalDto.sprintGoalInTabLabel);
-                }
                 if (this.waitControl) this.waitControl.endWait();
                 return sprintGoalDto;
             });
     }
-
+    private updateSprintGoalCookie = (key: string, sprintGoal: SprintGoalDto) => {
+        this.setCookie(key + "goalText", sprintGoal.goal);
+        this.setCookie(key + "sprintGoalInTabLabel", sprintGoal.sprintGoalInTabLabel);
+    }
     public fillForm = (sprintGoal: SprintGoalDto) => {
         if (!this.checkCookie()) {
             $("#cookieWarning").show();
