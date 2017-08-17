@@ -21,7 +21,9 @@ export class SprintGoal {
     constructor() {
         var context = VSS.getExtensionContext();
         this.storageUri = this.getLocation(context.baseUri).hostname;
-        this.teamId = VSS.getWebContext().team.id;
+
+        var webContext = VSS.getWebContext();
+        this.teamId = webContext.team.id;
 
         var config = VSS.getConfiguration();
         this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
@@ -128,11 +130,11 @@ export class SprintGoal {
         var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
         var sprintGoalInTabLabel = false;
         if (!goal) {
-            //for backwards compatibility (older release were saved without team identifier)
             goal = this.getCookie(this.iterationId + "goalText");
             sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
         }
         else {
+            // team specific setting
             sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
         }
 
@@ -152,15 +154,21 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        var configIdentifier: string = this.iterationId.toString() + this.teamId;
+        var configIdentifier: string = this.iterationId.toString();
+        var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
 
         this.setCookie(configIdentifier + "goalText", sprintConfig.goal);
         this.setCookie(configIdentifier + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
+        this.setCookie(configIdentifierWithTeam + "goalText", sprintConfig.goal);
+        this.setCookie(configIdentifierWithTeam + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('saveSettings: ExtensionData Service Loaded');
-                return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);;
+                return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig).then((x) => {
+                    // override the project level goal, indeed: last team saving 'wins'
+                    return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);
+                });
             })
             .then((value: object) => {
                 this.log('saveSettings: settings saved!');
@@ -176,7 +184,10 @@ export class SprintGoal {
         var cookieSupport = this.checkCookie();
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
-            return this.fetchSettingsFromExtensionDataService(this.iterationId.toString() + this.teamId).then((teamSettings: SprintGoalDto): IPromise<SprintGoalDto> => {
+            var configIdentifier = this.iterationId.toString();
+            var configIdentifierWithTeam = this.iterationId.toString() + this.teamId;
+
+            return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamSettings: SprintGoalDto): IPromise<SprintGoalDto> => {
                 if (teamSettings) {
                     return Q.fcall((): SprintGoalDto => {
                         // team settings
@@ -184,8 +195,8 @@ export class SprintGoal {
                     });
                 }
                 else {
-                    // project settings
-                    return this.fetchSettingsFromExtensionDataService(this.iterationId.toString());
+                    // fallback, also for backward compatibility: project level settings
+                    return this.fetchSettingsFromExtensionDataService(configIdentifier);
                 }
             });
         }
@@ -197,10 +208,11 @@ export class SprintGoal {
 
         }
     }
+
     private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
-                this.log('getSettings: ExtensionData Service Loaded, get value by key: '+ key);
+                this.log('getSettings: ExtensionData Service Loaded, get value by key: ' + key);
                 return dataService.getValue("sprintConfig." + key);
             })
             .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
@@ -245,6 +257,7 @@ export class SprintGoal {
         var success = (this.getCookie("testcookie") == "true");
         return success;
     }
+
     private log = (message: string, object: any = null) => {
         if (!window.console) return;
 
