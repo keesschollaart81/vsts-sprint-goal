@@ -42,6 +42,10 @@ export class SprintGoal {
                 instrumentationKey: "<<AppInsightsInstrumentationKey>>",
             });
 
+            AppInsights.AppInsights.setAuthenticatedUserContext(
+                webContext.user.id,
+                webContext.collection.id);
+                
             AppInsights.AppInsights.trackPageView(
                 document.title,
                 window.location.pathname,
@@ -283,7 +287,7 @@ export class SprintGoal {
 
     private log = (message: string, object: any = null) => {
         if (!window.console) return;
-        
+
         if (this.storageUri.indexOf('dev') === -1 && this.storageUri.indexOf('acc') === -1) return;
 
         if (object) {
