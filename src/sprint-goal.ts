@@ -6,7 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import { AppInsights } from 'applicationinsights-js';
+import AppInsights = require('applicationinsights-js');
 
 export class SprintGoalDto {
     public goal: string;
@@ -38,11 +38,11 @@ export class SprintGoal {
             this.getSettings(true).then((settings) => this.fillForm(settings));
             this.buildMenuBar();
  
-            AppInsights.downloadAndSetup({
+            AppInsights.AppInsights.downloadAndSetup({
                 instrumentationKey: "<<AppInsightsInstrumentationKey>>",
             });
 
-            AppInsights.trackPageView(
+            AppInsights.AppInsights.trackPageView(
                 document.title,
                 window.location.pathname,
                 {
@@ -170,7 +170,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
  
-        AppInsights.trackEvent("SaveSettings", sprintConfig); 
+        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig); 
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;

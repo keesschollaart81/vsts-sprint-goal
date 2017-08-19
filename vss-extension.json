@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "1.6.0",
+    "version": "1.6.2",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -55,6 +55,10 @@
         },
         {
             "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/applicationinsights-js",
             "addressable": true
         },
         {
