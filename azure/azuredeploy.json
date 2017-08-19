@@ -16,7 +16,8 @@
         "storageAccountName": "[concat('vstssprintgoal',parameters('environment'),'storage')]",
         "cdnProfileName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile')]",
         "cdnProfileEndpointName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile-endpoint')]",
-        "cdnProfileEndpointOriginName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile-endpoint-origin')]"
+        "cdnProfileEndpointOriginName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile-endpoint-origin')]",
+        "applicationInsightsName": "[concat('vsts-sprint-goal-',parameters('environment'),'-appinsights')]"
     },
     "resources": [
         {
@@ -88,6 +89,18 @@
                 }
             ],
             "dependsOn": []
+        },
+         {
+            "type": "microsoft.insights/components",
+            "kind": "Node.JS",
+            "name": "[variables('applicationInsightsName')]",
+            "apiVersion": "2014-04-01",
+            "location": "westeurope",
+            "tags": {}, 
+            "properties": {
+                "ApplicationId": "[variables('applicationInsightsName')]"
+            },
+            "dependsOn": []
         }
     ],
     "outputs": {
@@ -102,6 +115,10 @@
         "cdnProfileEndpointHostname": {
             "type": "string",
             "value": "[reference(variables('cdnProfileEndpointName')).hostName]"
+        },
+        "applicationInsightsName":{
+            "type": "string",
+            "value": "variables('applicationInsightsName')]"
         }
     }
 }

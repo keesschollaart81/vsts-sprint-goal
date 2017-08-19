@@ -37,7 +37,7 @@ export class SprintGoal {
             this.buildWaitControl();
             this.getSettings(true).then((settings) => this.fillForm(settings));
             this.buildMenuBar();
- 
+
             AppInsights.AppInsights.downloadAndSetup({
                 instrumentationKey: "<<AppInsightsInstrumentationKey>>",
             });
@@ -169,8 +169,8 @@ export class SprintGoal {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
         };
- 
-        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig); 
+
+        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
