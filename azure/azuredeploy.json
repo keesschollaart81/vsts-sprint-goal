@@ -116,9 +116,9 @@
             "type": "string",
             "value": "[reference(variables('cdnProfileEndpointName')).hostName]"
         },
-        "applicationInsightsName":{
+        "applicationInsightsInstrumentationKey":{
             "type": "string",
-            "value": "variables('applicationInsightsName')]"
+            "value": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]"
         }
     }
 }
