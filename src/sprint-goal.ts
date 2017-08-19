@@ -6,6 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
+import { AppInsights } from 'applicationinsights-js';
 
 export class SprintGoalDto {
     public goal: string;
@@ -36,6 +37,20 @@ export class SprintGoal {
             this.buildWaitControl();
             this.getSettings(true).then((settings) => this.fillForm(settings));
             this.buildMenuBar();
+ 
+            AppInsights.downloadAndSetup({
+                instrumentationKey: "<<AppInsightsInstrumentationKey>>",
+            });
+
+            AppInsights.trackPageView(
+                document.title,
+                window.location.pathname,
+                {
+                    accountName: webContext.account.name,
+                    extensionId: context.extensionId,
+                    version: context.version
+                }
+            );
         }
 
         // register this 'Sprint Goal' service
@@ -148,11 +163,14 @@ export class SprintGoal {
 
     public saveSettings = (): IPromise<any> => {
         this.log('saveSettings');
+
         if (this.waitControl) this.waitControl.startWait();
         const sprintConfig = {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
         };
+ 
+        AppInsights.trackEvent("SaveSettings", sprintConfig); 
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
@@ -225,10 +243,12 @@ export class SprintGoal {
                 return sprintGoalDto;
             });
     }
+
     private updateSprintGoalCookie = (key: string, sprintGoal: SprintGoalDto) => {
         this.setCookie(key + "goalText", sprintGoal.goal);
         this.setCookie(key + "sprintGoalInTabLabel", sprintGoal.sprintGoalInTabLabel);
     }
+
     public fillForm = (sprintGoal: SprintGoalDto) => {
         if (!this.checkCookie()) {
             $("#cookieWarning").show();
