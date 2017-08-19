@@ -24,3 +24,5 @@ After setting the sprint goal, the goal can is shown in the tabname on every pag
 [VSTS Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.sprint-goal)
 
 [Github](https://github.com/keesschollaart81/vsts-sprint-goal)
+
+![Build status][https://caseonline.visualstudio.com/_apis/public/build/definitions/e3292a40-7e22-4ea2-bf37-12310b62b34a/6/badge]

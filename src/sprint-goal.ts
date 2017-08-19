@@ -50,7 +50,8 @@ export class SprintGoal {
                 document.title,
                 window.location.pathname,
                 {
-                    accountName: webContext.account.name,
+                    accountName: webContext.account.id,
+                    accountId: webContext.account.name,
                     extensionId: context.extensionId,
                     version: context.version
                 }
