@@ -45,7 +45,7 @@ export class SprintGoal {
             AppInsights.AppInsights.setAuthenticatedUserContext(
                 webContext.user.id,
                 webContext.collection.id);
-                
+
             AppInsights.AppInsights.trackPageView(
                 document.title,
                 window.location.pathname,
@@ -56,6 +56,8 @@ export class SprintGoal {
                     version: context.version
                 }
             );
+
+            this.loadEmojiPicker();
         }
 
         // register this 'Sprint Goal' service
@@ -296,6 +298,27 @@ export class SprintGoal {
             return;
         }
         console.log(message)
+    }
+
+    private loadEmojiPicker = () => {
+        this.addStylesheet('emojipicker/css/emoji.css');
+        this.addScriptTag('emojipicker/js/util.js');
+        this.addScriptTag('emojipicker/js/jquery.emojiarea.js');
+        this.addScriptTag('emojipicker/js/emoji-picker.js');
+    }
+
+    private addStylesheet = (href:string) =>{
+        var link = document.createElement('link')
+        link.setAttribute('rel', 'stylesheet')
+        link.setAttribute('type', 'text/css')
+        link.setAttribute('href', href)
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+
+    private addScriptTag = (src:string) =>{
+        var script = document.createElement('script'); 
+        script.src = src;
+        document.head.appendChild(script);
     }
 }
 

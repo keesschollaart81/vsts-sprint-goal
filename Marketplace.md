@@ -14,8 +14,9 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ### Version 2.0 - 20-08-217
 
-- Support for multiple team working on the same iteration. The first team setting the goal, sets it both on iteration level as well on team level. After this all teams share this initial goal but can set their own if they want to.
-- Support for TFS / On-Premises, note: internet connection is required for the end-user since the scripts/pages are hosted online.
+- Support for multiple team working on the same iteration. The first team setting the goal, sets it both on iteration level as well on team level. After this all teams share this initial goal but can set their own if they want to
+- Support for TFS / On-Premises, note: internet connection is required for the end-user since the scripts/pages are hosted online
+- Removed limit of 60 characters
 
 ### Version 1.0 - 02-06-2017
 

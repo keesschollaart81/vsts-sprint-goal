@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -55,6 +55,10 @@
     "files": [
         {
             "path": "src/sprint-goal.html",
+            "addressable": true
+        },
+        {
+            "path": "src/emojipicker",
             "addressable": true
         },
         {
