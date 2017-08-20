@@ -29,3 +29,8 @@ Initial Release
 ## Privacy
 
 Sprint Goal uses Application Insights to track telemetry. When: 'sprint form page loaded', 'sprint saved', data: the id's (guids) of the account, project and user.
+
+## Contact
+
+Experiencing problems, or do you have an idea? 
+Please let me know via [Twitter](https://twitter.com/keesschollaart) or by [mail](mailto:keesschollaart81@hotmail.com).
