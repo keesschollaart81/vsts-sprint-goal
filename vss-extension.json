@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -22,12 +22,20 @@
     ],
     "content": {
         "details": {
-            "path": "readme.md"
+            "path": "Marketplace.md"
         },
         "license": {
             "path": "LICENSE"
         }
     },
+    "screenshots": [
+        {
+            "path": "images/screenshots-vsts-sprint-goal-1.png"
+        },
+        {
+            "path": "images/screenshots-vsts-sprint-goal-2.png"
+        }
+    ],
     "links": {
         "getstarted": {
             "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
@@ -66,7 +74,7 @@
             "addressable": true
         }
     ],
-     "baseUri": "<<baseuri>>",
+    "baseUri": "<<baseuri>>",
     "contributions": [
         {
             "id": "iteration-backlog-tab",
