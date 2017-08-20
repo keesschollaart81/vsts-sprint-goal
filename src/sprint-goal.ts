@@ -35,7 +35,10 @@ export class SprintGoal {
 
             this.iterationId = config.iterationId;
             this.buildWaitControl();
-            this.getSettings(true).then((settings) => this.fillForm(settings));
+            this.getSettings(true).then((settings) => {
+                this.fillForm(settings); 
+                this.loadEmojiPicker();
+            });
             this.buildMenuBar();
 
             AppInsights.AppInsights.downloadAndSetup({
@@ -45,7 +48,7 @@ export class SprintGoal {
             AppInsights.AppInsights.setAuthenticatedUserContext(
                 webContext.user.id,
                 webContext.collection.id);
-                
+
             AppInsights.AppInsights.trackPageView(
                 document.title,
                 window.location.pathname,
@@ -138,7 +141,7 @@ export class SprintGoal {
 
         if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
             this.log("getTabTitle: loaded title from cookie");
-            return "Goal: " + sprintGoalCookie.goal.substr(0, 60);
+            return "Goal: " + sprintGoalCookie.goal;
         }
         else {
             this.log("getTabTitle: Cookie found but empty goal");
@@ -297,6 +300,43 @@ export class SprintGoal {
         }
         console.log(message)
     }
+
+    private loadEmojiPicker = () => {
+        this.addStylesheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
+        this.addStylesheet('emojipicker/css/emoji.css');
+        this.addScriptTag('emojipicker/js/config.js');
+        this.addScriptTag('emojipicker/js/util.js');
+        this.addScriptTag('emojipicker/js/jquery.emojiarea.js');
+        var emojiPickerScriptElement = this.addScriptTag('emojipicker/js/emoji-picker.js');
+
+        emojiPickerScriptElement.addEventListener('load', function () {
+            (<any>window).emojiPicker = new EmojiPicker({
+                emojiable_selector: '[data-emojiable=true]',
+                assetsPath: 'emojipicker/img',
+                popupButtonClasses: 'fa fa-smile-o'
+            });
+            (<any>window).emojiPicker.discover();
+        });
+    }
+
+    private addStylesheet = (href: string) => {
+        var link = document.createElement('link')
+        link.setAttribute('rel', 'stylesheet')
+        link.setAttribute('type', 'text/css')
+        link.setAttribute('href', href)
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+
+    private addScriptTag = (src: string): HTMLScriptElement => {
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        document.head.appendChild(script);
+        return script;
+    }
 }
 
+export declare class EmojiPicker {
+    constructor(params: any);
+}
 //# sourceMappingURL=extension.js.map
