@@ -6,6 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
+import AppInsights = require('applicationinsights-js');
 
 export class SprintGoalDto {
     public goal: string;
@@ -14,9 +15,16 @@ export class SprintGoalDto {
 
 export class SprintGoal {
     private iterationId: number;
+    private teamId: string;
+    private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
     constructor() {
+        var context = VSS.getExtensionContext();
+        this.storageUri = this.getLocation(context.baseUri).hostname;
+
+        var webContext = VSS.getWebContext();
+        this.teamId = webContext.team.id;
 
         var config = VSS.getConfiguration();
         this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
@@ -29,6 +37,25 @@ export class SprintGoal {
             this.buildWaitControl();
             this.getSettings(true).then((settings) => this.fillForm(settings));
             this.buildMenuBar();
+
+            AppInsights.AppInsights.downloadAndSetup({
+                instrumentationKey: "<<AppInsightsInstrumentationKey>>",
+            });
+
+            AppInsights.AppInsights.setAuthenticatedUserContext(
+                webContext.user.id,
+                webContext.collection.id);
+                
+            AppInsights.AppInsights.trackPageView(
+                document.title,
+                window.location.pathname,
+                {
+                    accountName: webContext.account.id,
+                    accountId: webContext.account.name,
+                    extensionId: context.extensionId,
+                    version: context.version
+                }
+            );
         }
 
         // register this 'Sprint Goal' service
@@ -52,6 +79,12 @@ export class SprintGoal {
         this.waitControl = Controls.create(StatusIndicator.WaitControl, $("#sprint-goal"), waitControlOptions);
     }
 
+    private getLocation = (href: string): HTMLAnchorElement => {
+        var l = document.createElement("a");
+        l.href = href;
+        return l;
+    }
+
     private buildMenuBar = () => {
         var menuItems: Menus.IMenuItemSpec[] = [
             { id: "save", text: "Save", icon: "icon-save" }
@@ -63,7 +96,9 @@ export class SprintGoal {
                 switch (command) {
                     case "save":
                         this.saveSettings().then(() => {
-                            $("#saveMessage").show();
+                            VSS.getService(VSS.ServiceIds.Navigation).then((navigationService: IHostNavigationService) => {
+                                navigationService.reload();
+                            });
                         });
                         break;
                     default:
@@ -82,10 +117,7 @@ export class SprintGoal {
             this.log("getTabTitle: tabContext or tabContext.iterationId empty");
             return "Goal";
         }
-        if (!this.checkCookie()) {
-            this.log("getTabTitle: no cookie support: simple tab title!");
-            return "Goal";
-        }
+
         this.iterationId = tabContext.iterationId;
         var sprintGoalCookie = this.getSprintGoalFromCookie();
 
@@ -115,8 +147,16 @@ export class SprintGoal {
     }
 
     public getSprintGoalFromCookie = (): SprintGoalDto => {
-        var goal = this.getCookie(this.iterationId + "goalText");
-        var sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
+        var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
+        var sprintGoalInTabLabel = false;
+        if (!goal) {
+            goal = this.getCookie(this.iterationId + "goalText");
+            sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
+        }
+        else {
+            // team specific setting
+            sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
+        }
 
         if (!goal) return undefined;
 
@@ -128,18 +168,28 @@ export class SprintGoal {
 
     public saveSettings = (): IPromise<any> => {
         this.log('saveSettings');
+
         if (this.waitControl) this.waitControl.startWait();
         const sprintConfig = {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
         };
-        this.setCookie(this.iterationId + "goalText", sprintConfig.goal);
-        this.setCookie(this.iterationId + "sprintGoalInTabLabel", sprintConfig.sprintGoalInTabLabel);
+
+        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig);
+
+        var configIdentifier: string = this.iterationId.toString();
+        var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
+
+        this.updateSprintGoalCookie(configIdentifier, sprintConfig);
+        this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('saveSettings: ExtensionData Service Loaded');
-                return dataService.setValue("sprintConfig." + this.iterationId, sprintConfig);;
+                return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig).then((x) => {
+                    // override the project level goal, indeed: last team saving 'wins'
+                    return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);
+                });
             })
             .then((value: object) => {
                 this.log('saveSettings: settings saved!');
@@ -155,20 +205,27 @@ export class SprintGoal {
         var cookieSupport = this.checkCookie();
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
-            return VSS.getService(VSS.ServiceIds.ExtensionData)
-                .then((dataService: Extension_Data.ExtensionDataService) => {
-                    this.log('getSettings: ExtensionData Service Loaded');
-                    return dataService.getValue("sprintConfig." + this.iterationId);
-                })
-                .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
-                    this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
-                    if (sprintGoalDto) {
-                        this.setCookie(this.iterationId + "goalText", sprintGoalDto.goal);
-                        this.setCookie(this.iterationId + "sprintGoalInTabLabel", sprintGoalDto.sprintGoalInTabLabel);
-                    }
-                    if (this.waitControl) this.waitControl.endWait();
-                    return sprintGoalDto;
-                });
+            var configIdentifier = this.iterationId.toString();
+            var configIdentifierWithTeam = this.iterationId.toString() + this.teamId;
+
+            return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto): IPromise<SprintGoalDto> => {
+                if (teamGoal) {
+                    this.updateSprintGoalCookie(configIdentifier, teamGoal);
+                    this.updateSprintGoalCookie(configIdentifierWithTeam, teamGoal);
+
+                    return Q.fcall((): SprintGoalDto => {
+                        // team settings
+                        return teamGoal;
+                    });
+                }
+                else {
+                    // fallback, also for backward compatibility: project/iteration level settings
+                    return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                        this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                        return iterationGoal;
+                    });
+                }
+            });
         }
         else {
             return Q.fcall((): SprintGoalDto => {
@@ -177,6 +234,24 @@ export class SprintGoal {
             });
 
         }
+    }
+
+    private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
+        return VSS.getService(VSS.ServiceIds.ExtensionData)
+            .then((dataService: Extension_Data.ExtensionDataService) => {
+                this.log('getSettings: ExtensionData Service Loaded, get value by key: ' + key);
+                return dataService.getValue("sprintConfig." + key);
+            })
+            .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
+                this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
+                if (this.waitControl) this.waitControl.endWait();
+                return sprintGoalDto;
+            });
+    }
+
+    private updateSprintGoalCookie = (key: string, sprintGoal: SprintGoalDto) => {
+        this.setCookie(key + "goalText", sprintGoal.goal);
+        this.setCookie(key + "sprintGoalInTabLabel", sprintGoal.sprintGoalInTabLabel);
     }
 
     public fillForm = (sprintGoal: SprintGoalDto) => {
@@ -197,7 +272,7 @@ export class SprintGoal {
     public setCookie = (key, value) => {
         var expires = new Date();
         expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=.vsassets.io;path=/';
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=' + this.storageUri + ';path=/';
     }
 
     public getCookie(key) {
@@ -206,10 +281,16 @@ export class SprintGoal {
     }
 
     public checkCookie = (): boolean => {
-        document.cookie = "testcookie";
-        return document.cookie.indexOf("testcookie") != -1;
+        this.setCookie("testcookie", true);
+        var success = (this.getCookie("testcookie") == "true");
+        return success;
     }
+
     private log = (message: string, object: any = null) => {
+        if (!window.console) return;
+
+        if (this.storageUri.indexOf('dev') === -1 && this.storageUri.indexOf('acc') === -1) return;
+
         if (object) {
             console.log(message, object);
             return;

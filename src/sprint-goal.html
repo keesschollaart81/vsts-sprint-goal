@@ -2,7 +2,7 @@
 
 <head>
     <title>Web Context</title>
-    <script src="node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script src="../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
@@ -10,6 +10,7 @@
             usePlatformStyles: true,
             moduleLoaderConfig: {
                 paths: {
+                    "applicationinsights-js": "node_modules/applicationinsights-js/JavaScript/JavaScriptSDK.Module/AppInsightsModule",
                     "dataStorage": "scripts"
                 }
             }
@@ -30,17 +31,18 @@
             padding: 20px;
         }
 
-        .goal {
+        .goal,
+        .teamgoal {
             margin-top: 20px;
         }
 
-        #goal {
+        #goal,
+        #teamgoal {
             padding: 10px;
             font-weight: bold;
             width: 500px;
         }
 
-        #saveMessage,
         #cookieWarning {
             border: 1px solid #f4ce42;
             background-color: #fff2c4;
@@ -50,26 +52,35 @@
             border-radius: 4px;
             display: none;
         }
+
+        .footer {
+            color: gray;
+            font-size: 10px;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: gray;
+        }
     </style>
 </head>
 
 <body>
     <div id="sprint-goal">
         <div class="toolbar"></div>
-        <div id="saveMessage">Sprint Goal saved, you have to reload the page for changes to take effect.</div>
         <div id="vss-extension">
-
             <div class="sprintGoalInTabLabel">
                 <input id="sprintGoalInTabLabel" type="checkbox" />
                 <label for="sprintGoalInTabLabel">Show sprint goal in tab label</label>
-                <span id="cookieWarning">This only work with VSTS and when Cookies are enabled!</span>
+                <span id="cookieWarning">This only work with when Cookies are enabled!</span>
             </div>
-
             <div class="goal">
                 <label>Set your goal for this sprint:</label><br/>
                 <input id="goal" />
             </div>
         </div>
+
+        <p class="footer">Experiencing problems, or do you have an idea? Please let me know via <a href="https://twitter.com/keesschollaart">Twitter</a> or by <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
     </div>
 </body>
 
