@@ -138,7 +138,7 @@ export class SprintGoal {
 
         if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
             this.log("getTabTitle: loaded title from cookie");
-            return "Goal: " + sprintGoalCookie.goal.substr(0, 60);
+            return "Goal: " + sprintGoalCookie.goal;
         }
         else {
             this.log("getTabTitle: Cookie found but empty goal");
