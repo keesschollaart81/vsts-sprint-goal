@@ -12,12 +12,12 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ## Release notes
 
-### 2.0 20-08-217
+### Version 2.0 - 20-08-217
 
 - Support for multiple team working on the same iteration. The first team setting the goal, sets it both on iteration level as well on team level. After this all teams share this initial goal but can set their own if they want to.
 - Support for TFS / On-Premises, note: internet connection is required for the end-user since the scripts/pages are hosted online.
 
-### 1.0 02-06-2017
+### Version 1.0 - 02-06-2017
 
 Initial Release
 
@@ -27,4 +27,4 @@ Initial Release
 
 ## Privacy
 
-Sprint Goal uses Application Insights to track telemetry. Data send: 'sprint form page loaded', 'sprint saved', 
+Sprint Goal uses Application Insights to track telemetry. When: 'sprint form page loaded', 'sprint saved', data: the id's (guids) of the account, project and user.
