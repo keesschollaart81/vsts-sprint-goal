@@ -302,12 +302,19 @@ export class SprintGoal {
 
     private loadEmojiPicker = () => {
         this.addStylesheet('emojipicker/css/emoji.css');
+        this.addScriptTag('emojipicker/js/config.js');
         this.addScriptTag('emojipicker/js/util.js');
         this.addScriptTag('emojipicker/js/jquery.emojiarea.js');
         this.addScriptTag('emojipicker/js/emoji-picker.js');
+        (<any>window).emojiPicker = new EmojiPicker({
+            emojiable_selector: '[data-emojiable=true]',
+            assetsPath: 'emojipicker/img/',
+            popupButtonClasses: 'fa fa-smile-o'
+        });
+        (<any>window).emojiPicker.discover();
     }
 
-    private addStylesheet = (href:string) =>{
+    private addStylesheet = (href: string) => {
         var link = document.createElement('link')
         link.setAttribute('rel', 'stylesheet')
         link.setAttribute('type', 'text/css')
@@ -315,11 +322,16 @@ export class SprintGoal {
         document.getElementsByTagName('head')[0].appendChild(link);
     }
 
-    private addScriptTag = (src:string) =>{
-        var script = document.createElement('script'); 
+    private addScriptTag = (src: string) => {
+        var script = document.createElement('script');
         script.src = src;
         document.head.appendChild(script);
     }
 }
 
+export class EmojiPicker {
+    constructor(params: any) {
+
+    }
+}
 //# sourceMappingURL=extension.js.map
