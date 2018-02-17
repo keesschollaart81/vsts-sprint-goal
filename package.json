@@ -27,6 +27,7 @@
     "applicationinsights-js": "^1.0.11",
     "vss-web-extension-sdk": "^2.109.0",
     "moment": "^2.14.1",
-    "moment-timezone": "^0.5.4"
+    "moment-timezone": "^0.5.4",
+    "simple-color-picker ": "^0.1.2"
   }
 }

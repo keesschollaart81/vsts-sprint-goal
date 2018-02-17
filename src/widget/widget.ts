@@ -48,8 +48,10 @@ export class SprintGoalWidget {
         };
         var settings = JSON.parse(widgetSettings.customSettings.data);
 
-        $("#sprint-goal").css("color",settings.foregroundColor);
-
+        if (settings) {
+            $("#sprint-goal").css("color", settings.foregroundColor);
+        }
+        
         workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
             var iterationId = teamIterations[0].id;
             var configIdentifier = iterationId;

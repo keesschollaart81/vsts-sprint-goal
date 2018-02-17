@@ -7,12 +7,14 @@ import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
+import ColorPicker = require("simple-color-picker");
 
 VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
     VSS.register("SprintGoalWidget.Configuration", function () {
         return new SprintGoalWidgetConfiguration(WidgetHelpers);
     });
-    VSS.notifyLoadSucceeded();
+    VSS.notifyLoadSucceeded(); 
+    $(".").spectrum();
 });
 
 
@@ -24,7 +26,13 @@ export class SprintGoalWidgetConfiguration {
         var settings = JSON.parse(widgetSettings.customSettings.data);
         if (settings && settings.foregroundColor) {
              $("#foreground-color-input").val(settings.foregroundColor);
-
+             var colorPicker = new ColorPicker.ColorPicker({
+                color: '#FF0000',
+                background: '#454545',
+                el: document.getElementById("foreground-color-input"),
+                width: 200,
+                height: 200
+              });
              return this.WidgetHelpers.WidgetStatusHelper.Success();
          }
     }
