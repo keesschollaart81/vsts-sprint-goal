@@ -13,8 +13,7 @@ VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
     VSS.register("SprintGoalWidget.Configuration", function () {
         return new SprintGoalWidgetConfiguration(WidgetHelpers);
     });
-    VSS.notifyLoadSucceeded(); 
-    $(".").spectrum();
+    VSS.notifyLoadSucceeded();  
 });
 
 
