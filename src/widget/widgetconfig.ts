@@ -13,7 +13,7 @@ VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
     VSS.register("SprintGoalWidget.Configuration", function () {
         return new SprintGoalWidgetConfiguration(WidgetHelpers);
     });
-    VSS.notifyLoadSucceeded();  
+    VSS.notifyLoadSucceeded();
 });
 
 
@@ -23,27 +23,35 @@ export class SprintGoalWidgetConfiguration {
 
     public load(widgetSettings: WidgetSettings) {
         var settings = JSON.parse(widgetSettings.customSettings.data);
-        if (settings && settings.foregroundColor) {
-             $("#foreground-color-input").val(settings.foregroundColor);
-             var colorPicker = new ColorPicker.ColorPicker({
-                color: '#FF0000',
+        if (settings) {
+            $("#foreground-color-input").val(settings.foregroundColor);
+            var colorPicker = new ColorPicker.ColorPicker({
+                color: settings.foregroundColor,
                 background: '#454545',
                 el: document.getElementById("foreground-color-input"),
                 width: 200,
                 height: 200
-              });
-             return this.WidgetHelpers.WidgetStatusHelper.Success();
-         }
+            });
+            $("#background-color-input").val(settings.backgroundColor);
+            var colorPicker = new ColorPicker.ColorPicker({
+                color: settings.backgroundColor,
+                background: '#454545',
+                el: document.getElementById("background-color-input"),
+                width: 200,
+                height: 200
+            });
+            return this.WidgetHelpers.WidgetStatusHelper.Success();
+        }
     }
 
-    public onSave() { 
+    public onSave() {
         var customSettings = {
             data: JSON.stringify({
                 foregroundColor: $("#foreground-color-input").val()
-                })
+            })
         };
-        return this.WidgetHelpers.WidgetConfigurationSave.Valid(customSettings); 
+        return this.WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
 
     }
- 
+
 } 
