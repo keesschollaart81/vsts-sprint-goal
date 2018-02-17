@@ -1,10 +1,11 @@
 <html>
+
 <head>
     <script src="../../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
-            usePlatformStyles: true, 
+            usePlatformStyles: true,
             usePlatformScripts: true,
             setupModuleLoader: true
         });
@@ -12,14 +13,30 @@
             require(["scripts/widget/widget"], function () { });
         });
     </script>
+    <style type="text/css">
+        body,
+        html {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #sprint-goal {
+            background-color: #f18c16;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height:100%;
+            text-align: center;
+            font-size: 30px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="widget">
-        <h2 class="projectid"></h2>
-        <h2 class="teamid"></h2>
-        <h2 class="iterationid"></h2>
-    </div>
+    <div id="sprint-goal">No goal yet!</div>
 </body>
 
 </html>

@@ -6,9 +6,10 @@ import System_Contracts = require("VSS/Common/Contracts/System");
 import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
+import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 
 VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
-    WidgetHelpers.IncludeWidgetStyles(); 
+    WidgetHelpers.IncludeWidgetStyles();
 
     VSS.register("SprintGoalWidget", function () {
         return new SprintGoalWidget(WidgetHelpers);
@@ -22,15 +23,15 @@ export class SprintGoalWidget {
         public WidgetHelpers) { }
 
     public load(widgetSettings: WidgetSettings) {
-        return this.kees();
+        return this.kees(widgetSettings);
     }
 
     public reload(widgetSettings: WidgetSettings) {
-        this.kees();
+        return this.kees(widgetSettings);
     }
 
 
-    public kees() {
+    public kees(widgetSettings: WidgetSettings) {
         const workClient: Work_Client.WorkHttpClient = Service.VssConnection
             .getConnection()
             .getHttpClient(Work_Client.WorkHttpClient, WebApi_Constants.ServiceInstanceTypes.TFS);
@@ -45,20 +46,43 @@ export class SprintGoalWidget {
             team: "",
             teamId: webContext.team.id,
         };
+        var settings = JSON.parse(widgetSettings.customSettings.data);
 
-        return workClient.getTeamIterations(teamContext).then((iterations) => {
-            $('h2.projectid').text(projectId);
-            $('h2.teamid').text(teamId);
-            $('h2.iterationid').text("loading...");
-            if (iterations.length > 0) {
-                return workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
-                    var iterationId = teamIterations[0].id;
-                    $('h2.iterationid').text(iterationId);
-                });
-            } else {
-                $('h2.iterationid').text("none");
-            }
-            return this.WidgetHelpers.WidgetStatusHelper.Success();
+        $("#sprint-goal").css("color",settings.foregroundColor);
+
+        workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
+            var iterationId = teamIterations[0].id;
+            var configIdentifier = iterationId;
+            var configIdentifierWithTeam = iterationId + teamId;
+
+            this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
+                if (teamGoal) {
+                    $('#sprint-goal').html(teamGoal.goal);
+                }
+                else {
+                    // fallback, also for backward compatibility: project/iteration level settings
+                    this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                        if (iterationGoal) {
+                            $('#sprint-goal').html(iterationGoal.goal);
+                        }
+                        else {
+                            $('#sprint-goal').html("No sprint goal yet, <a href=''>set one</a>!");
+                        }
+                    });
+                }
+            });
         });
+        return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
+
+    private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
+        return VSS.getService(VSS.ServiceIds.ExtensionData)
+            .then((dataService: Extension_Data.ExtensionDataService) => {
+                return dataService.getValue("sprintConfig." + key);
+            });
+    }
+}
+export class SprintGoalDto {
+    public goal: string;
+    public sprintGoalInTabLabel: boolean;
 }
