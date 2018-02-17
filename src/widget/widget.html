@@ -1,35 +1,15 @@
-<!DOCTYPE html>
 <html>
-
 <head>
-    <script src="../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script src="../../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
-            usePlatformStyles: true
+            usePlatformStyles: true, 
+            usePlatformScripts: true,
+            setupModuleLoader: true
         });
-
-        VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
-            WidgetHelpers.IncludeWidgetStyles();
-
-            var config = VSS.getConfiguration();
-            var webContext = VSS.getWebContext();
-            var projectId = webContext.project.id;
-            var teamId = webContext.team.id;
-            var iterationId = config.iterationId;
-
-            VSS.register("SprintGoalWidget", function () {
-                return {
-                    load: function (widgetSettings) {
-                        $('h2.projectid').text(projectId);
-                        $('h2.teamid').text(teamId);
-                        $('h2.iterationid').text(iterationId);
-
-                        return WidgetHelpers.WidgetStatusHelper.Success();
-                    }
-                }
-            });
-            VSS.notifyLoadSucceeded();
+        VSS.ready(function () {
+            require(["scripts/widget/widget"], function () { });
         });
     </script>
 </head>

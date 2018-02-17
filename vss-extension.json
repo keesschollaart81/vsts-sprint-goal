@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -99,7 +99,7 @@
             }
         },
         {
-            "id": "widget",
+            "id": "SprintGoalWidget",
             "type": "ms.vss-dashboards-web.widget",
             "targets": [
                 "ms.vss-dashboards-web.widget-catalog"
@@ -123,5 +123,8 @@
     "repository": {
         "type": "git",
         "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
-    }
+    },
+    "scopes": [
+      "vso.work"
+    ]
 }
