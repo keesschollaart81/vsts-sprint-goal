@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>          
-        <script src="../node_modules/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>     
-        <script type="text/javascript">
-            VSS.init({                        
-                explicitNotifyLoaded: true,
-                usePlatformStyles: true
-            });
-    
-            VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
-                WidgetHelpers.IncludeWidgetStyles();
-                VSS.register("HelloWorldWidget", function () {                
-                    return {
-                        load: function (widgetSettings) {
-                            var $title = $('h2.title');
-                            $title.text('Hello World');
-    
-                            return WidgetHelpers.WidgetStatusHelper.Success();
-                        }
+
+<head>
+    <script src="../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformStyles: true
+        });
+
+        VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
+            WidgetHelpers.IncludeWidgetStyles();
+
+            var config = VSS.getConfiguration();
+            var webContext = VSS.getWebContext();
+            var projectId = webContext.project.id;
+            var teamId = webContext.team.id;
+            var iterationId = config.iterationId;
+
+            VSS.register("SprintGoalWidget", function () {
+                return {
+                    load: function (widgetSettings) {
+                        $('h2.projectid').text(projectId);
+                        $('h2.teamid').text(teamId);
+                        $('h2.iterationid').text(iterationId);
+
+                        return WidgetHelpers.WidgetStatusHelper.Success();
                     }
-                });
-                VSS.notifyLoadSucceeded();
+                }
             });
-        </script>         
-    </head>
-    <body>
-        <div class="widget">
-            <h2 class="title"></h2>
-        </div>
-    </body>
+            VSS.notifyLoadSucceeded();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="widget">
+        <h2 class="projectid"></h2>
+        <h2 class="teamid"></h2>
+        <h2 class="iterationid"></h2>
+    </div>
+</body>
+
 </html>
