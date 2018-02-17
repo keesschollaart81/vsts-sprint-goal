@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "2.0.8",
+    "version": "3.0.0",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -58,6 +58,10 @@
             "addressable": true
         },
         {
+            "path": "src/widget/widget.html",
+            "addressable": true
+        },
+        {
             "path": "src/emojipicker",
             "addressable": true
         },
@@ -92,6 +96,27 @@
                 "title": "Sprint Goal Tab",
                 "uri": "src/sprint-goal.html",
                 "dynamic": true
+            }
+        },
+        {
+            "id": "widget",
+            "type": "ms.vss-dashboards-web.widget",
+            "targets": [
+                "ms.vss-dashboards-web.widget-catalog"
+            ],
+            "properties": {
+                "name": "Sprint Goal Widget",
+                "description": "Sprint Goal widget",
+                "catalogIconUrl:": "img/CatalogIcon.png",
+                "previewImageUrl": "img/preview.png",                            
+                "uri": "src/widget/widget.html",
+                "supportedSizes": [
+                     {
+                            "rowSpan": 1,
+                            "columnSpan": 2
+                        }
+                    ],
+                "supportedScopes": ["project_team"]
             }
         }
     ],
