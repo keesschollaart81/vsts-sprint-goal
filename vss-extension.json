@@ -106,7 +106,8 @@
             "id": "SprintGoalWidget",
             "type": "ms.vss-dashboards-web.widget",
             "targets": [
-                "ms.vss-dashboards-web.widget-catalog"
+                "ms.vss-dashboards-web.widget-catalog",
+                ".SprintGoalWidget.Configuration"
             ],
             "properties": {
                 "name": "Sprint Goal Widget",
