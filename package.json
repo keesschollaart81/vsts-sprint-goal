@@ -28,6 +28,6 @@
     "vss-web-extension-sdk": "^2.109.0",
     "moment": "^2.14.1",
     "moment-timezone": "^0.5.4",
-    "simple-color-picker ": "^0.1.2"
+    "simple-color-picker": "^0.1.2"
   }
 }
