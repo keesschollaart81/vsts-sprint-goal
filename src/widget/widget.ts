@@ -50,6 +50,8 @@ export class SprintGoalWidget {
 
         if (settings) {
             $("#sprint-goal").css("color", settings.foregroundColor);
+            $("#sprint-goal").css("background-color", settings.backgroundColor);
+            $("#sprint-goal").css("font-size", settings.fontSize+"pt");
         }
         
         workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {

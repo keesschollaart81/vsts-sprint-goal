@@ -1,46 +1,39 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
-    <style type="text/css">
-        .container {
-            display: inline-block;
-            height: 100%;
-            width: 100%;
-        }
-
-        .title {
-            margin-top: -5px;
-            margin-bottom: 5px;
-            font-size: 16px;
-            min-height: 21px;
-        }
-
-        .config-label {
-            margin-right: 20px;
-        } 
-    </style>
+    <script src="../../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script src="../../node_modules/jscolor-picker/jscolor.min.js"></script>
 </head>
-
 <body>
-    <div class="container">
-        <div id="foreground-colorpicker" style="margin-top: 1px">
-            <fieldset>
-                <label class="config-label">Foreground color</label>
-                <input id="foreground-color-input" class="field">
-            </fieldset>
+    <div class="widget-configuration">
+        <div id="single-line-text-input">
+            <label>Foreground color</label>
+            <input id="foreground-color-input" class="field jscolor" type="text" required="required">
+
+            <span class="validation-error foreground-color-input-validation">
+                <span class="icon-error-exclamation"></span>
+                <span class="validation-error-text"></span>
+            </span>
         </div>
-        <div id="background-colorpicker" class="background-picker">
-            <fieldset>
-                <label class="config-label">Background color</label>
-                <input id="background-color-input" class="field" style="margin-left: -1px">
-            </fieldset>
+        <div id="single-line-text-input">
+            <label>Background color</label>
+            <input id="background-color-input" class="field jscolor" type="text">
+
+            <span class="validation-error background-color-input-validation">
+                <span class="icon-error-exclamation"></span>
+                <span class="validation-error-text"></span>
+            </span>
+        </div>
+        <div id="single-line-text-input">
+            <label>Font size (pt)</label>
+            <input id="font-size-input" class="field" type="text" onkeypress="return isNumberKey(event)" >
+
+            <span class="validation-error font-size-input-validation">
+                <span class="icon-error-exclamation"></span>
+                <span class="validation-error-text"></span>
+            </span>
         </div>
     </div>
-    <div class="error"></div>
-
-    <script src="../../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
-    <script src="../../node_modules/simple-color-picker/src/index.js"></script>
 
     <script type="text/javascript">
         VSS.init({
