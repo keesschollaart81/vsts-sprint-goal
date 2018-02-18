@@ -6,7 +6,8 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import AppInsights = require('applicationinsights-js');
+// import telemetry = require('telemetryclient-team-services-extension');
+import * as telemetry from "telemetryclient-team-services-extension";
 
 export class SprintGoalDto {
     public goal: string;
@@ -18,6 +19,7 @@ export class SprintGoal {
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
+    private ai: telemetry.TelemetryClient;
 
     constructor() {
         var context = VSS.getExtensionContext();
@@ -36,20 +38,22 @@ export class SprintGoal {
             this.iterationId = config.iterationId;
             this.buildWaitControl();
             this.getSettings(true).then((settings) => {
-                this.fillForm(settings); 
+                this.fillForm(settings);
                 this.loadEmojiPicker();
             });
             this.buildMenuBar();
 
-            AppInsights.AppInsights.downloadAndSetup({
-                instrumentationKey: "<<AppInsightsInstrumentationKey>>",
-            });
+            var telemetryClientSettings: telemetry.TelemetryClientSettings = {
+                key: "<<AppInsightsInstrumentationKey>>",
+                extensioncontext: "Sprint Goal",
+                disableTelemetry: "false",
+                disableAjaxTracking: "false",
+                enableDebug: "false"
 
-            AppInsights.AppInsights.setAuthenticatedUserContext(
-                webContext.user.id,
-                webContext.collection.id);
+            }
+            this.ai = telemetry.TelemetryClient.getClient(telemetryClientSettings);
 
-            AppInsights.AppInsights.trackPageView(
+            this.ai.trackPageView(
                 document.title,
                 window.location.pathname,
                 {
@@ -178,7 +182,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig);
+        this.ai.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;

@@ -75,11 +75,18 @@
         },
         {
             "path": "node_modules/vss-web-extension-sdk/lib",
-            "addressable": true
+            "addressable": true,
+            "packagePath": "lib"
         },
         {
-            "path": "node_modules/applicationinsights-js",
-            "addressable": true
+            "path": "node_modules/applicationinsights-js/dist",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "node_modules/telemetryclient-team-services-extension/lib",
+            "addressable": true,
+            "packagePath": "lib"
         },
         {
             "path": "scripts",

@@ -4,6 +4,7 @@
   "description": "vsts-sprint-goal",
   "license": "Apache-2.0",
   "scripts": {
+    "copy": "cpx node_modules/telemetryclient-team-services-extension/lib/*.* scripts",
     "build": "tsc -p .",
     "postbuild": "npm run package",
     "package": "tfx extension create",
@@ -24,7 +25,8 @@
   "dependencies": {
     "@types/jquery": "^2.0.34",
     "@types/q": "0.0.32",
-    "applicationinsights-js": "^1.0.11",
+    "applicationinsights-js": "^1.0.15",
+    "telemetryclient-team-services-extension": "^1.0.2",
     "vss-web-extension-sdk": "^2.109.0",
     "moment": "^2.14.1",
     "moment-timezone": "^0.5.4",

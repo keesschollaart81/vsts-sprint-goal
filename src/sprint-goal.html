@@ -2,7 +2,9 @@
 
 <head>
     <title>Web Context</title>
-    <script src="../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script src="../lib/VSS.SDK.js"></script>
+    <!-- <script src="../lib/ai.module.js"></script> -->
+    <script src="../lib/ai.0.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
@@ -10,7 +12,8 @@
             usePlatformStyles: true,
             moduleLoaderConfig: {
                 paths: {
-                    "applicationinsights-js": "node_modules/applicationinsights-js/JavaScript/JavaScriptSDK.Module/AppInsightsModule",
+                    // "applicationinsights-js": "node_modules/applicationinsights-js/bundle/ai.module",
+                    "telemetryclient-team-services-extension": "node_modules/telemetryclient-team-services-extension/lib/telemetryclient",
                     "dataStorage": "scripts"
                 }
             }
