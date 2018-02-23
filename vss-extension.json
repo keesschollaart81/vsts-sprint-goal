@@ -77,7 +77,7 @@
         {
             "path": "node_modules/jscolor-picker/jscolor.min.js",
             "addressable": true,
-            "packagePath": "lib"
+            "packagePath": "lib/jscolor.min.js"
         },
         {
             "path": "node_modules/onesignal-emoji-picker/lib",
