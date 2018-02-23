@@ -80,10 +80,15 @@
             "packagePath": "lib/jscolor.min.js"
         },
         {
+            "path": "node_modules/tinycolor2/dist/tinycolor-min.js",
+            "addressable": true,
+            "packagePath": "lib/tinycolor-min.js"
+        },
+        {
             "path": "src/onesignal-emoji-picker",
             "addressable": true,
             "packagePath": "lib/onesignal-emoji-picker"
-        },
+        }, 
         {
             "path": "lib",
             "addressable": true
@@ -122,10 +127,26 @@
                 "supportedSizes": [
                     {
                         "rowSpan": 1,
+                        "columnSpan": 1
+                    },
+                    {
+                        "rowSpan": 1,
                         "columnSpan": 2
                     },
                     {
                         "rowSpan": 1,
+                        "columnSpan": 3
+                    },
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 4
+                    },
+                    {
+                        "rowSpan": 2,
+                        "columnSpan": 2
+                    },
+                    {
+                        "rowSpan": 3,
                         "columnSpan": 3
                     }
                 ],
