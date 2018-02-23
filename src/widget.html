@@ -21,10 +21,13 @@
             padding: 0px;
         }
 
-        #sprint-goal {
+        .widget {
             background-color: white;
             color: black;
-            font-family: 'Segoe UI','Tahoma','Arial','Verdana';
+        }
+
+        #sprint-goal {
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', 'Verdana';
             font-weight: 300;
             font-weight: bold;
             display: flex;
@@ -33,13 +36,16 @@
             height: 100%;
             text-align: center;
             font-size: 25px;
+            margin-top:-25px;
         }
     </style>
 </head>
 
 <body>
-    <h2>Sprint goal</h2>
-    <div id="sprint-goal"></div>
+    <div class="widget" id="widgetcontainer">
+        <h2 class="title">Sprint goal</h2>
+        <div id="sprint-goal"></div>
+    </div>
 </body>
 
 </html>

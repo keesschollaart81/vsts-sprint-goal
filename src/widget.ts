@@ -53,8 +53,8 @@ export class SprintGoalWidget {
         var isLight = true;
 
         if (settings) {
+            $("#widgetcontainer").css("background-color", settings.backgroundColor);
             $("#sprint-goal").css("color", settings.foregroundColor);
-            $("#sprint-goal").css("background-color", settings.backgroundColor);
             $("#sprint-goal").css("font-size", settings.fontSize + "pt");
             isLight = tinycolor(settings.backgroundColor).isLight();
         }
