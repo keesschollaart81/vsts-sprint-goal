@@ -6,14 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-// import AppInsights = require("applicationinsights-js");
-// import { AppInsights } from "../lib/ai.module";
 
-export class SprintGoalDto {
-    public goal: string;
-    public sprintGoalInTabLabel: boolean;
-}
- 
 
 export class SprintGoal {
     private iterationId: number;
@@ -42,11 +35,6 @@ export class SprintGoal {
                 this.loadEmojiPicker();
             });
             this.buildMenuBar();
-
-            // window["appInsights"].downloadAndSetup({
-            //     instrumentationKey: "2e57111b-5b8a-4d49-bb34-58e4f59fbaae",
-            //     // instrumentationKey: "<<AppInsightsInstrumentationKey>>",
-            // });
 
             window["appInsights"].setAuthenticatedUserContext(
                 webContext.user.id,
@@ -306,16 +294,16 @@ export class SprintGoal {
 
     private loadEmojiPicker = () => {
         this.addStylesheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
-        this.addStylesheet('emojipicker/css/emoji.css');
-        this.addScriptTag('emojipicker/js/config.js');
-        this.addScriptTag('emojipicker/js/util.js');
-        this.addScriptTag('emojipicker/js/jquery.emojiarea.js');
-        var emojiPickerScriptElement = this.addScriptTag('emojipicker/js/emoji-picker.js');
+        this.addStylesheet('../lib/onesignal-emoji-picker/css/emoji.css');
+        this.addScriptTag('../lib/onesignal-emoji-picker/js/config.js');
+        this.addScriptTag('../lib/onesignal-emoji-picker/js/util.js');
+        this.addScriptTag('../lib/onesignal-emoji-picker/js/jquery.emojiarea.js');
+        var emojiPickerScriptElement = this.addScriptTag('../lib/onesignal-emoji-picker/js/emoji-picker.js');
 
         emojiPickerScriptElement.addEventListener('load', function () {
             (<any>window).emojiPicker = new EmojiPicker({
                 emojiable_selector: '[data-emojiable=true]',
-                assetsPath: 'emojipicker/img',
+                assetsPath: '../lib/onesignal-emoji-picker/img',
                 popupButtonClasses: 'fa fa-smile-o'
             });
             (<any>window).emojiPicker.discover();
@@ -342,4 +330,8 @@ export class SprintGoal {
 export declare class EmojiPicker {
     constructor(params: any);
 }
-//# sourceMappingURL=extension.js.map
+
+export class SprintGoalDto {
+    public goal: string;
+    public sprintGoalInTabLabel: boolean;
+}

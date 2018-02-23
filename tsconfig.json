@@ -3,7 +3,7 @@
         "module": "amd",
         "moduleResolution": "node",
         "target": "es5",
-        "outDir": "scripts/",
+        "outDir": "lib/",
         "types": [
             "vss-web-extension-sdk",
             "q",

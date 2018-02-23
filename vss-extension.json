@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "3.0.7",
+    "version": "3.0.8",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -30,10 +30,10 @@
     },
     "screenshots": [
         {
-            "path": "images/screenshots-vsts-sprint-goal-3.png"
+            "path": "images/dist/screenshots-vsts-sprint-goal-3.png"
         },
         {
-            "path": "images/screenshots-vsts-sprint-goal-4.png"
+            "path": "images/dist/screenshots-vsts-sprint-goal-4.png"
         }
     ],
     "links": {
@@ -49,8 +49,8 @@
         "theme": "light"
     },
     "icons": {
-        "default": "images/icon.png",
-        "large": "images/icon-large.png"
+        "default": "images/dist/icon.png",
+        "large": "images/dist/icon-large.png"
     },
     "files": [
         {
@@ -58,19 +58,15 @@
             "addressable": true
         },
         {
-            "path": "src/widget/widget.html",
+            "path": "src/widget.html",
             "addressable": true
         },
         {
-            "path": "src/widget/widgetconfig.html",
+            "path": "src/widgetconfig.html",
             "addressable": true
         },
         {
-            "path": "src/emojipicker",
-            "addressable": true
-        },
-        {
-            "path": "images",
+            "path": "images/dist",
             "addressable": true
         },
         {
@@ -79,12 +75,17 @@
             "packagePath": "lib"
         },
         {
-            "path": "node_modules/applicationinsights-js/bundle",
+            "path": "node_modules/jscolor-picker/jscolor.min.js",
             "addressable": true,
             "packagePath": "lib"
-        }, 
+        },
         {
-            "path": "scripts",
+            "path": "node_modules/onesignal-emoji-picker/lib",
+            "addressable": true,
+            "packagePath": "lib/onesignal-emoji-picker"
+        },
+        {
+            "path": "lib",
             "addressable": true
         }
     ],
@@ -116,7 +117,7 @@
                 "description": "Sprint Goal widget",
                 "catalogIconUrl:": "img/CatalogIcon.png",
                 "previewImageUrl": "img/preview.png",
-                "uri": "src/widget/widget.html",
+                "uri": "src/widget.html",
                 "isNameConfigurable": true,
                 "supportedSizes": [
                     {
@@ -142,7 +143,7 @@
             "properties": {
                 "name": "SprintGoalWidget Configuration",
                 "description": "Configures SprintGoalWidget",
-                "uri": "src/widget/widgetconfig.html"
+                "uri": "src/widgetconfig.html"
             }
         }
     ],

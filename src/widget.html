@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <script src="../../node_modules/vss-web-extension-sdk/lib/VSS.SDK.js"></script>
+    <script src="../lib/VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
@@ -10,7 +10,7 @@
             setupModuleLoader: true
         });
         VSS.ready(function () {
-            require(["scripts/widget/widget"], function () { });
+            require(["lib/widget"], function () { });
         });
     </script>
     <style type="text/css">

@@ -2,7 +2,7 @@
 
 This extension enables you to set a goal for your sprint in VSTS.
 
-![Gif showing Sprint Goal](images/sprint-goal-gif.gif "Gif showing Sprint Goal")
+![Gif showing Sprint Goal](images/dist/sprint-goal-gif.gif "Gif showing Sprint Goal")
 
 ## Usage
 
