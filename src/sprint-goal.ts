@@ -6,13 +6,14 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import AppInsights = require("applicationinsights-js");
-// import { AppInsights } from "applicationinsights-js";
+// import AppInsights = require("applicationinsights-js");
+// import { AppInsights } from "../lib/ai.module";
 
 export class SprintGoalDto {
     public goal: string;
     public sprintGoalInTabLabel: boolean;
 }
+ 
 
 export class SprintGoal {
     private iterationId: number;
@@ -42,16 +43,16 @@ export class SprintGoal {
             });
             this.buildMenuBar();
 
-            AppInsights.AppInsights.downloadAndSetup({
-                instrumentationKey: "2e57111b-5b8a-4d49-bb34-58e4f59fbaae",
-                // instrumentationKey: "<<AppInsightsInstrumentationKey>>",
-            });
+            // window["appInsights"].downloadAndSetup({
+            //     instrumentationKey: "2e57111b-5b8a-4d49-bb34-58e4f59fbaae",
+            //     // instrumentationKey: "<<AppInsightsInstrumentationKey>>",
+            // });
 
-            AppInsights.AppInsights.setAuthenticatedUserContext(
+            window["appInsights"].setAuthenticatedUserContext(
                 webContext.user.id,
                 webContext.collection.id);
 
-                AppInsights.AppInsights.trackPageView(
+            window["appInsights"].trackPageView(
                 document.title,
                 window.location.pathname,
                 {
@@ -180,7 +181,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig);
+        window["appInsights"].trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
