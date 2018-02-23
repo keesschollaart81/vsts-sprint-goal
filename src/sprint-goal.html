@@ -3,30 +3,27 @@
 <head>
     <title>Web Context</title>
     <script src="../lib/VSS.SDK.js"></script>
-    <!-- <script src="../lib/ai.module.js"></script> -->
-    <script src="../lib/ai.0.js"></script>
+    <script src="../lib/ai.module.js"></script>
+    <!-- <script src="../lib/ai.0.js"></script>  -->
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
+            setupModuleLoader: true,
             usePlatformScripts: true,
-            usePlatformStyles: true,
-            moduleLoaderConfig: {
-                paths: {
-                    // "applicationinsights-js": "node_modules/applicationinsights-js/bundle/ai.module",
-                    "telemetryclient-team-services-extension": "node_modules/telemetryclient-team-services-extension/lib/telemetryclient",
-                    "dataStorage": "scripts"
-                }
-            }
+            usePlatformStyles: true//, 
+            // moduleLoaderConfig: {
+            //     paths: {
+            //         "applicationinsights-js": "lib/ai.module"
+            //     }
+            // }
         });
 
         VSS.ready(function () {
-
-            require(["dataStorage/sprint-goal"], function (sg) {
+            require(["scripts/sprint-goal"], function (sg) {
                 var asd = new sg.SprintGoal();
 
                 VSS.notifyLoadSucceeded();
             });
-
         });
     </script>
     <style type="text/css">
@@ -79,13 +76,15 @@
                 <span id="cookieWarning">This only work with when Cookies are enabled!</span>
             </div>
             <div class="goal">
-                <label>Set your goal for this sprint:</label><br/>
-                <input type="text" id="goal" data-emojiable="true"/>
+                <label>Set your goal for this sprint:</label>
+                <br/>
+                <input type="text" id="goal" data-emojiable="true" />
             </div>
         </div>
 
-        <p class="footer">Experiencing problems, or do you have an idea? Please let me know via <a href="https://twitter.com/keesschollaart"
-                target="_blank">Twitter</a> or by <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
+        <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
+            <a href="https://twitter.com/keesschollaart" target="_blank">Twitter</a> or by
+            <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
     </div>
 </body>
 

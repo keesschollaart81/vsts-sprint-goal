@@ -79,15 +79,10 @@
             "packagePath": "lib"
         },
         {
-            "path": "node_modules/applicationinsights-js/dist",
+            "path": "node_modules/applicationinsights-js/bundle",
             "addressable": true,
             "packagePath": "lib"
-        },
-        {
-            "path": "node_modules/telemetryclient-team-services-extension/lib",
-            "addressable": true,
-            "packagePath": "lib"
-        },
+        }, 
         {
             "path": "scripts",
             "addressable": true

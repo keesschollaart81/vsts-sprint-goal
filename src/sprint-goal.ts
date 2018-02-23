@@ -6,8 +6,8 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-// import telemetry = require('telemetryclient-team-services-extension');
-import * as telemetry from "telemetryclient-team-services-extension";
+import AppInsights = require("applicationinsights-js");
+// import { AppInsights } from "applicationinsights-js";
 
 export class SprintGoalDto {
     public goal: string;
@@ -19,7 +19,6 @@ export class SprintGoal {
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
-    private ai: telemetry.TelemetryClient;
 
     constructor() {
         var context = VSS.getExtensionContext();
@@ -43,22 +42,21 @@ export class SprintGoal {
             });
             this.buildMenuBar();
 
-            var telemetryClientSettings: telemetry.TelemetryClientSettings = {
-                key: "<<AppInsightsInstrumentationKey>>",
-                extensioncontext: "Sprint Goal",
-                disableTelemetry: "false",
-                disableAjaxTracking: "false",
-                enableDebug: "false"
+            AppInsights.AppInsights.downloadAndSetup({
+                instrumentationKey: "2e57111b-5b8a-4d49-bb34-58e4f59fbaae",
+                // instrumentationKey: "<<AppInsightsInstrumentationKey>>",
+            });
 
-            }
-            this.ai = telemetry.TelemetryClient.getClient(telemetryClientSettings);
+            AppInsights.AppInsights.setAuthenticatedUserContext(
+                webContext.user.id,
+                webContext.collection.id);
 
-            this.ai.trackPageView(
+                AppInsights.AppInsights.trackPageView(
                 document.title,
                 window.location.pathname,
                 {
-                    accountName: webContext.account.name,
-                    accountId: webContext.account.id,
+                    accountName: webContext.account.id,
+                    accountId: webContext.account.name,
                     extensionId: context.extensionId,
                     version: context.version
                 }
@@ -182,7 +180,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        this.ai.trackEvent("SaveSettings", sprintConfig);
+        AppInsights.AppInsights.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
