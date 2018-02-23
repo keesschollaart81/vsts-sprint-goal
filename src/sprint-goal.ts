@@ -298,6 +298,7 @@ export class SprintGoal {
         this.addScriptTag('../lib/onesignal-emoji-picker/js/config.js');
         this.addScriptTag('../lib/onesignal-emoji-picker/js/util.js');
         this.addScriptTag('../lib/onesignal-emoji-picker/js/jquery.emojiarea.js');
+        this.addScriptTag('../lib/onesignal-emoji-picker/js/nanoscroller.js');
         var emojiPickerScriptElement = this.addScriptTag('../lib/onesignal-emoji-picker/js/emoji-picker.js');
 
         emojiPickerScriptElement.addEventListener('load', function () {

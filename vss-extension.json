@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "3.0.8",
+    "version": "3.0.9",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -80,7 +80,7 @@
             "packagePath": "lib/jscolor.min.js"
         },
         {
-            "path": "node_modules/onesignal-emoji-picker/lib",
+            "path": "src/onesignal-emoji-picker",
             "addressable": true,
             "packagePath": "lib/onesignal-emoji-picker"
         },
