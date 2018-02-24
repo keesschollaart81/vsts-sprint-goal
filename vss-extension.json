@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "3.0.10",
+    "version": "3.0.11",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -119,7 +119,7 @@
             ],
             "properties": {
                 "name": "Sprint Goal Widget",
-                "description": "Sprint Goal widget",
+                "description": "Sprint Goal",
                 "catalogIconUrl:": "img/CatalogIcon.png",
                 "previewImageUrl": "img/preview.png",
                 "uri": "src/widget.html",

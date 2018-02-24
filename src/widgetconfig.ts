@@ -61,12 +61,12 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
             settings = {
                 foregroundColor: "#3624A0",
                 backgroundColor: "#FFFFFF",
-                fontSize:"20"
+                fontSize:"13"
             }
         }
         if (!settings.foregroundColor) settings.foregroundColor = "#3624A0";
         if (!settings.backgroundColor) settings.backgroundColor = "#FFFFFF";
-        if (!settings.fontSize) settings.fontSize = "20";
+        if (!settings.fontSize) settings.fontSize = "13";
 
         return settings;
     }
