@@ -86,6 +86,9 @@ export class SprintGoalWidget {
                         }
                     });
                 }
+            },() =>{
+                $(".widget").show();
+                $('#sprint-goal').html("No sprint goal yet!");
             });
         });
         return this.WidgetHelpers.WidgetStatusHelper.Success();
