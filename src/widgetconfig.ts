@@ -48,7 +48,6 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
         });
 
         return this.WidgetHelpers.WidgetStatusHelper.Success();
-
     }
 
     public onSave() {

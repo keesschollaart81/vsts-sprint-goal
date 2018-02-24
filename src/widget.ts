@@ -32,7 +32,6 @@ export class SprintGoalWidget {
         return this.loadSprintGoal(widgetSettings);
     }
 
-    
     public loadSprintGoal(widgetSettings: WidgetSettings) {
         const workClient: Work_Client.WorkHttpClient = Service.VssConnection
             .getConnection()
@@ -59,21 +58,20 @@ export class SprintGoalWidget {
             isLight = tinycolor(settings.backgroundColor).isLight();
         }
         $(".widget").css("background-image", this.getFlagFilename(widgetSettings.size.columnSpan, isLight));
-        
+
         $("#widgetcontainer h2").css("color", (isLight) ? "black" : "white");
         $("#widgetcontainer h2").text(widgetSettings.name);
-        $(".widget").show();
 
         workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
             var iterationId = teamIterations[0].id;
             var configIdentifier = iterationId;
             var configIdentifierWithTeam = iterationId + teamId;
 
-            if (widgetSettings.size.columnSpan > 1) {
-                $("#widgetcontainer h2").text(widgetSettings.name + " - " + teamIterations[0].name);
-            }
-
             this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
+                $(".widget").show();
+                if (widgetSettings.size.columnSpan > 1) {
+                    $("#widgetcontainer h2").text(widgetSettings.name + " - " + teamIterations[0].name);
+                }
                 if (teamGoal) {
                     $('#sprint-goal').html(teamGoal.goal);
                 }
