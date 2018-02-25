@@ -26,11 +26,21 @@ export class SprintGoalWidget {
         public WidgetHelpers) { }
 
     public load(widgetSettings: WidgetSettings) {
-        return this.loadSprintGoal(widgetSettings);
+        try {
+            return this.loadSprintGoal(widgetSettings);
+        } catch (e) {
+            console.error("Sprint goal initialization exception", e);
+            return this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
+        }
     }
 
     public reload(widgetSettings: WidgetSettings) {
-        return this.loadSprintGoal(widgetSettings);
+        try {
+            return this.loadSprintGoal(widgetSettings);
+        } catch (e) {
+            console.error("Sprint goal reloading exception", e);
+            return this.display(widgetSettings.name, "Error reloading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
+        }
     }
 
     public loadSprintGoal(widgetSettings: WidgetSettings) {
@@ -83,7 +93,7 @@ export class SprintGoalWidget {
 
     }
 
-    private display = (title: string, text: string, columns:number, settings: SprintGoalWidgetSettings) => {
+    private display = (title: string, text: string, columns: number, settings: SprintGoalWidgetSettings) => {
         var isLight = true;
 
         $("#widgetcontainer").css("background-color", settings.BackgroundColor);
