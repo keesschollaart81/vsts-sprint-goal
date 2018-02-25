@@ -1,6 +1,6 @@
 export class SprintGoalWidgetSettings {
 
-    public static DefaultSettings = new SprintGoalWidgetSettings("#3624A0", "#ffffff", 13);
+    public static DefaultSettings = new SprintGoalWidgetSettings("#FFFFFF", "#191EBF", 13);
 
     constructor(foregroundColor: string, backgroundColor: string, fontSize: number) {
         this.backgroundColor = backgroundColor;

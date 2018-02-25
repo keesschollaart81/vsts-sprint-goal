@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal",
     "name": "Sprint Goal",
-    "version": "3.0.22",
+    "version": "3.0.23",
     "publisher": "keesschollaart",
     "public": true,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -127,11 +127,11 @@
                 "supportedSizes": [
                     {
                         "rowSpan": 1,
-                        "columnSpan": 1
+                        "columnSpan": 2
                     },
                     {
                         "rowSpan": 1,
-                        "columnSpan": 2
+                        "columnSpan": 1
                     },
                     {
                         "rowSpan": 1,

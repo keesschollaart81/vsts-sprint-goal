@@ -8,10 +8,11 @@ import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
+import { SprintGoalWidgetSettings } from "./settings";
 
 VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
-    
+
     VSS.register("SprintGoalWidget.Configuration", function () {
         return new SprintGoalWidgetConfiguration(WidgetHelpers);
     });
@@ -24,12 +25,12 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
     constructor(public WidgetHelpers) { }
 
     public load(widgetSettings: WidgetSettings, widgetConfigurationContext: IWidgetConfigurationContext) {
-        var settings = JSON.parse(widgetSettings.customSettings.data);
+        var settings = JSON.parse(widgetSettings.customSettings.data) as SprintGoalWidgetSettings;
         settings = this.setDefaultColors(settings);
 
         $("#foreground-color-input").val(settings.foregroundColor);
         $("#background-color-input").val(settings.backgroundColor);
-        $("#font-size-input").val(settings.fontSize);
+        $("#font-size-input").val(settings.fontsize);
 
         $("#foreground-color-input").on("change paste keyup", () => {
             if (this.validateNameTextInput($("#foreground-color-input"), $(".foreground-color-input-validation"))) {
@@ -55,17 +56,14 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
         return this.WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
     }
 
-    private setDefaultColors = (settings: any) => {
-        if (!settings) {
-            settings = {
-                foregroundColor: "#3624A0",
-                backgroundColor: "#FFFFFF",
-                fontSize:"13"
-            }
-        }
-        if (!settings.foregroundColor) settings.foregroundColor = "#3624A0";
-        if (!settings.backgroundColor) settings.backgroundColor = "#FFFFFF";
-        if (!settings.fontSize) settings.fontSize = "13";
+    private setDefaultColors = (settings: SprintGoalWidgetSettings) => {
+        var defaultSettings = SprintGoalWidgetSettings.DefaultSettings;
+        if (!settings)
+            settings = defaultSettings
+
+        if (!settings.foregroundColor) settings.foregroundColor = defaultSettings.foregroundColor;
+        if (!settings.backgroundColor) settings.backgroundColor = defaultSettings.backgroundColor;
+        if (!settings.fontsize) settings.fontsize = defaultSettings.fontsize;
 
         return settings;
     }
@@ -75,12 +73,10 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
     }
 
     private getCustomSettings = () => {
+        var fontSize = parseInt($("#font-size-input").val());
+
         var customSettings = {
-            data: JSON.stringify({
-                foregroundColor: $("#foreground-color-input").val(),
-                backgroundColor: $("#background-color-input").val(),
-                fontSize: $("#font-size-input").val()
-            })
+            data: JSON.stringify(new SprintGoalWidgetSettings($("#foreground-color-input").val(),$("#background-color-input").val(), fontSize))
         };
         return customSettings;
     }
