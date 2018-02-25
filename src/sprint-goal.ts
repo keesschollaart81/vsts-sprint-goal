@@ -31,10 +31,10 @@ export class SprintGoal {
             this.iterationId = config.iterationId;
             this.buildWaitControl();
             this.getSettings(true).then((settings) => {
-                this.fillForm(settings);
-            }).then(() => {
                 this.loadEmojiPicker();
+                this.fillForm(settings);
             });
+
             this.buildMenuBar();
 
             window["appInsights"].setAuthenticatedUserContext(
@@ -216,7 +216,9 @@ export class SprintGoal {
                 else {
                     // fallback, also for backward compatibility: project/iteration level settings
                     return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
-                        this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                        if (iterationGoal) {
+                            this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                        }
                         return iterationGoal;
                     });
                 }
@@ -235,9 +237,12 @@ export class SprintGoal {
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('getSettings: ExtensionData Service Loaded, get value by key: ' + key);
 
-                // TODO: validate if key exist (currently this causes a exception/404 request)
-
-                return dataService.getValue("sprintConfig." + key);
+                try {
+                    return dataService.getValue("sprintConfig." + key);
+                }
+                catch{
+                    return null;
+                }
             })
             .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
                 this.log('getSettings: ExtensionData Service fetched data', sprintGoalDto);
