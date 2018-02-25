@@ -78,7 +78,7 @@ export class SprintGoalWidget {
                     }
                     else {
                         // fallback, also for backward compatibility: project/iteration level settings
-                        this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                        return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
                             if (iterationGoal) {
                                 return this.display(title, iterationGoal.goal, widgetSettings.size.columnSpan, settings)
                             }

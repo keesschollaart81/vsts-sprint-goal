@@ -15,6 +15,7 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 ### Version 3.0 - 01-03-2018
 
 - Added Widget
+- Important notice: because of this widget, this update requires approval. You have to go to 'manage extensions' and authorize this update before it becomes available!
 
 ### Version 2.0 - 20-08-2017
 

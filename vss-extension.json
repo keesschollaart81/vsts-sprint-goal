@@ -30,7 +30,10 @@
     },
     "screenshots": [
         {
-            "path": "images/dist/screenshots-vsts-sprint-goal-3.png"
+            "path": "images/dist/widget-screenshot.png"
+        },
+        {
+            "path": "images/dist/screenshots-vsts-sprint-goal-4.png"
         },
         {
             "path": "images/dist/screenshots-vsts-sprint-goal-4.png"
