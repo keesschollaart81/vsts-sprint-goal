@@ -106,7 +106,10 @@ export class SprintGoalWidget {
         $("#widgetcontainer h2").css("color", (isLight) ? "black" : "white");
         $("#widgetcontainer h2").text(title);
 
+        $("#sprint-goal").text(text);
+
         $(".widget").show();
+        
         return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
 
