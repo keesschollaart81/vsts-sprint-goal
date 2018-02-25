@@ -51,7 +51,7 @@ export class SprintGoalWidget {
         let settings: SprintGoalWidgetSettings = JSON.parse(widgetSettings.customSettings.data);
         if (!settings) settings = SprintGoalWidgetSettings.DefaultSettings;
 
-        return workClient.getTeamIterations(teamContext, "current").then((i) => {
+        return workClient.getTeamIterations(teamContext).then((i) => {
             if (i.length == 0)
                 return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
 
