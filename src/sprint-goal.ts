@@ -240,7 +240,7 @@ export class SprintGoal {
                 try {
                     return dataService.getValue("sprintConfig." + key);
                 }
-                catch{
+                catch(e){
                     return null;
                 }
             })
