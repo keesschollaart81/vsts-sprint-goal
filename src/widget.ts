@@ -65,7 +65,7 @@ export class SprintGoalWidget {
             if (i.length == 0)
                 return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
 
-            workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
+            return workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
                 var iterationId = teamIterations[0].id;
                 var configIdentifier = iterationId;
                 var configIdentifierWithTeam = iterationId + teamId;
