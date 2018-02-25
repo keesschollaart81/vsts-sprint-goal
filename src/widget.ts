@@ -96,10 +96,10 @@ export class SprintGoalWidget {
     private display = (title: string, text: string, columns: number, settings: SprintGoalWidgetSettings) => {
         var isLight = true;
 
-        $("#widgetcontainer").css("background-color", settings.BackgroundColor);
-        $("#sprint-goal").css("color", settings.ForegroundColor);
-        $("#sprint-goal").css("font-size", settings.Fontsize + "pt");
-        isLight = tinycolor(settings.BackgroundColor).isLight();
+        $("#widgetcontainer").css("background-color", settings.backgroundColor);
+        $("#sprint-goal").css("color", settings.foregroundColor);
+        $("#sprint-goal").css("font-size", settings.fontsize + "pt");
+        isLight = tinycolor(settings.backgroundColor).isLight();
 
         $(".widget").css("background-image", this.getFlagFilename(columns, isLight));
 
@@ -109,7 +109,7 @@ export class SprintGoalWidget {
         $("#sprint-goal").text(text);
 
         $(".widget").show();
-        
+
         return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
 
