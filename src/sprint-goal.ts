@@ -32,6 +32,7 @@ export class SprintGoal {
             this.buildWaitControl();
             this.getSettings(true).then((settings) => {
                 this.fillForm(settings);
+            }).then(() => {
                 this.loadEmojiPicker();
             });
             this.buildMenuBar();
@@ -226,7 +227,6 @@ export class SprintGoal {
                 this.log('getSettings: fetched settings from cookie');
                 return currentGoalInCookie;
             });
-
         }
     }
 
@@ -234,6 +234,9 @@ export class SprintGoal {
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('getSettings: ExtensionData Service Loaded, get value by key: ' + key);
+
+                // TODO: validate if key exist (currently this causes a exception/404 request)
+
                 return dataService.getValue("sprintConfig." + key);
             })
             .then((sprintGoalDto: SprintGoalDto): SprintGoalDto => {
