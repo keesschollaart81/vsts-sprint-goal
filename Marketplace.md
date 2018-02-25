@@ -15,9 +15,9 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 ### Version 3.0 - 01-03-2018
 
 - Added Widget
-  ![Widget Example](images/dist/widget-screenshot,png)
+  ![Widget Example](images/dist/widget-screenshot.png)
 - <b>Important notice</b>: because of this widget, this update requires approval. You have to go to 'manage extensions' and authorize this update before it becomes available!
-- Support for <b>TFS 2018</b> / On-Premises (email me when having problems / let me know your context to that I can reproduce)
+- Support for <b>TFS 2018</b> / On-Premises (email me when having problems / let me know your context so that I can reproduce)
 
 ### Version 2.0 - 20-08-2017
 
