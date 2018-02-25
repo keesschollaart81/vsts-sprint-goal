@@ -7,6 +7,7 @@ import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
+import { SprintGoalWidgetSettings } from "./settings";
 
 declare var tinycolor: any;
 
@@ -47,50 +48,54 @@ export class SprintGoalWidget {
             team: "",
             teamId: webContext.team.id,
         };
-        var settings = JSON.parse(widgetSettings.customSettings.data);
+        let settings: SprintGoalWidgetSettings = JSON.parse(widgetSettings.customSettings.data);
+        if (!settings) settings = SprintGoalWidgetSettings.DefaultSettings;
 
+        return workClient.getTeamIterations(teamContext, "current").then((i) => {
+            if (i.length == 0)
+                return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
+
+            workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
+                var iterationId = teamIterations[0].id;
+                var configIdentifier = iterationId;
+                var configIdentifierWithTeam = iterationId + teamId;
+
+                return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
+                    var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
+
+                    if (teamGoal) {
+                        return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
+                    }
+                    else {
+                        // fallback, also for backward compatibility: project/iteration level settings
+                        this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                            if (iterationGoal) {
+                                return this.display(title, iterationGoal.goal, widgetSettings.size.columnSpan, settings)
+                            }
+                            else {
+                                return this.display(title, "No sprint goal yet", widgetSettings.size.columnSpan, settings)
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+    }
+
+    private display = (title: string, text: string, columns:number, settings: SprintGoalWidgetSettings) => {
         var isLight = true;
 
-        if (settings) {
-            $("#widgetcontainer").css("background-color", settings.backgroundColor);
-            $("#sprint-goal").css("color", settings.foregroundColor);
-            $("#sprint-goal").css("font-size", settings.fontSize + "pt");
-            isLight = tinycolor(settings.backgroundColor).isLight();
-        }
-        $(".widget").css("background-image", this.getFlagFilename(widgetSettings.size.columnSpan, isLight));
+        $("#widgetcontainer").css("background-color", settings.BackgroundColor);
+        $("#sprint-goal").css("color", settings.ForegroundColor);
+        $("#sprint-goal").css("font-size", settings.Fontsize + "pt");
+        isLight = tinycolor(settings.BackgroundColor).isLight();
+
+        $(".widget").css("background-image", this.getFlagFilename(columns, isLight));
 
         $("#widgetcontainer h2").css("color", (isLight) ? "black" : "white");
-        $("#widgetcontainer h2").text(widgetSettings.name);
+        $("#widgetcontainer h2").text(title);
 
-        workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
-            var iterationId = teamIterations[0].id;
-            var configIdentifier = iterationId;
-            var configIdentifierWithTeam = iterationId + teamId;
-
-            this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
-                $(".widget").show();
-                if (widgetSettings.size.columnSpan > 1) {
-                    $("#widgetcontainer h2").text(widgetSettings.name + " - " + teamIterations[0].name);
-                }
-                if (teamGoal) {
-                    $('#sprint-goal').html(teamGoal.goal);
-                }
-                else {
-                    // fallback, also for backward compatibility: project/iteration level settings
-                    this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
-                        if (iterationGoal) {
-                            $('#sprint-goal').html(iterationGoal.goal);
-                        }
-                        else {
-                            $('#sprint-goal').html("No sprint goal yet!");
-                        }
-                    });
-                }
-            },(err) =>{
-                $(".widget").show();
-                $('#sprint-goal').html("No sprint goal yet!");
-            },);
-        });
         return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
 
