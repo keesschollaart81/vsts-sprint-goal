@@ -1,6 +1,5 @@
-export class SprintGoalApplicationInsightsWrapper { 
+export class SprintGoalApplicationInsightsWrapper {
 
-    appInsights: any;
     webContext: WebContext;
     context: IExtensionContext;
 
@@ -13,15 +12,15 @@ export class SprintGoalApplicationInsightsWrapper {
             instrumentationKey: "<<AppInsightsInstrumentationKey>>"
         });
 
-        this.appInsights = appInsights, appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
+        window["appInsights"] = appInsights, appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
 
-        this.appInsights.setAuthenticatedUserContext(
+        window["appInsights"].setAuthenticatedUserContext(
             this.webContext.user.id,
             this.webContext.collection.id);
     }
 
     public trackPageView = (title: string) => {
-        this.appInsights.trackPageView(
+        window["appInsights"].trackPageView(
             title,
             window.location.pathname,
             {
@@ -35,6 +34,6 @@ export class SprintGoalApplicationInsightsWrapper {
     }
 
     public trackEvent = (name: string, properties?: { [name: string]: string; }, measurements?: { [name: string]: number; }) => {
-        this.appInsights.trackEvent(name, properties, measurements)
+        window["appInsights"].trackEvent(name, properties, measurements)
     }
 }
