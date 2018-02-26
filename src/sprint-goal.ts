@@ -9,13 +9,12 @@ import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
-    private ai: sg.SprintGoalApplicationInsightsWrapper;
     private iterationId: number;
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
-    constructor() {
+    constructor(private ai) {
         try {
             var context = VSS.getExtensionContext();
             this.storageUri = this.getLocation(context.baseUri).hostname;
@@ -27,8 +26,6 @@ export class SprintGoal {
             this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
 
             if (config.foregroundInstance) { // else: config.host.background == true
-
-                this.ai = new sg.SprintGoalApplicationInsightsWrapper();
                 // this code runs when the form is loaded, otherwise, just load the tab
 
                 this.iterationId = config.iterationId;
@@ -40,7 +37,7 @@ export class SprintGoal {
 
                 this.buildMenuBar();
 
-                this.ai.trackPageView(document.title);
+                ai.trackPageView(document.title);
             }
 
             // register this 'Sprint Goal' service

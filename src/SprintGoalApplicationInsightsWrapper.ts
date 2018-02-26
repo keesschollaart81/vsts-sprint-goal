@@ -1,10 +1,15 @@
 export class SprintGoalApplicationInsightsWrapper {
-
-    
-    webContext: WebContext;
-    context: IExtensionContext;
+    private webContext: WebContext;
+    private context: IExtensionContext;
+    private isLoaded: boolean;
 
     constructor() {
+        this.isLoaded = false;
+    }
+
+    private load = () => {
+        this.isLoaded = true;
+
         this.context = VSS.getExtensionContext();
         this.webContext = VSS.getWebContext();
         var appInsights = window["appInsights"] || function (a: any) {
@@ -21,6 +26,8 @@ export class SprintGoalApplicationInsightsWrapper {
     }
 
     public trackPageView = (title: string) => {
+        if (!this.isLoaded) this.load();
+
         window["appInsights"].trackPageView(
             title,
             window.location.pathname,
@@ -35,10 +42,14 @@ export class SprintGoalApplicationInsightsWrapper {
     }
 
     public trackEvent = (name: string, properties?: { [name: string]: string; }, measurements?: { [name: string]: number; }) => {
+        if (!this.isLoaded) this.load();
+
         window["appInsights"].trackEvent(name, properties, measurements)
     }
 
     public trackException = (exception: Error): any => {
+        if (!this.isLoaded) this.load();
+
         window["appInsights"].trackException(exception)
     }
 }
