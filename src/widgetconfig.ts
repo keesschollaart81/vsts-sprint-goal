@@ -9,9 +9,9 @@ import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
-import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
+import ai = require("./SprintGoalApplicationInsightsWrapper");
 
-VSS.require(["TFS/Dashboards/WidgetHelpers", "lib/SprintGoalApplicationInsightsWrapper"], function (WidgetHelpers, ai: SprintGoalApplicationInsightsWrapper) {
+VSS.require(["TFS/Dashboards/WidgetHelpers", "lib/SprintGoalApplicationInsightsWrapper"], function (WidgetHelpers, ai: ai.SprintGoalApplicationInsightsWrapper) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
 
     VSS.register("SprintGoalWidget.Configuration", function () {
@@ -23,7 +23,7 @@ VSS.require(["TFS/Dashboards/WidgetHelpers", "lib/SprintGoalApplicationInsightsW
 
 export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
 
-    constructor(public WidgetHelpers, private ai: SprintGoalApplicationInsightsWrapper) { }
+    constructor(public WidgetHelpers, private ai: ai.SprintGoalApplicationInsightsWrapper) { }
 
     public load(widgetSettings: WidgetSettings, widgetConfigurationContext: IWidgetConfigurationContext) {
         var settings = JSON.parse(widgetSettings.customSettings.data) as SprintGoalWidgetSettings;

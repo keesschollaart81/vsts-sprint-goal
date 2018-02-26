@@ -13,7 +13,7 @@
 
         VSS.ready(function () {
             require(["lib/sprint-goal","lib/SprintGoalApplicationInsightsWrapper"], function (sg,ai) {
-                var asd = new sg.SprintGoal(ai);
+                var asd = new sg.SprintGoal(new ai.SprintGoalApplicationInsightsWrapper());
 
                 VSS.notifyLoadSucceeded();
             });

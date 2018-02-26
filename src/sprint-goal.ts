@@ -6,7 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
+import sg = require( "./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
     private iterationId: number;
@@ -14,7 +14,7 @@ export class SprintGoal {
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
-    constructor(private ai: SprintGoalApplicationInsightsWrapper) {
+    constructor(private ai: sg.SprintGoalApplicationInsightsWrapper) {
         var context = VSS.getExtensionContext();
         this.storageUri = this.getLocation(context.baseUri).hostname;
 
