@@ -9,7 +9,7 @@ import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
-import { SprintGoalApplicationInsightsWrapper } from "./ai";
+import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 
 VSS.require(["TFS/Dashboards/WidgetHelpers", "lib/SprintGoalApplicationInsightsWrapper"], function (WidgetHelpers, ai: SprintGoalApplicationInsightsWrapper) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
