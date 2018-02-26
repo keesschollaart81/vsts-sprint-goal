@@ -6,7 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import { SprintGoalApplicationInsightsWrapper } from "./ai";
+import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 
 export class SprintGoal {
     private iterationId: number;

@@ -11,7 +11,7 @@ import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
 import { SprintGoalApplicationInsightsWrapper } from "./ai";
 
-VSS.require(["TFS/Dashboards/WidgetHelpers", "SprintGoalApplicationInsightsWrapper"], function (WidgetHelpers, ai: SprintGoalApplicationInsightsWrapper) {
+VSS.require(["TFS/Dashboards/WidgetHelpers", "lib/SprintGoalApplicationInsightsWrapper"], function (WidgetHelpers, ai: SprintGoalApplicationInsightsWrapper) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
 
     VSS.register("SprintGoalWidget.Configuration", function () {
