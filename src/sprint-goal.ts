@@ -9,12 +9,13 @@ import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
+    private ai: sg.SprintGoalApplicationInsightsWrapper;
     private iterationId: number;
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
-    constructor(private ai: sg.SprintGoalApplicationInsightsWrapper) {
+    constructor() {
         try {
             var context = VSS.getExtensionContext();
             this.storageUri = this.getLocation(context.baseUri).hostname;
@@ -27,6 +28,7 @@ export class SprintGoal {
 
             if (config.foregroundInstance) { // else: config.host.background == true
 
+                this.ai = new sg.SprintGoalApplicationInsightsWrapper();
                 // this code runs when the form is loaded, otherwise, just load the tab
 
                 this.iterationId = config.iterationId;
@@ -38,7 +40,7 @@ export class SprintGoal {
 
                 this.buildMenuBar();
 
-                ai.trackPageView(document.title);
+                this.ai.trackPageView(document.title);
             }
 
             // register this 'Sprint Goal' service
@@ -51,7 +53,7 @@ export class SprintGoal {
             });
         }
         catch (e) {
-            this.ai.trackException(e);
+            if (this.ai) this.ai.trackException(e);
         }
     }
 
@@ -162,7 +164,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        this.ai.trackEvent("SaveSettings", sprintConfig);
+        if (this.ai) this.ai.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
