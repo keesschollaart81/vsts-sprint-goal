@@ -8,6 +8,7 @@ import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
+import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 
 declare var tinycolor: any;
 
@@ -15,7 +16,7 @@ VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
     WidgetHelpers.IncludeWidgetStyles();
 
     VSS.register("SprintGoalWidget", function () {
-        return new SprintGoalWidget(WidgetHelpers);
+        return new SprintGoalWidget(WidgetHelpers, new SprintGoalApplicationInsightsWrapper());
     });
     VSS.notifyLoadSucceeded();
 });
@@ -23,13 +24,14 @@ VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
 
 export class SprintGoalWidget {
     constructor(
-        public WidgetHelpers) { }
+        public WidgetHelpers,
+        private ai: SprintGoalApplicationInsightsWrapper) { }
 
     public load(widgetSettings: WidgetSettings) {
         try {
             return this.loadSprintGoal(widgetSettings);
         } catch (e) {
-            console.error("Sprint goal initialization exception", e);
+            this.ai.trackException(e);
             return this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
         }
     }
@@ -38,7 +40,7 @@ export class SprintGoalWidget {
         try {
             return this.loadSprintGoal(widgetSettings);
         } catch (e) {
-            console.error("Sprint goal reloading exception", e);
+            this.ai.trackException(e);
             return this.display(widgetSettings.name, "Error reloading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
         }
     }
@@ -109,6 +111,8 @@ export class SprintGoalWidget {
         $("#sprint-goal").text(text);
 
         $(".widget").show();
+        
+        this.ai.trackEvent("Widget shown");
 
         return this.WidgetHelpers.WidgetStatusHelper.Success();
     }

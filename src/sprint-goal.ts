@@ -6,7 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import sg = require( "./SprintGoalApplicationInsightsWrapper");
+import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
     private iterationId: number;
@@ -15,39 +15,44 @@ export class SprintGoal {
     private waitControl: StatusIndicator.WaitControl;
 
     constructor(private ai: sg.SprintGoalApplicationInsightsWrapper) {
-        var context = VSS.getExtensionContext();
-        this.storageUri = this.getLocation(context.baseUri).hostname;
+        try {
+            var context = VSS.getExtensionContext();
+            this.storageUri = this.getLocation(context.baseUri).hostname;
 
-        var webContext = VSS.getWebContext();
-        this.teamId = webContext.team.id;
+            var webContext = VSS.getWebContext();
+            this.teamId = webContext.team.id;
 
-        var config = VSS.getConfiguration();
-        this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
+            var config = VSS.getConfiguration();
+            this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
 
-        if (config.foregroundInstance) { // else: config.host.background == true
+            if (config.foregroundInstance) { // else: config.host.background == true
 
-            // this code runs when the form is loaded, otherwise, just load the tab
+                // this code runs when the form is loaded, otherwise, just load the tab
 
-            this.iterationId = config.iterationId;
-            this.buildWaitControl();
-            this.getSettings(true).then((settings) => {
-                this.loadEmojiPicker();
-                this.fillForm(settings);
-            });
+                this.iterationId = config.iterationId;
+                this.buildWaitControl();
+                this.getSettings(true).then((settings) => {
+                    this.loadEmojiPicker();
+                    this.fillForm(settings);
+                });
 
-            this.buildMenuBar();
+                this.buildMenuBar();
 
-            ai.trackPageView(document.title);
-        }
-
-        // register this 'Sprint Goal' service
-        VSS.register(VSS.getContribution().id, {
-            pageTitle: this.getTabTitle,
-            name: this.getTabTitle,
-            isInvisible: function (state) {
-                return false;
+                ai.trackPageView(document.title);
             }
-        });
+
+            // register this 'Sprint Goal' service
+            VSS.register(VSS.getContribution().id, {
+                pageTitle: this.getTabTitle,
+                name: this.getTabTitle,
+                isInvisible: function (state) {
+                    return false;
+                }
+            });
+        }
+        catch (e) {
+            this.ai.trackException(e);
+        }
     }
 
     private buildWaitControl = () => {

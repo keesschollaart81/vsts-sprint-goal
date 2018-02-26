@@ -1,5 +1,6 @@
 export class SprintGoalApplicationInsightsWrapper {
 
+    
     webContext: WebContext;
     context: IExtensionContext;
 
@@ -35,5 +36,9 @@ export class SprintGoalApplicationInsightsWrapper {
 
     public trackEvent = (name: string, properties?: { [name: string]: string; }, measurements?: { [name: string]: number; }) => {
         window["appInsights"].trackEvent(name, properties, measurements)
+    }
+
+    public trackException = (exception: Error): any => {
+        window["appInsights"].trackException(exception)
     }
 }
