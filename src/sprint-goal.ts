@@ -6,7 +6,7 @@ import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-
+import { SprintGoalApplicationInsightsWrapper } from "./ai";
 
 export class SprintGoal {
     private iterationId: number;
@@ -14,7 +14,7 @@ export class SprintGoal {
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
-    constructor() {
+    constructor(private ai: SprintGoalApplicationInsightsWrapper) {
         var context = VSS.getExtensionContext();
         this.storageUri = this.getLocation(context.baseUri).hostname;
 
@@ -37,20 +37,7 @@ export class SprintGoal {
 
             this.buildMenuBar();
 
-            window["appInsights"].setAuthenticatedUserContext(
-                webContext.user.id,
-                webContext.collection.id);
-
-            window["appInsights"].trackPageView(
-                document.title,
-                window.location.pathname,
-                {
-                    accountName: webContext.account.id,
-                    accountId: webContext.account.name,
-                    extensionId: context.extensionId,
-                    version: context.version
-                }
-            );
+            ai.trackPageView(document.title);
         }
 
         // register this 'Sprint Goal' service
@@ -170,7 +157,7 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        window["appInsights"].trackEvent("SaveSettings", sprintConfig);
+        this.ai.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
@@ -240,7 +227,7 @@ export class SprintGoal {
                 try {
                     return dataService.getValue("sprintConfig." + key);
                 }
-                catch(e){
+                catch (e) {
                     return null;
                 }
             })
