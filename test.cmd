@@ -1,2 +1,2 @@
 net use Z: \\keesfilestest.file.core.windows.net\npm /u:AZURE\keesfilestest GZFQ+9+MTdu74PCPJykKnjPVm5q1VxEhfPClz3+0W+RU8MNIzYl3jW/cYpGYvT+ODwlU44UAqi5YdOJbJ0+EGA==
-mklink /d  C:\npm\cache\remote \\keesfilestest.file.core.windows.net\npm
+mklink /d  D:\a\1\s\node_modules\ \\keesfilestest.file.core.windows.net\npm
