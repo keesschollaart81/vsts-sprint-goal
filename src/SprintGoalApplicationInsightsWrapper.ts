@@ -31,25 +31,31 @@ export class SprintGoalApplicationInsightsWrapper {
         window["appInsights"].trackPageView(
             title,
             window.location.pathname,
-            {
-                accountName: this.webContext.account.id,
-                accountId: this.webContext.account.name,
-                extensionId: this.context.extensionId,
-                version: this.context.version,
-                teamName: this.webContext.team.name
-            }
+            this.getDefaultProps()
         );
     }
 
     public trackEvent = (name: string, properties?: { [name: string]: string; }, measurements?: { [name: string]: number; }) => {
         if (!this.isLoaded) this.load();
+ 
+        var joinedProps = { ...this.getDefaultProps(), ...properties};
 
-        window["appInsights"].trackEvent(name, properties, measurements)
+        window["appInsights"].trackEvent(name, joinedProps, measurements)
     }
 
     public trackException = (exception: Error): any => {
         if (!this.isLoaded) this.load();
 
-        window["appInsights"].trackException(exception)
+        window["appInsights"].trackException(exception, "unhandled", this.getDefaultProps());
+    }
+
+    private getDefaultProps = () =>{
+        return  {
+            accountName: this.webContext.account.id,
+            accountId: this.webContext.account.name,
+            extensionId: this.context.extensionId,
+            version: this.context.version,
+            teamName: this.webContext.team.name
+        };
     }
 }
