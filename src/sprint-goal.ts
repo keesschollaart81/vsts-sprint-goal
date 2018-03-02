@@ -156,6 +156,9 @@ export class SprintGoal {
         this.log('saveSettings');
 
         if (this.waitControl) this.waitControl.startWait();
+
+        $(".emoji-wysiwyg-editor").blur(); //ie11 hook to force WYIWYG editor to copy value to #goal input field
+
         const sprintConfig = {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
