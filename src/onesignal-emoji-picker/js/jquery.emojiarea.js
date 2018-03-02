@@ -401,7 +401,7 @@
         }
         document.execCommand('insertText', false, content);
       }
-      else if (window.clipboardData) {
+      else if (window.clipboardData && document.selection) {
         content = window.clipboardData.getData('Text');
         if (self.options.onPaste) {
           content = self.options.onPaste(content);
