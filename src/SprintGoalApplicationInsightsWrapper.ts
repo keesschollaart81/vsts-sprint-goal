@@ -51,8 +51,8 @@ export class SprintGoalApplicationInsightsWrapper {
 
     private getDefaultProps = () =>{
         return  {
-            accountName: this.webContext.account.id,
-            accountId: this.webContext.account.name,
+            accountName: this.webContext.account.name,
+            accountId: this.webContext.account.id,
             extensionId: this.context.extensionId,
             version: this.context.version,
             teamName: this.webContext.team.name
