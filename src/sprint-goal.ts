@@ -20,6 +20,7 @@ export class SprintGoal {
             this.storageUri = this.getLocation(context.baseUri).hostname;
 
             var webContext = VSS.getWebContext();
+            this.log('TeamId:' + webContext.team.id);
             this.teamId = webContext.team.id;
 
             var config = VSS.getConfiguration();
@@ -174,14 +175,14 @@ export class SprintGoal {
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
-                this.log('saveSettings: ExtensionData Service Loaded');
+                this.log('saveSettings: ExtensionData Service Loaded, saving for ' + configIdentifierWithTeam, sprintConfig);
                 return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig).then((x) => {
                     // override the project level goal, indeed: last team saving 'wins'
                     return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);
                 });
             })
             .then((value: object) => {
-                this.log('saveSettings: settings saved!');
+                this.log('saveSettings: settings saved!', value);
                 if (this.waitControl) this.waitControl.endWait();
             });
     }
