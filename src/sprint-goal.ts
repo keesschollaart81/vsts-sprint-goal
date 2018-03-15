@@ -9,7 +9,7 @@ import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
-    private iterationId: number;
+    private iterationId: string;
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
@@ -134,15 +134,21 @@ export class SprintGoal {
     }
 
     public getSprintGoalFromCookie = (): SprintGoalDto => {
-        var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
+        var goal = this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "goalText");
+
         var sprintGoalInTabLabel = false;
-        if (!goal) {
-            goal = this.getCookie(this.iterationId + "goalText");
-            sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
-        }
-        else {
-            // team specific setting
-            sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
+        if (goal) {
+            sprintGoalInTabLabel = (this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "sprintGoalInTabLabel") == "true");
+
+        } else {
+            var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
+            if (goal) {
+                sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
+            }
+            else {
+                goal = this.getCookie(this.iterationId + "goalText");
+                sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
+            }
         }
 
         if (!goal) return undefined;
@@ -168,7 +174,7 @@ export class SprintGoal {
         if (this.ai) this.ai.trackEvent("SaveSettings", sprintConfig);
 
         var configIdentifier: string = this.iterationId.toString();
-        var configIdentifierWithTeam: string = this.iterationId.toString() + this.teamId;
+        var configIdentifierWithTeam: string = this.getConfigKey(this.iterationId, this.teamId);
 
         this.updateSprintGoalCookie(configIdentifier, sprintConfig);
         this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
@@ -196,7 +202,8 @@ export class SprintGoal {
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
             var configIdentifier = this.iterationId.toString();
-            var configIdentifierWithTeam = this.iterationId.toString() + this.teamId;
+            var oldConfigIdentifierWithTeam = this.iterationId.toString() + this.teamId;
+            var configIdentifierWithTeam = this.getConfigKey(this.iterationId, this.teamId);
 
             return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto): IPromise<SprintGoalDto> => {
                 if (teamGoal) {
@@ -209,13 +216,27 @@ export class SprintGoal {
                     });
                 }
                 else {
-                    // fallback, also for backward compatibility: project/iteration level settings
-                    return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
-                        if (iterationGoal) {
-                            this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                    return this.fetchSettingsFromExtensionDataService(oldConfigIdentifierWithTeam).then((oldTeamGoal) => {
+                        if (oldTeamGoal) {
+                            this.updateSprintGoalCookie(configIdentifier, oldTeamGoal);
+                            this.updateSprintGoalCookie(configIdentifierWithTeam, oldTeamGoal);
+                            return oldTeamGoal;
                         }
-                        return iterationGoal;
+                        else return null;
+                    }).then((goal) => {
+                        if (goal) {
+                            return Q.fcall((): SprintGoalDto => {
+                                return goal;
+                            });
+                        }
+                        return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
+                            if (iterationGoal) {
+                                this.updateSprintGoalCookie(configIdentifier, iterationGoal);
+                            }
+                            return iterationGoal;
+                        })
                     });
+
                 }
             });
         }
@@ -246,6 +267,11 @@ export class SprintGoal {
             });
     }
 
+    private getConfigKey = (iterationId: string, teamId: string) => {
+        // https://github.com/Microsoft/vss-web-extension-sdk/issues/75
+        return iterationId.toString().substring(0, 15) + teamId.toString().substring(0, 15)
+    }
+
     private updateSprintGoalCookie = (key: string, sprintGoal: SprintGoalDto) => {
         this.setCookie(key + "goalText", sprintGoal.goal);
         this.setCookie(key + "sprintGoalInTabLabel", sprintGoal.sprintGoalInTabLabel);
@@ -256,7 +282,7 @@ export class SprintGoal {
             $("#cookieWarning").show();
         }
         if (!sprintGoal) {
-            $("#sprintGoalInTabLabel").prop("checked", false);
+            $("#sprintGoalInTabLabel").prop("checked", true);
             $("#goal").val("")
         }
         else {
