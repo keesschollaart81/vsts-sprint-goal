@@ -70,7 +70,7 @@ export class SprintGoalWidget {
             return workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
                 var iterationId = teamIterations[0].id;
                 var configIdentifier = iterationId;
-                var configIdentifierWithTeam = iterationId + teamId;
+                var configIdentifierWithTeam = this.getConfigKey(iterationId, teamId);
 
                 return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
                     var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
@@ -93,6 +93,11 @@ export class SprintGoalWidget {
             });
         });
 
+    }
+
+    private getConfigKey = (iterationId: string, teamId: string) => {
+        // https://github.com/Microsoft/vss-web-extension-sdk/issues/75
+        return iterationId.toString().substring(0, 15) + teamId.toString().substring(0, 15)
     }
 
     private display = (title: string, text: string, columns: number, settings: SprintGoalWidgetSettings) => {
