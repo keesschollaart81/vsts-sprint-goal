@@ -1,12 +1,8 @@
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import Q = require("q");
-import VSS_Service = require("VSS/Service");
-import TFS_Build_Contracts = require("TFS/Build/Contracts");
-import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
     private iterationId: string;
@@ -140,15 +136,6 @@ export class SprintGoal {
         if (goal) {
             sprintGoalInTabLabel = (this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "sprintGoalInTabLabel") == "true");
 
-        } else {
-            var goal = this.getCookie(this.iterationId + this.teamId + "goalText");
-            if (goal) {
-                sprintGoalInTabLabel = (this.getCookie(this.iterationId + this.teamId + "sprintGoalInTabLabel") == "true");
-            }
-            else {
-                goal = this.getCookie(this.iterationId + "goalText");
-                sprintGoalInTabLabel = (this.getCookie(this.iterationId + "sprintGoalInTabLabel") == "true");
-            }
         }
 
         if (!goal) return undefined;
@@ -173,19 +160,14 @@ export class SprintGoal {
 
         if (this.ai) this.ai.trackEvent("SaveSettings", sprintConfig);
 
-        var configIdentifier: string = this.iterationId.toString();
         var configIdentifierWithTeam: string = this.getConfigKey(this.iterationId, this.teamId);
 
-        this.updateSprintGoalCookie(configIdentifier, sprintConfig);
         this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
             .then((dataService: Extension_Data.ExtensionDataService) => {
                 this.log('saveSettings: ExtensionData Service Loaded, saving for ' + configIdentifierWithTeam, sprintConfig);
-                return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig).then((x) => {
-                    // override the project level goal, indeed: last team saving 'wins'
-                    return dataService.setValue("sprintConfig." + configIdentifier, sprintConfig);
-                });
+                return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig);
             })
             .then((value: object) => {
                 this.log('saveSettings: settings saved!', value);
@@ -201,42 +183,16 @@ export class SprintGoal {
         var cookieSupport = this.checkCookie();
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
-            var configIdentifier = this.iterationId.toString();
-            var oldConfigIdentifierWithTeam = this.iterationId.toString() + this.teamId;
             var configIdentifierWithTeam = this.getConfigKey(this.iterationId, this.teamId);
 
             return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto): IPromise<SprintGoalDto> => {
                 if (teamGoal) {
-                    this.updateSprintGoalCookie(configIdentifier, teamGoal);
                     this.updateSprintGoalCookie(configIdentifierWithTeam, teamGoal);
 
                     return Q.fcall((): SprintGoalDto => {
                         // team settings
                         return teamGoal;
                     });
-                }
-                else {
-                    return this.fetchSettingsFromExtensionDataService(oldConfigIdentifierWithTeam).then((oldTeamGoal) => {
-                        if (oldTeamGoal) {
-                            this.updateSprintGoalCookie(configIdentifier, oldTeamGoal);
-                            this.updateSprintGoalCookie(configIdentifierWithTeam, oldTeamGoal);
-                            return oldTeamGoal;
-                        }
-                        else return null;
-                    }).then((goal) => {
-                        if (goal) {
-                            return Q.fcall((): SprintGoalDto => {
-                                return goal;
-                            });
-                        }
-                        return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
-                            if (iterationGoal) {
-                                this.updateSprintGoalCookie(configIdentifier, iterationGoal);
-                            }
-                            return iterationGoal;
-                        })
-                    });
-
                 }
             });
         }

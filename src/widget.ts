@@ -1,8 +1,5 @@
-import moment = require("moment-timezone");
 import TFS_Core_Contracts = require("TFS/Core/Contracts");
-import Work_Contracts = require("TFS/Work/Contracts");
 import Work_Client = require("TFS/Work/RestClient");
-import System_Contracts = require("VSS/Common/Contracts/System");
 import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
@@ -69,7 +66,6 @@ export class SprintGoalWidget {
 
             return workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
                 var iterationId = teamIterations[0].id;
-                var configIdentifier = iterationId;
                 var configIdentifierWithTeam = this.getConfigKey(iterationId, teamId);
 
                 return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
@@ -77,17 +73,6 @@ export class SprintGoalWidget {
 
                     if (teamGoal) {
                         return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
-                    }
-                    else {
-                        // fallback, also for backward compatibility: project/iteration level settings
-                        return this.fetchSettingsFromExtensionDataService(configIdentifier).then((iterationGoal) => {
-                            if (iterationGoal) {
-                                return this.display(title, iterationGoal.goal, widgetSettings.size.columnSpan, settings)
-                            }
-                            else {
-                                return this.display(title, "No sprint goal yet", widgetSettings.size.columnSpan, settings)
-                            }
-                        });
                     }
                 });
             });

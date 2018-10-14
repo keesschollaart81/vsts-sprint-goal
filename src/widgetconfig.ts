@@ -1,15 +1,5 @@
-import jscolor = require("jscolor-picker/jscolor");
-import moment = require("moment-timezone");
-import TFS_Core_Contracts = require("TFS/Core/Contracts");
-import Work_Contracts = require("TFS/Work/Contracts");
-import Work_Client = require("TFS/Work/RestClient");
-import System_Contracts = require("VSS/Common/Contracts/System");
-import Service = require("VSS/Service");
-import WebApi_Constants = require("VSS/WebApi/Constants");
 import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
-import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
-// import   ais = require("./SprintGoalApplicationInsightsWrapper");
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 
 VSS.require(["TFS/Dashboards/WidgetHelpers"], function (WidgetHelpers) {
