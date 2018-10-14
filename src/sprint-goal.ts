@@ -1,12 +1,8 @@
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import Q = require("q");
-import VSS_Service = require("VSS/Service");
-import TFS_Build_Contracts = require("TFS/Build/Contracts");
-import TFS_Build_Extension_Contracts = require("TFS/Build/ExtensionContracts");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
-import sg = require("./SprintGoalApplicationInsightsWrapper");
 
 export class SprintGoal {
     private iterationId: string;
