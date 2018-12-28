@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <title>Sprint Goal</title>
+    <script src="VSS.SDK.js"></script>
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            setupModuleLoader: true,
+            usePlatformScripts: true,
+            usePlatformStyles: true
+        });
+
+        VSS.ready(function () {
+            require(["SprintGoal", "SprintGoalApplicationInsightsWrapper"], function (sg, ai) {
+                var asd = new sg.SprintGoal(new ai.SprintGoalApplicationInsightsWrapper());
+
+                VSS.notifyLoadSucceeded();
+            });
+        });
+    </script>
+    <style type="text/css">
+        #vss-extension {
+            padding: 20px;
+        }
+
+        .goal,
+        .teamgoal {
+            margin-top: 20px;
+        }
+
+        #goal,
+        #teamgoal {
+            padding: 10px;
+            width: 100%;
+        }
+
+        #cookieWarning {
+            border: 1px solid #f4ce42;
+            background-color: #fff2c4;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .footer {
+            color: #e0e0e0;
+            font-size: 10px;
+            padding: 20px;
+        }
+
+        .goal .footer a {
+            color: #e0e0e0 !important;
+            text-decoration: underline !important;
+        }
+
+        .goal .emoji-picker-icon {
+            top: auto;
+            margin-top: -30px;
+            right: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sprint-goal">
+        <div class="toolbar"></div>
+        <div id="vss-extension">
+            <div class="sprintGoalInTabLabel">
+                <input id="sprintGoalInTabLabel" type="checkbox" />
+                <label for="sprintGoalInTabLabel">Show sprint goal in tab label</label>
+                <span id="cookieWarning">This only work with when Cookies are enabled!</span>
+            </div>
+            <div class="goal">
+                <label>Set your goal for this sprint:</label>
+                <br />
+                <input type="text" id="goal" data-emoji-picker="true" />
+            </div>
+        </div>
+
+        <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
+            <a href="https://twitter.com/keesschollaart" target="_blank">Twitter</a> or by
+            <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
+    </div> 
+</body>
+
+</html>

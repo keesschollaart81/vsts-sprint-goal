@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <title>Sprint Goal Widget</title>
+    <script src="VSS.SDK.js"></script>
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformStyles: true,
+            usePlatformScripts: true,
+            setupModuleLoader: true
+        });
+        VSS.ready(function () {
+            require(["SprintGoalWidget"], function () { });
+        });
+    </script>
+    <style type="text/css">
+        body,
+        html {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .widget {
+            display:none;
+            background-color: white;
+            color: black;
+            background-image:url("images/dist/flag-black.png");
+            background-position: bottom right;
+            background-repeat: no-repeat;
+        }
+
+        #sprint-goal {
+            font-family: "Segoe UI VSS (Regular)","-apple-system",BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Helvetica,Ubuntu,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            font-size: 25px;
+            margin-top:-25px;
+        }
+
+        .title{
+            -webkit-font-smoothing: antialiased;
+            padding-top:3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="widget" id="widgetcontainer">
+        <h2 class="title"></h2>
+        <div id="sprint-goal"></div> 
+    </div>
+</body>
+
+</html>

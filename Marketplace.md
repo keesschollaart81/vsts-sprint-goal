@@ -14,7 +14,7 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ### Version 3.3 - 14-10-2018
 
-- Solved [#12](https://github.com/keesschollaart81/vsts-sprint-goal/issues/12) and [#13](https://github.com/keesschollaart81/vsts-sprint-goal/issues/13)
+- Fixes [#12](https://github.com/keesschollaart81/vsts-sprint-goal/issues/12) and [#13](https://github.com/keesschollaart81/vsts-sprint-goal/issues/13)
 
 ### Version 3.0 - 01-03-2018
 

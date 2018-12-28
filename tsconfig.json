@@ -3,14 +3,20 @@
         "module": "amd",
         "moduleResolution": "node",
         "target": "es5",
-        "outDir": "lib/",
+        "outDir": "dist/js",
         "types": [
-            "vss-web-extension-sdk",
-            "q",
-            "jquery"
+            "vss-web-extension-sdk"
+        ],
+        "lib": [
+          "es6",
+          "dom",
+          "es2015.iterable"
         ]
     },
+    "exclude": [
+        "node_modules"
+    ],
     "include": [
-        "src/**/*.ts"
+        "script/*.ts"
     ]
 }
