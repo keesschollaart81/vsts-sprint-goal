@@ -19,7 +19,8 @@ export class SprintGoalWidget {
             return WidgetHelpers.WidgetStatusHelper.Success();
         } catch (e) {
             this.ai.trackException(e);
-            return this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
+            this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
+            return WidgetHelpers.WidgetStatusHelper.Success();
         }
     }
 
@@ -56,7 +57,7 @@ export class SprintGoalWidget {
         var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
 
         if (teamGoal) {
-            return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
+              return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings) 
         }
         else {
             return this.display(widgetSettings.name, "No goal set! Go to 'Azure Boards', select a sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
@@ -86,8 +87,6 @@ export class SprintGoalWidget {
         $(".widget").show();
 
         this.ai.trackEvent("Widget shown");
-
-        return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
 
     private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {

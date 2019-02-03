@@ -1,6 +1,6 @@
-# VSTS Sprint Goal
+# Azure DevOps - Sprint Goal
 
-This extension enables you to set a goal for your sprint in VSTS.
+This extension enables you to set a goal for your sprint in Azure DevOps.
 
 ![Gif showing Sprint Goal](images/dist/sprint-goal-gif.gif "Gif showing Sprint Goal")
 
