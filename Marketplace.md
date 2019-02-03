@@ -12,32 +12,20 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ## Release notes
 
-### Version 3.3 - 14-10-2018
+### Version 4.0 - 5-02-2019
 
-- Fixes [#12](https://github.com/keesschollaart81/vsts-sprint-goal/issues/12) and [#13](https://github.com/keesschollaart81/vsts-sprint-goal/issues/13)
+- Support for dark theme
+- From Azure hosted to self contained (Azure DevOps hosted) package
+- No more issues with SSL on TFS (Azure DevOps Server) On-Premises
+- No more error when no initial goal is set
+- Several bugfixes (see GitHub closed issues)
 
-### Version 3.0 - 01-03-2018
-
-- Added Widget
-
-  ![Widget Example](images/dist/widget-screenshot.png)
-- <b>Important notice</b>: because of this widget, this update requires approval. You have to go to 'manage extensions' and authorize this update before it becomes available!
-- Support for <b>TFS 2018</b> / On-Premises (email me when having problems / let me know your context so that I can reproduce)
-
-### Version 2.0 - 20-08-2017
-
-- Support for multiple team working on the same iteration. The first team setting the goal, sets it both on iteration level as well on team level. After this all teams share this initial goal but can set their own if they want to
-- Removed limit of 60 characters
-- Added emoji picker
-
-### Version 1.0 - 02-06-2017
-
-Initial Release
+For details of older releases check [GitHub Releases](https://github.com/keesschollaart81/vsts-sprint-goal/releases)
 
 ## Known Bugs
-
-- First time someone (else) loads the sprint page, the sprint goal is not shown in the tab label.
-- New navigation (summer '18) does not refresh the pages when switching team/sprint. Tab does not get updated.
+ 
+- New navigation (summer '18) does not fully refresh the page/tabs when switching team/sprint. (Updated) tab caption only visible after page refresh
+- When working with multiple teams, navigating back to the most recent dashboard, the goal of the wrong team is shown [addressed here](https://github.com/Microsoft/vss-web-extension-sdk/issues/128)
 
 ## Privacy
 
