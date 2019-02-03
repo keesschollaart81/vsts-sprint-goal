@@ -2,47 +2,32 @@ import TFS_Core_Contracts = require("TFS/Core/Contracts");
 import Work_Client = require("TFS/Work/RestClient");
 import Service = require("VSS/Service");
 import WebApi_Constants = require("VSS/WebApi/Constants");
-import { WidgetSettings } from "TFS/Dashboards/WidgetContracts";
+import { WidgetSettings, WidgetStatus } from "TFS/Dashboards/WidgetContracts";
 import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import { SprintGoalWidgetSettings } from "./settings";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 import tinycolor = require("tinycolor2");
-
-
-VSS.require("TFS/Dashboards/WidgetHelpers", function (WidgetHelpers) {
-    WidgetHelpers.IncludeWidgetStyles();
-
-    VSS.register("SprintGoalWidget", function () {
-        return new SprintGoalWidget(WidgetHelpers, new SprintGoalApplicationInsightsWrapper());
-    });
-    VSS.notifyLoadSucceeded();
-});
-
+import WidgetHelpers = require('TFS/Dashboards/WidgetHelpers');
 
 export class SprintGoalWidget {
-    constructor(
-        public WidgetHelpers,
-        private ai: SprintGoalApplicationInsightsWrapper) { }
 
-    public load(widgetSettings: WidgetSettings) {
+    constructor(private ai: SprintGoalApplicationInsightsWrapper) { }
+
+    public load = async (widgetSettings: WidgetSettings): Promise<WidgetStatus> => {
         try {
-            return this.loadSprintGoal(widgetSettings);
+            await this.loadSprintGoal(widgetSettings);
+            return WidgetHelpers.WidgetStatusHelper.Success();
         } catch (e) {
             this.ai.trackException(e);
             return this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
         }
     }
 
-    public reload(widgetSettings: WidgetSettings) {
-        try {
-            return this.loadSprintGoal(widgetSettings);
-        } catch (e) {
-            this.ai.trackException(e);
-            return this.display(widgetSettings.name, "Error reloading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
-        }
+    public reload = async (widgetSettings: WidgetSettings): Promise<WidgetStatus> => {
+        return this.load(widgetSettings);
     }
 
-    public loadSprintGoal(widgetSettings: WidgetSettings) {
+    public loadSprintGoal = async (widgetSettings: WidgetSettings): Promise<void> => {
         const workClient: Work_Client.WorkHttpClient = Service.VssConnection
             .getConnection()
             .getHttpClient(Work_Client.WorkHttpClient, WebApi_Constants.ServiceInstanceTypes.TFS);
@@ -60,27 +45,22 @@ export class SprintGoalWidget {
         let settings: SprintGoalWidgetSettings = JSON.parse(widgetSettings.customSettings.data);
         if (!settings) settings = SprintGoalWidgetSettings.DefaultSettings;
 
-        return workClient.getTeamIterations(teamContext).then((i) => {
-            if (i.length == 0)
-                return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
+        var iterations = await workClient.getTeamIterations(teamContext);
+        if (iterations.length == 0)
+            return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
 
-            return workClient.getTeamIterations(teamContext, "current").then((teamIterations) => {
-                var iterationId = teamIterations[0].id;
-                var configIdentifierWithTeam = this.getConfigKey(iterationId, teamId);
+        var teamIterations = await workClient.getTeamIterations(teamContext, "current");
+        var configIdentifierWithTeam = this.getConfigKey(teamIterations[0].id, teamId);
 
-                return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto) => {
-                    var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
+        var teamGoal = await this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam);
+        var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
 
-                    if (teamGoal) {
-                        return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
-                    }
-                    else{
-                        return this.display(widgetSettings.name, "No goal yet, go to sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
-                    }
-                });
-            });
-        });
-
+        if (teamGoal) {
+            return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
+        }
+        else {
+            return this.display(widgetSettings.name, "No goal set! Go to 'Azure Boards', select a sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
+        }
     }
 
     private getConfigKey = (iterationId: string, teamId: string) => {
@@ -131,3 +111,11 @@ export class SprintGoalDto {
     public goal: string;
     public sprintGoalInTabLabel: boolean;
 }
+
+
+WidgetHelpers.IncludeWidgetStyles();
+
+VSS.register("SprintGoalWidget", function () {
+    return new SprintGoalWidget(new SprintGoalApplicationInsightsWrapper());
+});
+VSS.notifyLoadSucceeded(); 
