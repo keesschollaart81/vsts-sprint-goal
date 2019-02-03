@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal-dev",
     "name": "Sprint Goal Dev",
-    "version": "4.0.21",
+    "version": "4.0.22",
     "publisher": "keesschollaart",
     "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -46,14 +46,35 @@
             "path": "images/dist/screenshots-vsts-sprint-goal-4.png"
         }
     ],
-    "links": {
+    "links": { 
+        "repository": {
+          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/"
+        },
+        "issues": {
+          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/issues"
+        },
+        "learn": {
+          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+        },
         "getstarted": {
             "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
         },
         "support": {
-            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/issues"
         }
     },
+    "badges": [
+        {
+            "href": "https://caseonline.visualstudio.com/Sprint%20Goal/_build/latest?definitionId=6",
+            "uri": "https://caseonline.visualstudio.com/Sprint%20Goal/_apis/build/status/Sprint%20Goal%20Develop-CI",
+            "description": "Build"
+        },
+        {
+            "href": "https://caseonline.visualstudio.com/Sprint%20Goal/_release?definitionId=1",
+            "uri": "https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/e3292a40-7e22-4ea2-bf37-12310b62b34a/1/2",
+            "description": "Release"
+        }
+    ],
     "branding": {
         "color": "rgb(216, 224, 240)",
         "theme": "light"
