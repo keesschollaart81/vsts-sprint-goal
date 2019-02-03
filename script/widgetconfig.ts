@@ -44,7 +44,7 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
                 }
             });
 
-            jscolor.installByClassName("jscolor");
+            jscolor.installByClassName("jscolor"); 
 
             return this.WidgetHelpers.WidgetStatusHelper.Success();
         }
