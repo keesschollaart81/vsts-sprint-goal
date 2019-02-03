@@ -74,6 +74,9 @@ export class SprintGoalWidget {
                     if (teamGoal) {
                         return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings)
                     }
+                    else{
+                        return this.display(widgetSettings.name, "No goal yet, go to sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
+                    }
                 });
             });
         });
