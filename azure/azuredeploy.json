@@ -13,90 +13,16 @@
         }
     },
     "variables": {
-        "storageAccountName": "[concat('vstssprintgoal',parameters('environment'),'storage')]",
-        "cdnProfileName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile')]",
-        "cdnProfileEndpointName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile-endpoint')]",
-        "cdnProfileEndpointOriginName": "[concat('vsts-sprint-goal-',parameters('environment'),'-cdn-profile-endpoint-origin')]",
         "applicationInsightsName": "[concat('vsts-sprint-goal-',parameters('environment'),'-appinsights')]"
     },
     "resources": [
         {
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "BlobStorage",
-            "name": "[variables('storageAccountName')]",
-            "apiVersion": "2016-01-01",
-            "location": "westeurope",
-            "tags": {},
-            "scale": null,
-            "properties": {
-                "accessTier": "Hot"
-            },
-            "dependsOn": []
-        },
-        {
-            "type": "Microsoft.Cdn/profiles",
-            "sku": {
-                "name": "Standard_Verizon"
-            },
-            "name": "[variables('cdnProfileName')]",
-            "apiVersion": "2016-04-02",
-            "location": "WestEurope",
-            "properties": {
-                "provisioningState": "Succeeded",
-                "resourceState": "Active"
-            },
-            "resources": [
-                {
-                    "type": "Microsoft.Cdn/profiles/endpoints",
-                    "name": "[concat(variables('cdnProfileName'),'/',variables('cdnProfileEndpointName'))]",
-                    "apiVersion": "2016-04-02",
-                    "location": "WestEurope",
-                    "properties": {
-                        "originHostHeader": "[concat(variables('storageAccountName'),'.blob.core.windows.net')]",
-                        "isHttpAllowed": true,
-                        "isHttpsAllowed": true,
-                        "queryStringCachingBehavior": "IgnoreQueryString",
-                        "originPath": null,
-                        "origins": [
-                            {
-                                "name": "[concat(variables('storageAccountName'),'-blob-core-windows-net')]",
-                                "properties": {
-                                    "hostName": "[concat(variables('storageAccountName'),'.blob.core.windows.net')]",
-                                    "httpPort": null,
-                                    "httpsPort": null
-                                }
-                            }
-                        ],
-                        "contentTypesToCompress": [
-                            "text/plain",
-                            "text/html",
-                            "text/css",
-                            "text/javascript",
-                            "application/x-javascript",
-                            "application/javascript",
-                            "application/json",
-                            "application/xml"
-                        ],
-                        "isCompressionEnabled": true
-                    },
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Cdn/profiles', variables('cdnProfileName'))]"
-                    ]
-                }
-            ],
-            "dependsOn": []
-        },
-         {
             "type": "microsoft.insights/components",
             "kind": "Node.JS",
             "name": "[variables('applicationInsightsName')]",
             "apiVersion": "2014-04-01",
             "location": "westeurope",
-            "tags": {}, 
+            "tags": {},
             "properties": {
                 "ApplicationId": "[variables('applicationInsightsName')]"
             },
@@ -104,19 +30,7 @@
         }
     ],
     "outputs": {
-        "storageAccountName": {
-            "type": "string",
-            "value": "[variables('storageAccountName')]"
-        },
-        "storageAccountKey": {
-            "type": "string",
-            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
-        },
-        "cdnProfileEndpointHostname": {
-            "type": "string",
-            "value": "[reference(variables('cdnProfileEndpointName')).hostName]"
-        },
-        "applicationInsightsInstrumentationKey":{
+        "applicationInsightsInstrumentationKey": {
             "type": "string",
             "value": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]"
         }

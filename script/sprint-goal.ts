@@ -3,6 +3,7 @@ import Q = require("q");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
+import EmojiPicker = require("vanilla-emoji-picker");
 
 export class SprintGoal {
     private iterationId: string;
@@ -17,18 +18,22 @@ export class SprintGoal {
 
             var webContext = VSS.getWebContext();
             this.log('TeamId:' + webContext.team.id);
-            this.teamId = webContext.team.id;
+            this.teamId = webContext.team.id; 
 
             var config = VSS.getConfiguration();
             this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
 
+            var reloadWhenIterationChanges = false;
+
             if (config.foregroundInstance) { // else: config.host.background == true
                 // this code runs when the form is loaded, otherwise, just load the tab
+
+                reloadWhenIterationChanges = true;
 
                 this.iterationId = config.iterationId;
                 this.buildWaitControl();
                 this.getSettings(true).then((settings) => {
-                    this.loadEmojiPicker();
+                    new EmojiPicker({});
                     this.fillForm(settings);
                 });
 
@@ -38,12 +43,12 @@ export class SprintGoal {
             }
 
             // register this 'Sprint Goal' service
-            VSS.register(VSS.getContribution().id, {
+            VSS.register(VSS.getContribution().id, <IContributedTab>{
                 pageTitle: this.getTabTitle,
+                uri: undefined,
+                updateContext: (ctx) => this.contextUpdated(ctx, reloadWhenIterationChanges),
                 name: this.getTabTitle,
-                isInvisible: function (state) {
-                    return false;
-                }
+                isInvisible: (state) => false
             });
         }
         catch (e) {
@@ -60,6 +65,18 @@ export class SprintGoal {
             showDelay: 0
         };
         this.waitControl = Controls.create(StatusIndicator.WaitControl, $("#sprint-goal"), waitControlOptions);
+    }
+
+    private contextUpdated = (ctx, reloadWhenIterationChanges: boolean) => {
+        if (ctx.iterationId == this.iterationId) return;
+        
+        if (reloadWhenIterationChanges) {
+            VSS.getService(VSS.ServiceIds.Navigation).then((hostNavigationService: IHostNavigationService) => {
+                //hostNavigationService.setTabTitle("my sprint goal"); // if only this was available
+                hostNavigationService.reload();
+            });
+
+        }
     }
 
     private getLocation = (href: string): HTMLAnchorElement => {
@@ -94,7 +111,7 @@ export class SprintGoal {
         var menubar = Controls.create(Menus.MenuBar, $(".toolbar"), menubarOptions);
     }
 
-    public getTabTitle = (tabContext): string => {
+    public getTabTitle = async (tabContext): Promise<string> => {
         this.log('getTabTitle');
         if (!tabContext || !tabContext.iterationId) {
             this.log("getTabTitle: tabContext or tabContext.iterationId empty");
@@ -105,18 +122,14 @@ export class SprintGoal {
         var sprintGoalCookie = this.getSprintGoalFromCookie();
 
         if (!sprintGoalCookie) {
-            this.log("getTabTitle: Sprint goal net yet loaded in cookie, cannot (synchrone) fetch this from storage in 'getTabTitle()' context, call is made anyway")
-            // todo: this call will not return sync. And/but we cannot wait here for the result
-            // because this code run every time the tab is visible (board, capacity, etc.) and we do not want to be blocking and slow down those pages
-            // this way, we at least fetch the values from the server (in the 'background') and persist them in a cookie for the next page view
-
-            var promise = this.getSettings(true)
-                .then((settings) => {
-                    // if (settings.sprintGoalInTabLabel && settings.goal != null) {
-                    //     return "Goal: " + settings.goal.substr(0, 60);
-                    // }
-                });
-            return "Goal";
+            this.log("getTabTitle: Sprint goal net yet loaded in cookie, getting it async...");
+            try {
+                var settings = await this.getSettings(true);
+                return "Goal: " + settings.goal;
+            }
+            catch{
+                return "Goal";
+            }
         }
 
         if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
@@ -153,7 +166,7 @@ export class SprintGoal {
 
         $(".emoji-wysiwyg-editor").blur(); //ie11 hook to force WYIWYG editor to copy value to #goal input field
 
-        const sprintConfig = {
+        const sprintConfig = <SprintGoalDto>{
             sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
             goal: $("#goal").val()
         };
@@ -175,7 +188,7 @@ export class SprintGoal {
             });
     }
 
-    public getSettings = (forceReload: boolean): IPromise<SprintGoalDto> => {
+    public getSettings = async (forceReload: boolean): Promise<SprintGoalDto> => {
         this.log('getSettings');
         if (this.waitControl) this.waitControl.startWait();
         var currentGoalInCookie = this.getSprintGoalFromCookie();
@@ -185,22 +198,16 @@ export class SprintGoal {
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
             var configIdentifierWithTeam = this.getConfigKey(this.iterationId, this.teamId);
 
-            return this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam).then((teamGoal: SprintGoalDto): IPromise<SprintGoalDto> => {
-                if (teamGoal) {
-                    this.updateSprintGoalCookie(configIdentifierWithTeam, teamGoal);
+            var teamGoal = await this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam);
+            if (teamGoal) {
+                this.updateSprintGoalCookie(configIdentifierWithTeam, teamGoal);
 
-                    return Q.fcall((): SprintGoalDto => {
-                        // team settings
-                        return teamGoal;
-                    });
-                }
-            });
+                return teamGoal;
+            }
         }
         else {
-            return Q.fcall((): SprintGoalDto => {
-                this.log('getSettings: fetched settings from cookie');
-                return currentGoalInCookie;
-            });
+            this.log('getSettings: fetched settings from cookie');
+            return currentGoalInCookie;
         }
     }
 
@@ -275,40 +282,6 @@ export class SprintGoal {
             return;
         }
         console.log(message)
-    }
-
-    private loadEmojiPicker = () => {
-        this.addStylesheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
-        this.addStylesheet('../lib/onesignal-emoji-picker/css/emoji.css');
-        this.addScriptTag('../lib/onesignal-emoji-picker/js/config.js');
-        this.addScriptTag('../lib/onesignal-emoji-picker/js/util.js');
-        this.addScriptTag('../lib/onesignal-emoji-picker/js/jquery.emojiarea.js');
-        var emojiPickerScriptElement = this.addScriptTag('../lib/onesignal-emoji-picker/js/emoji-picker.js');
-
-        emojiPickerScriptElement.addEventListener('load', function () {
-            (<any>window).emojiPicker = new EmojiPicker({
-                emojiable_selector: '[data-emojiable=true]',
-                assetsPath: '../lib/onesignal-emoji-picker/img',
-                popupButtonClasses: 'fa fa-smile-o'
-            });
-            (<any>window).emojiPicker.discover();
-        });
-    }
-
-    private addStylesheet = (href: string) => {
-        var link = document.createElement('link')
-        link.setAttribute('rel', 'stylesheet')
-        link.setAttribute('type', 'text/css')
-        link.setAttribute('href', href)
-        document.getElementsByTagName('head')[0].appendChild(link);
-    }
-
-    private addScriptTag = (src: string): HTMLScriptElement => {
-        var script = document.createElement('script');
-        script.src = src;
-        script.async = false;
-        document.head.appendChild(script);
-        return script;
     }
 }
 

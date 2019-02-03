@@ -1,10 +1,10 @@
 {
     "manifestVersion": 1,
-    "id": "sprint-goal",
-    "name": "Sprint Goal",
-    "version": "3.3.1",
+    "id": "sprint-goal-dev",
+    "name": "Sprint Goal Dev",
+    "version": "4.0.20",
     "publisher": "keesschollaart",
-    "public": true,
+    "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
     "targets": [
         {
@@ -64,47 +64,21 @@
     },
     "files": [
         {
-            "path": "src/sprint-goal.html",
-            "addressable": true
-        },
-        {
-            "path": "src/widget.html",
-            "addressable": true
-        },
-        {
-            "path": "src/widgetconfig.html",
-            "addressable": true
-        },
-        {
-            "path": "images/dist",
-            "addressable": true
-        },
-        {
-            "path": "node_modules/vss-web-extension-sdk/lib",
+            "path": "static/",
             "addressable": true,
-            "packagePath": "lib"
+            "packagePath": "/"
         },
         {
-            "path": "node_modules/jscolor-picker/jscolor.min.js",
+            "path": "dist/sprint-goal",
             "addressable": true,
-            "packagePath": "lib/jscolor.min.js"
-        },
-        {
-            "path": "node_modules/tinycolor2/dist/tinycolor-min.js",
-            "addressable": true,
-            "packagePath": "lib/tinycolor-min.js"
-        },
-        {
-            "path": "src/onesignal-emoji-picker",
-            "addressable": true,
-            "packagePath": "lib/onesignal-emoji-picker"
+            "packagePath": "/"
         }, 
         {
-            "path": "lib",
-            "addressable": true
+            "path": "images/dist",
+            "addressable": true,
+            "packagePath": "images/dist/"
         }
     ],
-    "baseUri": "<<baseuri>>",
     "contributions": [
         {
             "id": "iteration-backlog-tab",
@@ -116,7 +90,7 @@
             "properties": {
                 "name": "Sprint Goal",
                 "title": "Sprint Goal Tab",
-                "uri": "src/sprint-goal.html",
+                "uri": "sprint-goal.html",
                 "dynamic": true
             }
         },
@@ -132,7 +106,7 @@
                 "description": "Sprint Goal",
                 "catalogIconUrl:": "images/dist/widget.png",
                 "previewImageUrl": "images/dist/widget.png",
-                "uri": "src/widget.html",
+                "uri": "widget.html",
                 "isNameConfigurable": true,
                 "supportedSizes": [
                     {
@@ -174,7 +148,7 @@
             "properties": {
                 "name": "SprintGoalWidget Configuration",
                 "description": "Configures SprintGoalWidget",
-                "uri": "src/widgetconfig.html"
+                "uri": "widgetconfig.html"
             }
         }
     ],

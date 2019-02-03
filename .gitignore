@@ -256,3 +256,5 @@ paket-files/
 scripts/
 lib/
 keesschollaart.sprint-goal-*
+
+dist/

@@ -2,17 +2,17 @@
 
 <head>
     <title>Sprint Goal Widget</title>
-    <script src="../lib/VSS.SDK.js"></script>
-    <script src="../lib/tinycolor-min.js"></script>
+    <script src="VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
             usePlatformStyles: true,
             usePlatformScripts: true,
-            setupModuleLoader: true
+            setupModuleLoader: true,
+            applyTheme: true
         });
         VSS.ready(function () {
-            require(["lib/widget"], function () { });
+            require(["SprintGoalWidget"], function () { });
         });
     </script>
     <style type="text/css">
@@ -26,7 +26,7 @@
             display:none;
             background-color: white;
             color: black;
-            background-image:url("../images/dist/flag-black.png");
+            background-image:url("images/dist/flag-black.png");
             background-position: bottom right;
             background-repeat: no-repeat;
         }

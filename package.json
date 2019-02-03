@@ -4,7 +4,7 @@
   "description": "vsts-sprint-goal",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc -p . && webpack --config webpack.config",
     "postbuild": "npm run package",
     "package": "tfx extension create",
     "clean": "rimraf ./dist && rimraf ./*.vsix"
@@ -15,21 +15,25 @@
   },
   "author": "Case Online",
   "devDependencies": {
-    "ncp": "^2.0.0",
-    "cpx": "^1.5.0",
-    "rimraf": "^2.5.4",
-    "tfx-cli": "^0.3.45",
-    "typescript": "2.3.4",
-    "@types/applicationinsights-js": "~1.0.5"
+    "@types/q": "0.0.32",
+    "@types/applicationinsights-js": "1.0.9",
+    "@types/tinycolor": "1.1.27",
+    "ncp": "2.0.0",
+    "cpx": "1.5.0",
+    "rimraf": "2.6.2",
+    "tfx-cli": "0.6.4",
+    "typescript": "3.0.3",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "copy-webpack-plugin": "4.6.0"
   },
   "dependencies": {
-    "@types/jquery": "^2.0.34",
-    "@types/q": "0.0.32",
-    "applicationinsights-js": "1.0.14",
-    "vss-web-extension-sdk": "^2.109.0",
-    "moment": "^2.14.1",
-    "moment-timezone": "^0.5.4",
-    "jscolor-picker": "^2.0.4" ,
-    "tinycolor2":"1.4.1"
+    "applicationinsights-js": "1.0.20",
+    "jscolor-picker": "2.0.4",
+    "moment": "2.23.0",
+    "moment-timezone": "0.5.23",
+    "tinycolor2": "1.4.1",
+    "vanilla-emoji-picker": "^0.2.4",
+    "vss-web-extension-sdk": "5.140.0"
   }
 }

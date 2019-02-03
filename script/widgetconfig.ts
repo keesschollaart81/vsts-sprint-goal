@@ -1,6 +1,7 @@
 import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
 import { SprintGoalWidgetSettings } from "./settings";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
+import jscolor = require("jscolor-picker")
 
 VSS.require(["TFS/Dashboards/WidgetHelpers"], function (WidgetHelpers) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
@@ -43,6 +44,8 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
                 }
             });
 
+            jscolor.installByClassName("jscolor"); 
+
             return this.WidgetHelpers.WidgetStatusHelper.Success();
         }
         catch (e) {
@@ -54,9 +57,9 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
         var customSettings = this.getCustomSettings();
         try {
             this.ai.trackEvent("Save widget settings", {
-                foregroundColor: $("#foreground-color-input").val(),
-                backgroundColor: $("#background-color-input").val(),
-                fontSize: $("#font-size-input").val(),
+                foregroundColor: <string>$("#foreground-color-input").val(),
+                backgroundColor: <string>$("#background-color-input").val(),
+                fontSize: <string>$("#font-size-input").val(),
                 cols: this.widgetSettings.size.columnSpan.toString(),
                 rows: this.widgetSettings.size.columnSpan.toString(),
                 title: this.widgetSettings.name
@@ -85,10 +88,10 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
     }
 
     private getCustomSettings = () => {
-        var fontSize = parseInt($("#font-size-input").val());
+        var fontSize = parseInt(<string>$("#font-size-input").val());
 
         var customSettings = {
-            data: JSON.stringify(new SprintGoalWidgetSettings($("#foreground-color-input").val(), $("#background-color-input").val(), fontSize))
+            data: JSON.stringify(new SprintGoalWidgetSettings(<string>$("#foreground-color-input").val(), <string>$("#background-color-input").val(), fontSize))
         };
         return customSettings;
     }

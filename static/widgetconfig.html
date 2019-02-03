@@ -1,9 +1,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <script src="../lib/VSS.SDK.js"></script>
-    <script src="../lib/jscolor.min.js"></script>
+    <script src="VSS.SDK.js"></script>
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            setupModuleLoader: true,
+            usePlatformScripts: true,
+            usePlatformStyles: true,
+            applyTheme: true
+        });
+        VSS.ready(function () {
+            require(["SprintGoalWidgetConfiguration"], function (configuration) { });
+        });
+    </script>
+    <style> 
+        input, select {
+            color:rgba(var(--text-primary-color,0, 0, 0),1);
+        }
+        label, legend {
+            color:rgba(var(--text-secondary-color,0, 0, 0),1);
+        }
+    </style>
 </head>
+
 <body>
     <div class="widget-configuration">
         <div id="single-line-text-input">
@@ -26,7 +47,7 @@
         </div>
         <div id="single-line-text-input">
             <label>Font size (pt)</label>
-            <input id="font-size-input" class="field" type="text" >
+            <input id="font-size-input" class="field" type="text">
 
             <span class="validation-error font-size-input-validation">
                 <span class="icon-error-exclamation"></span>
@@ -34,18 +55,6 @@
             </span>
         </div>
     </div>
-
-    <script type="text/javascript">
-        VSS.init({
-            explicitNotifyLoaded: true,
-            setupModuleLoader: true,
-            usePlatformScripts: true,
-            usePlatformStyles: true
-        });
-        VSS.ready(function () {
-            require(["lib/widgetconfig"], function (configuration) { });
-        });
-    </script>
 </body>
 
 </html>

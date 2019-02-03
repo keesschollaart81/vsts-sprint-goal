@@ -2,17 +2,18 @@
 
 <head>
     <title>Sprint Goal</title>
-    <script src="../lib/VSS.SDK.js"></script>
+    <script src="VSS.SDK.js"></script>
     <script type="text/javascript">
         VSS.init({
             explicitNotifyLoaded: true,
             setupModuleLoader: true,
             usePlatformScripts: true,
-            usePlatformStyles: true
+            usePlatformStyles: true,
+            applyTheme: true
         });
 
         VSS.ready(function () {
-            require(["lib/sprint-goal","lib/SprintGoalApplicationInsightsWrapper"], function (sg,ai) {
+            require(["SprintGoal", "SprintGoalApplicationInsightsWrapper"], function (sg, ai) {
                 var asd = new sg.SprintGoal(new ai.SprintGoalApplicationInsightsWrapper());
 
                 VSS.notifyLoadSucceeded();
@@ -61,6 +62,21 @@
             margin-top: -30px;
             right: 30px;
         }
+
+        input,
+        select {
+            color: rgba(var(--text-primary-color, 0, 0, 0), 1);
+        }
+
+        label,
+        legend {
+            color: rgba(var(--text-secondary-color, 0, 0, 0), 1);
+        }
+
+        .goal svg {
+            fill: gray;
+            margin: 9px;
+        }
     </style>
 </head>
 
@@ -75,8 +91,8 @@
             </div>
             <div class="goal">
                 <label>Set your goal for this sprint:</label>
-                <br/>
-                <input type="text" id="goal" data-emojiable="true" data-emoji-input="unicode"/>
+                <br />
+                <input type="text" id="goal" data-emoji-picker="true" />
             </div>
         </div>
 
