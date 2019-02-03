@@ -1,5 +1,10 @@
 # Azure DevOps - Sprint Goal
 
+[![Build status](https://dev.azure.com/caseonline/Sprint%20Goal/_apis/build/status/Sprint%20Goal%20Develop-CI)](https://dev.azure.com/caseonline/Sprint%20Goal/_build/latest?definitionId=6)
+[![Deployment status](https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/e3292a40-7e22-4ea2-bf37-12310b62b34a/1/2)](https://dev.azure.com/caseonline/Sprint%20Goal/_releaseDefinition?definitionId=1)
+
+[![Build status](https://caseonline.visualstudio.com/Sprint%20Goal/_apis/build/status/Sprint%20Goal%20Develop-CI)](https://caseonline.visualstudio.com/Sprint%20Goal/_build/latest?definitionId=6)
+
 This extension enables you to set a goal for your sprint in Azure DevOps.
 
 ![Build status](https://caseonline.visualstudio.com/_apis/public/build/definitions/e3292a40-7e22-4ea2-bf37-12310b62b34a/6/badge) [![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/keesschollaart.sprint-goal.svg)](https://marketplace.visualstudio.com/items?itemName=keesschollaart.sprint-goal)
