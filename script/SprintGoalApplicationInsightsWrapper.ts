@@ -15,7 +15,7 @@ export class SprintGoalApplicationInsightsWrapper {
 
         this.context = VSS.getExtensionContext();
         this.webContext = VSS.getWebContext();
-        var dataService: ExtensionDataService = await VSS.getService(VSS.ServiceIds.ExtensionData);
+        var dataService: IExtensionDataService = await VSS.getService<IExtensionDataService>(VSS.ServiceIds.ExtensionData);
         try{
             this.telemetryOptOut = await dataService.getValue<boolean>("telemetryOptOut");
         }
