@@ -4,6 +4,7 @@ import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import EmojiPicker = require("vanilla-emoji-picker");
 import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
+import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 
 export class SprintGoal {
     private iterationId: string;
@@ -11,7 +12,7 @@ export class SprintGoal {
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
 
-    constructor(private ai) {
+    constructor(private ai: SprintGoalApplicationInsightsWrapper) {
         try {
             var context = VSS.getExtensionContext();
             this.storageUri = this.getLocation(context.baseUri).hostname;
@@ -173,7 +174,7 @@ export class SprintGoal {
 
         if (this.ai) {
             if (sprintConfig.goal.substr(0,1) != "!") {
-                await this.ai.trackEvent("SaveSettings", sprintConfig);
+                await this.ai.trackEvent("SaveSettings", <any>sprintConfig);
             }
         }
 
@@ -294,10 +295,11 @@ export class SprintGoal {
                 return telemetryOptOut;
             }, () =>{
                 return false;
-            }).then((optOut) => {
-                dataService.setValue("telemetryOptOut", !optOut);
-                var text = optOut ? "Telemetry now disabled" : "Telemetry now enabled"
+            }).then((currentOptOut) => {
+                var text = !currentOptOut ? "Telemetry now disabled" : "Telemetry now enabled"
+                dataService.setValue("telemetryOptOut", !currentOptOut);
                 sender.innerText = text;
+                this.ai.unload();
             });
         })
         

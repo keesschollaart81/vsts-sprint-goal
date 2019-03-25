@@ -73,4 +73,9 @@ export class SprintGoalApplicationInsightsWrapper {
             teamName: this.webContext.team.name
         };
     }
+
+    public unload = () => {
+        this.isLoaded = false;
+        this.telemetryOptOut = undefined;
+    }
 }
