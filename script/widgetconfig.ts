@@ -1,4 +1,4 @@
-import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration } from "TFS/Dashboards/WidgetContracts";
+import { WidgetSettings, IWidgetConfigurationContext, IWidgetConfiguration, SaveStatus, WidgetStatus } from "TFS/Dashboards/WidgetContracts";
 import { SprintGoalWidgetSettings } from "./settings";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 import jscolor = require("jscolor-picker")
@@ -18,7 +18,7 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
     widgetSettings: WidgetSettings;
     constructor(public WidgetHelpers, private ai: SprintGoalApplicationInsightsWrapper) { }
 
-    public load(widgetSettings: WidgetSettings, widgetConfigurationContext: IWidgetConfigurationContext) {
+    public async load(widgetSettings: WidgetSettings, widgetConfigurationContext: IWidgetConfigurationContext) : Promise<WidgetStatus> {
         try {
             this.widgetSettings = widgetSettings;
             var settings = JSON.parse(widgetSettings.customSettings.data) as SprintGoalWidgetSettings;
@@ -49,14 +49,14 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
             return this.WidgetHelpers.WidgetStatusHelper.Success();
         }
         catch (e) {
-            this.ai.trackException(e);
+            await this.ai.trackException(e);
         }
     }
 
-    public onSave = () => {
+    public onSave = async () : Promise<SaveStatus> => {
         var customSettings = this.getCustomSettings();
         try {
-            this.ai.trackEvent("Save widget settings", {
+            await this.ai.trackEvent("Save widget settings", {
                 foregroundColor: <string>$("#foreground-color-input").val(),
                 backgroundColor: <string>$("#background-color-input").val(),
                 fontSize: <string>$("#font-size-input").val(),

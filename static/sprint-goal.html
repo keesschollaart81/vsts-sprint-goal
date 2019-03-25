@@ -15,6 +15,7 @@
         VSS.ready(function () {
             require(["SprintGoal", "SprintGoalApplicationInsightsWrapper"], function (sg, ai) {
                 var asd = new sg.SprintGoal(new ai.SprintGoalApplicationInsightsWrapper());
+                document.getElementById("telemetryOptOut").onclick = function() { asd.toggleTelemetry(this)};
 
                 VSS.notifyLoadSucceeded();
             });
@@ -98,7 +99,8 @@
 
         <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
             <a href="https://twitter.com/keesschollaart" target="_blank">Twitter</a> or by
-            <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
+            <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p> | 
+            <span style="text-decoration: underline" id="telemetryOptOut">Opt-out telemetry</span>.</p>
     </div>
 </body>
 

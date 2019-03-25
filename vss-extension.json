@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal-dev",
     "name": "Sprint Goal Dev",
-    "version": "4.0.23",
+    "version": "4.1.0",
     "publisher": "keesschollaart",
     "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",

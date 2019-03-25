@@ -1,9 +1,9 @@
-import Extension_Data = require("VSS/SDK/Services/ExtensionData");
 import Q = require("q");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import EmojiPicker = require("vanilla-emoji-picker");
+import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 
 export class SprintGoal {
     private iterationId: string;
@@ -159,7 +159,7 @@ export class SprintGoal {
         };
     }
 
-    public saveSettings = (): IPromise<any> => {
+    public saveSettings = async (): Promise<any> => {
         this.log('saveSettings');
 
         if (this.waitControl) this.waitControl.startWait();
@@ -171,14 +171,18 @@ export class SprintGoal {
             goal: $("#goal").val()
         };
 
-        if (this.ai) this.ai.trackEvent("SaveSettings", sprintConfig);
+        if (this.ai) {
+            if (sprintConfig.goal.substr(0,1) != "!") {
+                await this.ai.trackEvent("SaveSettings", sprintConfig);
+            }
+        }
 
         var configIdentifierWithTeam: string = this.getConfigKey(this.iterationId, this.teamId);
 
         this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
 
         return VSS.getService(VSS.ServiceIds.ExtensionData)
-            .then((dataService: Extension_Data.ExtensionDataService) => {
+            .then((dataService: ExtensionDataService) => {
                 this.log('saveSettings: ExtensionData Service Loaded, saving for ' + configIdentifierWithTeam, sprintConfig);
                 return dataService.setValue("sprintConfig." + configIdentifierWithTeam, sprintConfig);
             })
@@ -213,7 +217,7 @@ export class SprintGoal {
 
     private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
         return VSS.getService(VSS.ServiceIds.ExtensionData)
-            .then((dataService: Extension_Data.ExtensionDataService) => {
+            .then((dataService: ExtensionDataService) => {
                 this.log('getSettings: ExtensionData Service Loaded, get value by key: ' + key);
 
                 try {
@@ -282,6 +286,21 @@ export class SprintGoal {
             return;
         }
         console.log(message)
+    }
+
+    public toggleTelemetry = (sender: HTMLSpanElement) => {
+        VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: ExtensionDataService) =>{
+            dataService.getValue<boolean>("telemetryOptOut").then((telemetryOptOut) => {
+                return telemetryOptOut;
+            }, () =>{
+                return false;
+            }).then((optOut) => {
+                dataService.setValue("telemetryOptOut", !optOut);
+                var text = optOut ? "Telemetry now disabled" : "Telemetry now enabled"
+                sender.innerText = text;
+            });
+        })
+        
     }
 }
 

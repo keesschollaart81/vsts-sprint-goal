@@ -18,7 +18,7 @@ export class SprintGoalWidget {
             await this.loadSprintGoal(widgetSettings);
             return WidgetHelpers.WidgetStatusHelper.Success();
         } catch (e) {
-            this.ai.trackException(e);
+            await this.ai.trackException(e);
             this.display(widgetSettings.name, "Error loading widget", widgetSettings.size.columnSpan, SprintGoalWidgetSettings.DefaultSettings);
             return WidgetHelpers.WidgetStatusHelper.Success();
         }
@@ -48,7 +48,7 @@ export class SprintGoalWidget {
 
         var iterations = await workClient.getTeamIterations(teamContext);
         if (iterations.length == 0)
-            return this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
+            return await this.display(widgetSettings.name, "No sprint goal yet!", widgetSettings.size.columnSpan, settings)
 
         var teamIterations = await workClient.getTeamIterations(teamContext, "current");
         var configIdentifierWithTeam = this.getConfigKey(teamIterations[0].id, teamId);
@@ -57,10 +57,10 @@ export class SprintGoalWidget {
         var title = (widgetSettings.size.columnSpan == 1) ? widgetSettings.name : widgetSettings.name + " - " + teamIterations[0].name;
 
         if (teamGoal) {
-              return this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings) 
+              return await this.display(title, teamGoal.goal, widgetSettings.size.columnSpan, settings) 
         }
         else {
-            return this.display(widgetSettings.name, "No goal set! Go to 'Azure Boards', select a sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
+            return await this.display(widgetSettings.name, "No goal set! Go to 'Azure Boards', select a sprint/iteration and set it in the 'goal' tab!", widgetSettings.size.columnSpan, settings)
         }
     }
 
@@ -69,7 +69,7 @@ export class SprintGoalWidget {
         return iterationId.toString().substring(0, 15) + teamId.toString().substring(0, 15)
     }
 
-    private display = (title: string, text: string, columns: number, settings: SprintGoalWidgetSettings) => {
+    private display = async (title: string, text: string, columns: number, settings: SprintGoalWidgetSettings) : Promise<void> => {
         var isLight = true;
 
         $("#widgetcontainer").css("background-color", settings.backgroundColor);
@@ -86,7 +86,7 @@ export class SprintGoalWidget {
 
         $(".widget").show();
 
-        this.ai.trackEvent("Widget shown");
+        await this.ai.trackEvent("Widget shown");
     }
 
     private fetchSettingsFromExtensionDataService = (key: string): IPromise<SprintGoalDto> => {
