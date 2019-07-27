@@ -12,6 +12,7 @@ export class SprintGoal {
     private teamId: string;
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
+    private editor: RoosterJs.Editor;
 
     constructor(private ai: SprintGoalApplicationInsightsWrapper) {
         try {
@@ -38,9 +39,6 @@ export class SprintGoal {
                     new EmojiPicker({});
                     this.fillForm(settings);
 
-                    var editorDiv = <HTMLDivElement>document.getElementById('editorDiv');
-                    var editor = RoosterJs.createEditor(editorDiv);
-                    editor.setContent('Welcome to <b>RoosterJs</b>!');
                 });
 
                 this.buildMenuBar();
@@ -154,14 +152,15 @@ export class SprintGoal {
         var sprintGoalInTabLabel = false;
         if (goal) {
             sprintGoalInTabLabel = (this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "sprintGoalInTabLabel") == "true");
-
         }
 
         if (!goal) return undefined;
 
         return {
             goal: goal,
-            sprintGoalInTabLabel: sprintGoalInTabLabel
+            sprintGoalInTabLabel: sprintGoalInTabLabel,
+            details: "", // we dont persist these values in the cookie
+            goalAchieved: false  // we dont persist these values in the cookie
         };
     }
 
@@ -173,8 +172,10 @@ export class SprintGoal {
         $(".emoji-wysiwyg-editor").blur(); //ie11 hook to force WYIWYG editor to copy value to #goal input field
 
         const sprintConfig = <SprintGoalDto>{
-            sprintGoalInTabLabel: $("#sprintGoalInTabLabel").prop("checked"),
-            goal: $("#goal").val()
+            sprintGoalInTabLabel: $("#sprintGoalInTabLabelCheckbox").prop("checked"),
+            goal: $("#goalInput").val(),
+            details: this.editor.getContent(),
+            goalAchieved: $("#achievedCheckbox").prop("checked")
         };
 
         if (this.ai) {
@@ -254,14 +255,28 @@ export class SprintGoal {
         if (!this.checkCookie()) {
             $("#cookieWarning").show();
         }
+
+        $("#sprintGoalInTabLabelCheckbox").change(function () {
+            if (this.checked) {
+                $("#ditwerkniettooltip").show();
+            } else {
+                $("#ditwerkniettooltip").hide();
+            }
+        });
+
+        var editorDiv = <HTMLDivElement>document.getElementById('detailsText');
+        this.editor = RoosterJs.createEditor(editorDiv);
         if (!sprintGoal) {
-            $("#sprintGoalInTabLabel").prop("checked", true);
-            $("#goal").val("")
+            $("#sprintGoalInTabLabelCheckbox").prop("checked", true);
+            $("#achievedCheckbox").prop("checked", true);
+            $("#goalInput").val("");
         }
         else {
-            $("#sprintGoalInTabLabel").prop("checked", sprintGoal.sprintGoalInTabLabel);
-            $("#goal").val(sprintGoal.goal)
+            $("#sprintGoalInTabLabelCheckbox").prop("checked", sprintGoal.sprintGoalInTabLabel);
+            $("#achievedCheckbox").prop("checked", sprintGoal.goalAchieved);
+            $("#goalInput").val(sprintGoal.goal);
 
+            this.editor.setContent(sprintGoal.details);
         }
     }
 
@@ -318,4 +333,6 @@ export declare class EmojiPicker {
 export class SprintGoalDto {
     public goal: string;
     public sprintGoalInTabLabel: boolean;
+    public goalAchieved: boolean;
+    public details: string;
 }

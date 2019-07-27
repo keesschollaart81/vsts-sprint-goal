@@ -22,8 +22,15 @@
         });
     </script>
     <style type="text/css">
+        body {
+            overflow: auto !important;
+        }
+
         #vss-extension {
-            padding: 20px;
+            width: 500px;
+            padding-top: 8px;
+            padding-left: 16px !important;
+            padding-bottom: 20px;
         }
 
         .goal,
@@ -34,7 +41,44 @@
         #goal,
         #teamgoal {
             padding: 10px;
+        }
+
+        #vss-extension label,
+        #vss-extension input,
+        #vss-extension select {
+            font-family: "Segoe UI VSS (Regular)", "Segoe UI", "-apple-system", BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Ubuntu, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        #vss-extension label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: black;
+            width: 500px;
+            color: rgba(var(--text-secondary-color, 0, 0, 0), 1);
+        }
+
+        #vss-extension input,
+        #vss-extension select,
+        #vss-extension #detailsText {
+            border: 1px solid rgba(200, 200, 200, 1);
+            padding: 7px;
+            border-radius: 2px;
+            width: 500px;
+            font-size: 14px;
+            color: var(--text-primary-color);
+        }
+
+        #vss-extension #detailsText {
+            height: 200px;
+            overflow: auto;
             width: 100%;
+        }
+
+        #vss-extension select {
+            height: 33px;
         }
 
         #cookieWarning {
@@ -47,10 +91,20 @@
             display: none;
         }
 
+        #ditwerkniettooltip {
+            border: 1px solid #f4ce42;
+            background-color: #fff2c4;
+            padding: 10px;
+            margin: 10px 0px 10px 0px;
+            text-align: center;
+            border-radius: 4px;
+            display: none;
+        }
+
         .footer {
             color: #e0e0e0;
             font-size: 10px;
-            padding: 20px;
+            padding: 0px;
         }
 
         .goal .footer a {
@@ -90,17 +144,33 @@
     <div id="sprint-goal">
         <div class="toolbar"></div>
         <div id="vss-extension">
-            <div class="sprintGoalInTabLabel">
-                <input id="sprintGoalInTabLabel" type="checkbox" />
-                <label for="sprintGoalInTabLabel">Show sprint goal in tab label</label>
-                <span id="cookieWarning">This only work with when Cookies are enabled!</span>
+
+            <div class="form-group">
+                <label for="goalInput">Goal for this sprint</label>
+                <input type="text" class="form-control" name="goal" id="goalInput" placeholder="Awesome sprint goal"
+                    data-emoji-picker="true">
             </div>
-            <div class="goal">
-                <label>Set your goal for this sprint:</label>
-                <br />
-                <input type="text" id="goal" data-emoji-picker="true" />
+            <div class="form-group">
+                <label for="sprintGoalInTabLabelCheckbox">Show sprint goal in tab label</label>
+                <input type="checkbox" class="form-control" name="sprintGoalInTabLabel"
+                    id="sprintGoalInTabLabelCheckbox">
+
+                <div id="ditwerkniettooltip">
+                    The title of the tab will not update when using the 'inline' iteration/sprint picker at the top
+                    right corner of this page.<br />You have to reload the page for the goal to update.
+                </div>
             </div>
-            <div id="editorDiv" style="width: 500px; height: 300px; overflow: auto; border: solid 1px black"></div>
+            
+            <div class="form-group">
+                <label for="achievedCheckbox">Goal achieved?</label>
+                <input type="checkbox" class="form-control" name="achieved" id="achievedCheckbox">
+            </div>
+
+            <div class="form-group">
+                <label for="detailsText">Details</label>
+                <div id="detailsText"></div>
+            </div>
+
         </div>
 
         <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
