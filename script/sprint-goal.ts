@@ -65,7 +65,7 @@ export class SprintGoal {
             target: $("#sprint-goal"),
             cancellable: false,
             backgroundColor: "#ffffff",
-            message: "Processing your Sprint Goal..",
+            message: "Working on your Sprint Goal..",
             showDelay: 0
         };
         this.waitControl = Controls.create(StatusIndicator.WaitControl, $("#sprint-goal"), waitControlOptions);
@@ -267,7 +267,7 @@ export class SprintGoal {
         var editorDiv = <HTMLDivElement>document.getElementById('detailsText');
         this.editor = RoosterJs.createEditor(editorDiv);
         if (!sprintGoal) {
-            $("#sprintGoalInTabLabelCheckbox").prop("checked", true);
+            $("#sprintGoalInTabLabelCheckbox").prop("checked", false);
             $("#achievedCheckbox").prop("checked", true);
             $("#goalInput").val("");
         }
