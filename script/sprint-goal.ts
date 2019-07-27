@@ -1,5 +1,5 @@
 import Q = require("q");
-import roosterjs = require("roosterjs");
+import * as RoosterJs from 'roosterjs';
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
@@ -38,8 +38,8 @@ export class SprintGoal {
                     new EmojiPicker({});
                     this.fillForm(settings);
 
-                    var editorDiv = document.getElementById('editorDiv');
-                    var editor = roosterjs.createEditor(editorDiv);
+                    var editorDiv = <HTMLDivElement>document.getElementById('editorDiv');
+                    var editor = RoosterJs.createEditor(editorDiv);
                     editor.setContent('Welcome to <b>RoosterJs</b>!');
                 });
 
