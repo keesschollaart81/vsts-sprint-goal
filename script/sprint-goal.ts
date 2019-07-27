@@ -1,4 +1,5 @@
 import Q = require("q");
+import roosterjs = require("roosterjs");
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
 import StatusIndicator = require("VSS/Controls/StatusIndicator");
@@ -19,7 +20,7 @@ export class SprintGoal {
 
             var webContext = VSS.getWebContext();
             this.log('TeamId:' + webContext.team.id);
-            this.teamId = webContext.team.id; 
+            this.teamId = webContext.team.id;
 
             var config = VSS.getConfiguration();
             this.log('constructor, foregroundInstance = ' + config.foregroundInstance);
@@ -36,6 +37,10 @@ export class SprintGoal {
                 this.getSettings(true).then((settings) => {
                     new EmojiPicker({});
                     this.fillForm(settings);
+
+                    var editorDiv = document.getElementById('editorDiv');
+                    var editor = roosterjs.createEditor(editorDiv);
+                    editor.setContent('Welcome to <b>RoosterJs</b>!');
                 });
 
                 this.buildMenuBar();
@@ -70,7 +75,7 @@ export class SprintGoal {
 
     private contextUpdated = (ctx, reloadWhenIterationChanges: boolean) => {
         if (ctx.iterationId == this.iterationId) return;
-        
+
         if (reloadWhenIterationChanges) {
             VSS.getService(VSS.ServiceIds.Navigation).then((hostNavigationService: IHostNavigationService) => {
                 //hostNavigationService.setTabTitle("my sprint goal"); // if only this was available
@@ -173,7 +178,7 @@ export class SprintGoal {
         };
 
         if (this.ai) {
-            if (sprintConfig.goal.substr(0,1) != "!") {
+            if (sprintConfig.goal.substr(0, 1) != "!") {
                 await this.ai.trackEvent("SaveSettings", <any>sprintConfig);
             }
         }
@@ -290,10 +295,10 @@ export class SprintGoal {
     }
 
     public toggleTelemetry = (sender: HTMLSpanElement) => {
-        VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: ExtensionDataService) =>{
+        VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: ExtensionDataService) => {
             dataService.getValue<boolean>("telemetryOptOut").then((telemetryOptOut) => {
                 return telemetryOptOut;
-            }, () =>{
+            }, () => {
                 return false;
             }).then((currentOptOut) => {
                 var text = !currentOptOut ? "Telemetry now disabled" : "Telemetry now enabled"
@@ -302,7 +307,7 @@ export class SprintGoal {
                 this.ai.unload();
             });
         })
-        
+
     }
 }
 

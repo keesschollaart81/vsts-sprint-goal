@@ -15,7 +15,7 @@
         VSS.ready(function () {
             require(["SprintGoal", "SprintGoalApplicationInsightsWrapper"], function (sg, ai) {
                 var asd = new sg.SprintGoal(new ai.SprintGoalApplicationInsightsWrapper());
-                document.getElementById("telemetryOptOut").onclick = function() { asd.toggleTelemetry(this)};
+                document.getElementById("telemetryOptOut").onclick = function () { asd.toggleTelemetry(this) };
 
                 VSS.notifyLoadSucceeded();
             });
@@ -78,8 +78,9 @@
             fill: gray;
             margin: 9px;
         }
-        .footer span{
-            text-decoration: underline; 
+
+        .footer span {
+            text-decoration: underline;
             color: #e0e0e0;
         }
     </style>
@@ -99,11 +100,12 @@
                 <br />
                 <input type="text" id="goal" data-emoji-picker="true" />
             </div>
+            <div id="editorDiv" style="width: 500px; height: 300px; overflow: auto; border: solid 1px black"></div>
         </div>
 
         <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
             <a href="https://twitter.com/keesschollaart" target="_blank">Twitter</a> or by
-            <a href="mailto:keesschollaart81@hotmail.com">mail</a> | 
+            <a href="mailto:keesschollaart81@hotmail.com">mail</a> |
             <span id="telemetryOptOut">Opt-out telemetry</span>.</p>
     </div>
 </body>
