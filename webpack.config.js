@@ -8,7 +8,8 @@ module.exports = {
     SprintGoalApplicationInsightsWrapper: './dist/js/SprintGoalApplicationInsightsWrapper.js',
     SprintGoal: './dist/js/sprint-goal.js',
     SprintGoalWidget: './dist/js/widget.js',
-    SprintGoalWidgetConfiguration: './dist/js/widgetconfig.js'
+    SprintGoalWidgetConfiguration: './dist/js/widgetconfig.js',
+    SprintGoalAdmin: './dist/js/SprintGoalAdmin.js'
   },
   target: 'web',
   output: {

@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sprint-goal-dev",
     "name": "Sprint Goal Dev",
-    "version": "4.1.10",
+    "version": "4.1.22",
     "publisher": "keesschollaart",
     "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
@@ -46,15 +46,15 @@
             "path": "images/dist/screenshots-vsts-sprint-goal-2.png"
         }
     ],
-    "links": { 
+    "links": {
         "repository": {
-          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/"
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/"
         },
         "issues": {
-          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/issues"
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal/issues"
         },
         "learn": {
-          "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
+            "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
         },
         "getstarted": {
             "uri": "https://github.com/keesschollaart81/vsts-sprint-goal"
@@ -93,7 +93,7 @@
             "path": "dist/sprint-goal",
             "addressable": true,
             "packagePath": "/"
-        }, 
+        },
         {
             "path": "images/dist",
             "addressable": true,
@@ -170,6 +170,19 @@
                 "name": "SprintGoalWidget Configuration",
                 "description": "Configures SprintGoalWidget",
                 "uri": "widgetconfig.html"
+            }
+        },
+        {
+            "id": "SprintGoalWidget.Admin",
+            "type": "ms.vss-web.hub",
+            "description": "Sprint Goal Project Administration",
+            "targets": [
+                "ms.vss-web.project-admin-hub-group"
+            ],
+            "properties": {
+                "name": "Sprint Goal",
+                "order": 100,
+                "uri": "SprintGoalAdmin.html"
             }
         }
     ],

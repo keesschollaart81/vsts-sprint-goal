@@ -6,6 +6,7 @@ import StatusIndicator = require("VSS/Controls/StatusIndicator");
 import EmojiPicker = require("vanilla-emoji-picker");
 import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
+import { Helpers } from "./helpers"
 
 export class SprintGoal {
     private iterationId: string;
@@ -13,9 +14,12 @@ export class SprintGoal {
     private storageUri: string;
     private waitControl: StatusIndicator.WaitControl;
     private editor: RoosterJs.Editor;
+    private helpers: Helpers;
 
     constructor(private ai: SprintGoalApplicationInsightsWrapper) {
         try {
+            this.helpers = new Helpers();
+
             var context = VSS.getExtensionContext();
             this.storageUri = this.getLocation(context.baseUri).hostname;
 
@@ -147,11 +151,11 @@ export class SprintGoal {
     }
 
     public getSprintGoalFromCookie = (): SprintGoalDto => {
-        var goal = this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "goalText");
+        var goal = this.getCookie(this.helpers.getConfigKey(this.iterationId, this.teamId) + "goalText");
 
         var sprintGoalInTabLabel = false;
         if (goal) {
-            sprintGoalInTabLabel = (this.getCookie(this.getConfigKey(this.iterationId, this.teamId) + "sprintGoalInTabLabel") == "true");
+            sprintGoalInTabLabel = (this.getCookie(this.helpers.getConfigKey(this.iterationId, this.teamId) + "sprintGoalInTabLabel") == "true");
         }
 
         if (!goal) return undefined;
@@ -159,8 +163,10 @@ export class SprintGoal {
         return {
             goal: goal,
             sprintGoalInTabLabel: sprintGoalInTabLabel,
-            details: "", // we dont persist these values in the cookie
-            goalAchieved: false  // we dont persist these values in the cookie
+            // we dont persist the rest of the values in the cookie
+            details: "",
+            detailsPlain: "",
+            goalAchieved: false
         };
     }
 
@@ -175,6 +181,7 @@ export class SprintGoal {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabelCheckbox").prop("checked"),
             goal: $("#goalInput").val(),
             details: this.editor.getContent(),
+            detailsPlain: this.editor.getTextContent(),
             goalAchieved: $("#achievedCheckbox").prop("checked")
         };
 
@@ -184,7 +191,7 @@ export class SprintGoal {
             }
         }
 
-        var configIdentifierWithTeam: string = this.getConfigKey(this.iterationId, this.teamId);
+        var configIdentifierWithTeam: string = this.helpers.getConfigKey(this.iterationId, this.teamId);
 
         this.updateSprintGoalCookie(configIdentifierWithTeam, sprintConfig);
 
@@ -207,7 +214,7 @@ export class SprintGoal {
         var cookieSupport = this.checkCookie();
 
         if (forceReload || !currentGoalInCookie || !cookieSupport) {
-            var configIdentifierWithTeam = this.getConfigKey(this.iterationId, this.teamId);
+            var configIdentifierWithTeam = this.helpers.getConfigKey(this.iterationId, this.teamId);
 
             var teamGoal = await this.fetchSettingsFromExtensionDataService(configIdentifierWithTeam);
             if (teamGoal) {
@@ -241,10 +248,6 @@ export class SprintGoal {
             });
     }
 
-    private getConfigKey = (iterationId: string, teamId: string) => {
-        // https://github.com/Microsoft/vss-web-extension-sdk/issues/75
-        return iterationId.toString().substring(0, 15) + teamId.toString().substring(0, 15)
-    }
 
     private updateSprintGoalCookie = (key: string, sprintGoal: SprintGoalDto) => {
         this.setCookie(key + "goalText", sprintGoal.goal);
@@ -308,22 +311,6 @@ export class SprintGoal {
         }
         console.log(message)
     }
-
-    public toggleTelemetry = (sender: HTMLSpanElement) => {
-        VSS.getService(VSS.ServiceIds.ExtensionData).then((dataService: ExtensionDataService) => {
-            dataService.getValue<boolean>("telemetryOptOut").then((telemetryOptOut) => {
-                return telemetryOptOut;
-            }, () => {
-                return false;
-            }).then((currentOptOut) => {
-                var text = !currentOptOut ? "Telemetry now disabled" : "Telemetry now enabled"
-                dataService.setValue("telemetryOptOut", !currentOptOut);
-                sender.innerText = text;
-                this.ai.unload();
-            });
-        })
-
-    }
 }
 
 export declare class EmojiPicker {
@@ -335,4 +322,5 @@ export class SprintGoalDto {
     public sprintGoalInTabLabel: boolean;
     public goalAchieved: boolean;
     public details: string;
+    public detailsPlain: string;
 }
