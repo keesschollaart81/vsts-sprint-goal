@@ -48,7 +48,6 @@ export class SprintGoal {
 
                 this.buildMenuBar();
 
-                (<HTMLAnchorElement>document.getElementById("projectadminlink")).href = this.getAdminPageUri();
 
                 ai.trackPageView(document.title);
             }
@@ -110,7 +109,8 @@ export class SprintGoal {
 
     private buildMenuBar = () => {
         var menuItems: Menus.IMenuItemSpec[] = [
-            { id: "save", text: "Save", icon: "icon-save" }
+            { id: "save", text: "Save", icon: "icon-save" },
+            { id: "settings", text: "Settings", icon: "icon-settings" }
         ];
         var menubarOptions: Menus.MenuOwnerOptions = {
             items: menuItems,
@@ -120,8 +120,13 @@ export class SprintGoal {
                     case "save":
                         this.saveSettings().then(() => {
                             VSS.getService(VSS.ServiceIds.Navigation).then((navigationService: IHostNavigationService) => {
-                                navigationService.reload();
+                                navigationService.reload()
                             });
+                        });
+                        break;
+                    case "settings":
+                        VSS.getService(VSS.ServiceIds.Navigation).then((navigationService: IHostNavigationService) => {
+                            navigationService.navigate(this.getAdminPageUri())
                         });
                         break;
                     default:
