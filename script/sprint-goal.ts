@@ -74,7 +74,7 @@ export class SprintGoal {
 
         if (extensionId.indexOf("-dev") >= 0) env = "-dev";
         if (extensionId.indexOf("-acc") >= 0) env = "-acc";
-        var uri = webContext.host.uri + "/" + webContext.project.name + "_settings/keesschollaart.sprint-goal" + env + ".SprintGoalWidget.Admin";
+        var uri = webContext.host.uri + webContext.project.name + "/_settings/keesschollaart.sprint-goal" + env + ".SprintGoalWidget.Admin";
 
         return uri;
     }
