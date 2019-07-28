@@ -47,7 +47,7 @@ export class SprintGoalAdmin {
 
     private setTelemetryOptOut = async (value: boolean): Promise<void> => {
         var dataService = <ExtensionDataService>await VSS.getService(VSS.ServiceIds.ExtensionData);
-        dataService.setValue("telemetryOptOut", !value);
+        await dataService.setValue("telemetryOptOut", !!value);
     }
 
     private exportButtonClick = async (): Promise<void> => {

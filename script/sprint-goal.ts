@@ -7,6 +7,7 @@ import EmojiPicker = require("vanilla-emoji-picker");
 import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 import { Helpers } from "./helpers"
+import { RunningDocumentsTable } from "VSS/Events/Document";
 
 export class SprintGoal {
     private iterationId: string;
@@ -47,6 +48,8 @@ export class SprintGoal {
 
                 this.buildMenuBar();
 
+                (<HTMLAnchorElement>document.getElementById("projectadminlink")).href = this.getAdminPageUri();
+
                 ai.trackPageView(document.title);
             }
 
@@ -62,6 +65,18 @@ export class SprintGoal {
         catch (e) {
             if (this.ai) this.ai.trackException(e);
         }
+    }
+
+    private getAdminPageUri = (): string => {
+        var webContext = VSS.getWebContext();
+        var extensionId = VSS.getExtensionContext().extensionId;
+        var env = ""
+
+        if (extensionId.indexOf("-dev") >= 0) env = "-dev";
+        if (extensionId.indexOf("-acc") >= 0) env = "-acc";
+        var uri = webContext.host.uri + "/" + webContext.project.name + "_settings/keesschollaart.sprint-goal" + env + ".SprintGoalWidget.Admin";
+
+        return uri;
     }
 
     private buildWaitControl = () => {

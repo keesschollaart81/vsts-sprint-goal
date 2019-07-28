@@ -104,9 +104,10 @@
             color: #e0e0e0;
             font-size: 10px;
             padding: 0px;
+            padding-left: 16px;
         }
 
-        .goal .footer a {
+        .footer a {
             color: #e0e0e0 !important;
             text-decoration: underline !important;
         }
@@ -136,6 +137,11 @@
             text-decoration: underline;
             color: #e0e0e0;
         }
+
+        .goalInputContainer>div>a {
+            top: 8px !important;
+            right: 7px !important;
+        }
     </style>
 </head>
 
@@ -144,7 +150,7 @@
         <div class="toolbar"></div>
         <div id="vss-extension">
 
-            <div class="form-group">
+            <div class="form-group goalInputContainer">
                 <label for="goalInput">Goal for this sprint</label>
                 <input type="text" class="form-control" name="goal" id="goalInput" data-emoji-picker="true">
             </div>
@@ -171,6 +177,8 @@
 
             <div class="form-group">
                 <label for="detailsText">Details</label>
+                <small style="color:gray; margin-bottom:4px; display: block;">Use ctrl+b, ctrl+u and ctrl+i for
+                    formatting. Also lists are automatically formatted</small>
                 <div id="detailsText"></div>
             </div>
 
@@ -178,7 +186,8 @@
 
         <p class="footer">Experiencing problems, or do you have an idea? Please let me know via
             <a href="https://twitter.com/keesschollaart" target="_blank">Twitter</a> or by
-            <a href="mailto:keesschollaart81@hotmail.com">mail</a>.</p>
+            <a href="mailto:keesschollaart81@hotmail.com">mail</a>
+           <a href="#" id="projectadminlink">project admin</a>.</p>
     </div>
 </body>
 
