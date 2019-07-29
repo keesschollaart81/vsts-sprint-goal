@@ -291,7 +291,7 @@ export class SprintGoal {
         this.editor = RoosterJs.createEditor(editorDiv);
         if (!sprintGoal) {
             $("#sprintGoalInTabLabelCheckbox").prop("checked", false);
-            $("#achievedCheckbox").prop("checked", true);
+            $("#achievedCheckbox").prop("checked", false);
             $("#goalInput").val("");
         }
         else {

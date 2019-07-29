@@ -63,6 +63,7 @@ export class SprintGoalAdmin {
         var collectionClient = VSS_Service.getCollectionClient(Tfs_Core_WebApi.CoreHttpClient4);
         var teams = await collectionClient.getTeams(project.id);
 
+        var keysToDownload : { [key:string]: { teamId: string, teamName: string }} = {};
         for (var j = 0; j < teams.length; j++) {
             let team = teams[j];
             var teamContext: contract.TeamContext = {
@@ -76,28 +77,35 @@ export class SprintGoalAdmin {
             for (var i = 0; i < iterations.length; i++) {
                 var iteration = iterations[i];
                 var configKey = this.helpers.getConfigKey(iteration.id, team.id);
-                try {
-                    var goal = <SprintGoalDto>await dataService.getValue("sprintConfig." + configKey);
-                    result.push({
-                        details: goal.details,
-                        detailsPlain: goal.detailsPlain,
-                        goal: goal.goal,
-                        goalAchieved: goal.goalAchieved,
-                        sprintGoalInTabLabel: goal.sprintGoalInTabLabel,
-                        iterationId: iteration.id,
-                        iterationName: iteration.name,
-                        teamId: team.id,
-                        teamName: team.name,
-                        projectId: project.id,
-                        projectName: project.name
-                    });
-                }
-                catch{
-                    console.log(`No goal for team: ${team.id}, iteration: ${iteration.id}`);
-                }
-            }
+                keysToDownload["sprintConfig." + configKey] = {
+                    teamId: team.id,
+                    teamName: team.name
+                };
+            } 
         }
 
+        try {
+            var goals = <{ [key: string]: SprintGoalDto}>await dataService.getValues(Object.keys(keysToDownload));
+            for(let key in goals){
+                result.push({
+                    details: goals[key].details,
+                    detailsPlain: goals[key].detailsPlain,
+                    goal: goals[key].goal,
+                    goalAchieved: goals[key].goalAchieved,
+                    sprintGoalInTabLabel: goals[key].sprintGoalInTabLabel,
+                    iterationId: iteration.id,
+                    iterationName: iteration.name,
+                    teamId: keysToDownload[key].teamId,
+                    teamName: keysToDownload[key].teamName,
+                    projectId: project.id,
+                    projectName: project.name
+                });
+            } 
+            
+        }
+        catch{
+            console.log(`No goal for iteration: ${iteration.id}`);
+        }
         this.download("goals.json", JSON.stringify(result));
 
         this.exportButton.disabled = false;
