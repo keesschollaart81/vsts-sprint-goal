@@ -12,7 +12,7 @@ import { RunningDocumentsTable } from "VSS/Events/Document";
 export class SprintGoal {
     private iterationId: string;
     private teamId: string;
-    private storageUri: string;
+    private storageUri: HTMLAnchorElement;
     private waitControl: StatusIndicator.WaitControl;
     private editor: RoosterJs.Editor;
     private helpers: Helpers;
@@ -22,7 +22,7 @@ export class SprintGoal {
             this.helpers = new Helpers();
 
             var context = VSS.getExtensionContext();
-            this.storageUri = this.getLocation(context.baseUri).hostname;
+            this.storageUri = this.getLocation(context.baseUri);
 
             var webContext = VSS.getWebContext();
             this.log('TeamId:' + webContext.team.id);
@@ -153,14 +153,18 @@ export class SprintGoal {
             this.log("getTabTitle: Sprint goal net yet loaded in cookie, getting it async...");
             try {
                 var settings = await this.getSettings(true);
-                return "Goal: " + settings.goal;
+                if (settings.goal && settings.goal != "") {
+                    return "Goal: " + settings.goal;
+                } else {
+                    return "Goal";
+                }
             }
             catch{
                 return "Goal";
             }
         }
 
-        if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null) {
+        if (sprintGoalCookie && sprintGoalCookie.sprintGoalInTabLabel && sprintGoalCookie.goal != null && sprintGoalCookie.goal != "") {
             this.log("getTabTitle: loaded title from cookie");
             return "Goal: " + sprintGoalCookie.goal;
         }
@@ -206,9 +210,10 @@ export class SprintGoal {
         };
 
         if (this.ai) {
-            if (sprintConfig.goal.substr(0, 1) != "!") {
-                await this.ai.trackEvent("SaveSettings", <any>sprintConfig);
-            }
+            await this.ai.trackEvent("SaveSettings", <any>{
+                sprintGoalInTabLabel: sprintConfig.sprintGoalInTabLabel,
+                detailsUsed: `${this.editor.getTextContent()}`.length > 10
+            });
         }
 
         var configIdentifierWithTeam: string = this.helpers.getConfigKey(this.iterationId, this.teamId);
@@ -306,7 +311,7 @@ export class SprintGoal {
     public setCookie = (key, value) => {
         var expires = new Date();
         expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=' + this.storageUri + ';path=/';
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';domain=' + this.storageUri.hostname + ';path=/';
     }
 
     public getCookie(key) {
@@ -323,7 +328,7 @@ export class SprintGoal {
     private log = (message: string, object: any = null) => {
         if (!window.console) return;
 
-        if (this.storageUri.indexOf('dev') === -1 && this.storageUri.indexOf('acc') === -1) return;
+        if (this.storageUri.href.indexOf('dev') === -1 && this.storageUri.href.indexOf('acc') === -1) return;
 
         if (object) {
             console.log(message, object);
