@@ -30,7 +30,7 @@
   "dependencies": {
     "applicationinsights-js": "1.0.20",
     "jscolor-picker": "2.0.4",
-    "moment": "2.23.0",
+    "moment": "2.24.0",
     "moment-timezone": "0.5.23",
     "roosterjs": "^7.4.1",
     "tinycolor2": "1.4.1",
