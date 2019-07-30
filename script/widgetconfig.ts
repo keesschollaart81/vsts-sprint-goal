@@ -5,10 +5,9 @@ import jscolor = require("jscolor-picker")
 
 VSS.require(["TFS/Dashboards/WidgetHelpers"], function (WidgetHelpers) {
     WidgetHelpers.IncludeWidgetConfigurationStyles();
+    var sprintGoalWidgetConfiguration = new SprintGoalWidgetConfiguration(WidgetHelpers, new SprintGoalApplicationInsightsWrapper());
 
-    VSS.register("SprintGoalWidget.Configuration", function () {
-        return new SprintGoalWidgetConfiguration(WidgetHelpers, new SprintGoalApplicationInsightsWrapper());
-    });
+    VSS.register("SprintGoalWidget.Configuration", () => sprintGoalWidgetConfiguration);
     VSS.notifyLoadSucceeded();
 });
 
@@ -44,12 +43,14 @@ export class SprintGoalWidgetConfiguration implements IWidgetConfiguration {
                 }
             });
 
-            jscolor.installByClassName("jscolor"); 
+            jscolor;
+            window["jscolor"].installByClassName("jscolor"); 
 
             return this.WidgetHelpers.WidgetStatusHelper.Success();
         }
         catch (e) {
             await this.ai.trackException(e);
+            return this.WidgetHelpers.WidgetStatusHelper.Failure(e.message); 
         }
     }
 
