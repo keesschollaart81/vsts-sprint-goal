@@ -15,7 +15,7 @@
   },
   "author": "Case Online",
   "devDependencies": {
-    "@types/q": "0.0.32",
+    "@types/q": "1.5.2",
     "@types/applicationinsights-js": "1.0.9",
     "@types/tinycolor": "1.1.27",
     "ncp": "2.0.0",
