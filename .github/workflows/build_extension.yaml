@@ -20,4 +20,5 @@ jobs:
       run: | 
         npm install
         npm run build
+        npm install -g tfx-cli
         tfx extension create 
