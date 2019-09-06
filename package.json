@@ -35,6 +35,6 @@
     "roosterjs": "^7.4.1",
     "tinycolor2": "1.4.1",
     "vanilla-emoji-picker": "^0.2.4",
-    "vss-web-extension-sdk": "5.140.0"
+    "vss-web-extension-sdk": "5.141.0"
   }
 }
