@@ -1,4 +1,3 @@
-import Q = require("q");
 import * as RoosterJs from 'roosterjs';
 import Controls = require("VSS/Controls");
 import Menus = require("VSS/Controls/Menus");
@@ -7,7 +6,6 @@ import EmojiPicker = require("vanilla-emoji-picker");
 import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 import { SprintGoalApplicationInsightsWrapper } from "./SprintGoalApplicationInsightsWrapper";
 import { Helpers } from "./helpers"
-import { RunningDocumentsTable } from "VSS/Events/Document";
 
 export class SprintGoal {
     private iterationId: string;

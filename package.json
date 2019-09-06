@@ -17,21 +17,21 @@
   "devDependencies": {
     "@types/applicationinsights-js": "1.0.9",
     "@types/tinycolor": "1.1.27",
-    "copy-webpack-plugin": "4.6.0",
     "cpx": "1.5.0",
     "ncp": "2.0.0",
     "rimraf": "3.0.0",
-    "tfx-cli": "0.6.4",
     "typescript": "3.0.3",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "webpack-cli": "^3.3.8",
+    "tfx-cli": "0.7.9",
+    "copy-webpack-plugin": "5.0.4"
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "2.2.2",
     "applicationinsights-js": "1.0.20",
     "jscolor-picker": "2.0.4",
     "moment": "2.24.0",
-    "moment-timezone": "0.5.23",
+    "moment-timezone": "0.5.26",
     "roosterjs": "^7.4.1",
     "tinycolor2": "1.4.1",
     "vanilla-emoji-picker": "^0.2.4",
