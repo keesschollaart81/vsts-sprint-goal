@@ -27,7 +27,7 @@
     "copy-webpack-plugin": "5.0.4"
   },
   "dependencies": {
-    "@microsoft/applicationinsights-web": "2.2.2",
+    "@microsoft/applicationinsights-web": "2.4.4",
     "applicationinsights-js": "1.0.20",
     "jscolor-picker": "2.0.4",
     "moment": "2.24.0",
