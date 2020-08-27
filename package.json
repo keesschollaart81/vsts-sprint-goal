@@ -23,7 +23,7 @@
     "typescript": "3.0.3",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
-    "tfx-cli": "0.7.9",
+    "tfx-cli": "0.8.2",
     "copy-webpack-plugin": "5.0.4"
   },
   "dependencies": {
