@@ -22,7 +22,7 @@
     "rimraf": "3.0.0",
     "typescript": "3.0.3",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
+    "webpack-cli": "^4.3.1",
     "tfx-cli": "0.7.9",
     "copy-webpack-plugin": "5.0.4"
   },
