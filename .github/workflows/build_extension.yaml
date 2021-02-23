@@ -30,7 +30,7 @@ jobs:
     - name: Create [prd] Extension
       if: github.ref == 'refs/heads/master'
       run: | 
-        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ "name": "Sprint Goal" }'
+        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ "name": "Sprint Goal", "public": true }'
 
     - name: Publish Extension
       env: 
