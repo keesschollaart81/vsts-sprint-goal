@@ -1,0 +1,39 @@
+name: AzD Extension
+
+on: [ push ]
+
+jobs:
+  vscode-extension:
+    name: AzD Extension
+    runs-on: ubuntu-latest 
+
+    steps:
+    
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x 
+
+    - name: NPM Install & Compile
+      run: | 
+        npm install
+        npm run build
+        npm install -g tfx-cli
+
+    - name: Create [dev] Extension
+      if: github.ref == 'refs/heads/develop'
+      run: | 
+        tfx extension create --output-path sprint-goal.vsix
+    
+    - name: Create [prd] Extension
+      if: github.ref == 'refs/heads/master'
+      run: | 
+        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ "name": "Sprint Goal" }'
+
+    - name: Publish Extension
+      env: 
+        AZD_TOKEN: ${{ secrets.AZD_TOKEN }}
+      run: | 
+        tfx extension publish --vsix sprint-goal.vsix --service-url https://marketplace.visualstudio.com --token $AZD_TOKEN

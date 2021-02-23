@@ -23,16 +23,14 @@ module.exports = {
     /^VSS\/.*/, /^TFS\/.*/, /^q$/
   ],
   plugins: [
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin({
+      patterns:[
       { from: "./node_modules/moment/min/moment.min.js", to: "moment.js" },
       { from: "./node_modules/jscolor-picker/jscolor.min.js", to: "jscolor.min.js" },
       { from: "./node_modules/vss-web-extension-sdk/lib/VSS.SDK.min.js", to: "VSS.SDK.js" },
       { from: './static', to: path.resolve(__dirname, 'dist', 'widget') }
-    ])
+    ]})
   ],
-  node: {
-    fs: 'empty'
-  },
   resolve: {
     extensions: ['.js', '.css', '.scss'],
     alias: {

@@ -12,6 +12,11 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ## Release notes
 
+### Version 5.2 - 23-02-2021
+
+- Updated all dependencies / security patches
+- Fix for dark theme
+
 ### Version 5.0 - 29-07-2019
 
 - Rich Text field for detailed goal description
