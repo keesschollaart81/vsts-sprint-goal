@@ -21,4 +21,18 @@ jobs:
         npm install
         npm run build
         npm install -g tfx-cli
-        tfx extension create 
+        tfx login  --service-url https://marketplace.visualstudio.com --token $(AZD_TOKEN)
+
+    - name: Create [dev] Extension
+      if: github.ref == 'refs/heads/develop'
+      run: | 
+        tfx extension create
+    
+    - name: Create [prd] Extension
+      if: github.ref == 'refs/heads/master'
+      run: | 
+        tfx extension create --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
+
+    - name: Publish Extension
+      run: | 
+        tfx extension publish
