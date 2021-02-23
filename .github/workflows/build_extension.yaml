@@ -30,12 +30,12 @@ jobs:
         npm install -g tfx-cli
 
     - name: Create [dev] Extension
-      if: github.ref == 'refs/heads/develop'
+      if: github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'
       run: | 
         tfx extension create --output-path sprint-goal.vsix
     
     - name: Create [prd] Extension
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
       run: | 
         tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
 
