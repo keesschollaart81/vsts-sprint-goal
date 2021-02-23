@@ -1,13 +1,6 @@
 name: AzD Extension
 
-on:
-  push:
-    branches:
-    - master
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-    - master
+- on: [ push, pull_request]
 
 jobs:
   vscode-extension:
@@ -30,14 +23,14 @@ jobs:
         npm install -g tfx-cli
 
     - name: Create [dev] Extension
-      if: github.ref == 'refs/heads/develop' || github.event.pull_request.base.ref == 'develop'
+      if: github.ref == 'refs/heads/develop'
       run: | 
         tfx extension create --output-path sprint-goal.vsix
     
     - name: Create [prd] Extension
-      if: github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
+      if: github.ref == 'refs/heads/master'
       run: | 
-        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
+        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ "name": "Sprint Goal" }'
 
     - name: Publish Extension
       env: 
