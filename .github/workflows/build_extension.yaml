@@ -1,6 +1,6 @@
 name: AzD Extension
 
-- on: [ push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   vscode-extension:
