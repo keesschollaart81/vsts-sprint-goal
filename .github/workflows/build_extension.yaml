@@ -43,5 +43,7 @@ jobs:
         tfx extension create --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
 
     - name: Publish Extension
+      env: # Set the secret as an input
+        AZD_TOKEN: ${{ secrets.AZD_TOKEN }}
       run: | 
         tfx extension publish --service-url https://marketplace.visualstudio.com --token $AZD_TOKEN
