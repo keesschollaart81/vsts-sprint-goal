@@ -12,7 +12,7 @@ export class SprintGoal {
     private teamId: string;
     private storageUri: HTMLAnchorElement;
     private waitControl: StatusIndicator.WaitControl;
-    private editor: RoosterJs.Editor;
+    private editor: RoosterJs.IEditor;
     private helpers: Helpers;
 
     constructor(private ai: SprintGoalApplicationInsightsWrapper) {
@@ -203,14 +203,14 @@ export class SprintGoal {
             sprintGoalInTabLabel: $("#sprintGoalInTabLabelCheckbox").prop("checked"),
             goal: $("#goalInput").val(),
             details: this.editor.getContent(),
-            detailsPlain: this.editor.getTextContent(),
+            detailsPlain: this.editor.getContent(RoosterJs.GetContentMode.PlainText),
             goalAchieved: $("#achievedCheckbox").prop("checked")
         };
 
         if (this.ai) {
             await this.ai.trackEvent("SaveSettings", <any>{
                 sprintGoalInTabLabel: sprintConfig.sprintGoalInTabLabel,
-                detailsUsed: `${this.editor.getTextContent()}`.length > 10
+                detailsUsed: `${this.editor.getContent(RoosterJs.GetContentMode.PlainText)}`.length > 10
             });
         }
 
