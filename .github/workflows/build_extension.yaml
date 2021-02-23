@@ -17,11 +17,13 @@ jobs:
         node-version: 12.x 
 
     - name: NPM Install & Compile
+      with: # Set the secret as an input
+        AZD_TOKEN: ${{ secrets.AZD_TOKEN }}
       run: | 
         npm install
         npm run build
         npm install -g tfx-cli
-        tfx login  --service-url https://marketplace.visualstudio.com --token $(AZD_TOKEN)
+        tfx login  --service-url https://marketplace.visualstudio.com --token $AZD_TOKEN
 
     - name: Create [dev] Extension
       if: github.ref == 'refs/heads/develop'
