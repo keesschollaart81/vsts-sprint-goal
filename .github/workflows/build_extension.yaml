@@ -35,15 +35,15 @@ jobs:
     - name: Create [dev] Extension
       if: github.ref == 'refs/heads/develop'
       run: | 
-        tfx extension create
+        tfx extension create --output-path sprint-goal.vsix
     
     - name: Create [prd] Extension
       if: github.ref == 'refs/heads/master'
       run: | 
-        tfx extension create --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
+        tfx extension create --output-path sprint-goal.vsix --extension-id sprint-goal --override '{ \"name\": \"Sprint Goal\" }'
 
     - name: Publish Extension
       env: # Set the secret as an input
         AZD_TOKEN: ${{ secrets.AZD_TOKEN }}
       run: | 
-        tfx extension publish --service-url https://marketplace.visualstudio.com --token $AZD_TOKEN
+        tfx extension publish --vsix sprint-goal.vsix --service-url https://marketplace.visualstudio.com --token $AZD_TOKEN
