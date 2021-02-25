@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "2.5.11",
-    "applicationinsights-js": "1.0.20",
+    "applicationinsights-js": "1.0.21",
     "jscolor-picker": "2.0.4",
     "moment": "2.29.1",
     "moment-timezone": "0.5.33",
