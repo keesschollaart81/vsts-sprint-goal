@@ -32,7 +32,7 @@
     "jscolor-picker": "2.0.4",
     "moment": "2.29.1",
     "moment-timezone": "0.5.33",
-    "roosterjs": "^8.0.1",
+    "roosterjs": "^8.2.7",
     "tinycolor2": "1.4.2",
     "vanilla-emoji-picker": "^0.2.4",
     "vss-web-extension-sdk": "5.141.0"
