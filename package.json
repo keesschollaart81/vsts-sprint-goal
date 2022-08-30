@@ -31,7 +31,7 @@
     "applicationinsights-js": "1.0.20",
     "jscolor-picker": "2.0.4",
     "moment": "2.29.1",
-    "moment-timezone": "0.5.33",
+    "moment-timezone": "0.5.35",
     "roosterjs": "^8.0.1",
     "tinycolor2": "1.4.2",
     "vanilla-emoji-picker": "^0.2.4",
