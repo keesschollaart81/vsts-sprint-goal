@@ -18,7 +18,7 @@
     "@types/applicationinsights-js": "^1.0.9",
     "@types/tinycolor2": "^1.4.3",
     "copy-webpack-plugin": "^7.0.0",
-    "cpx": "^1.5.0",
+    "cpx2": "^4.2.0",
     "ncp": "^2.0.0",
     "rimraf": "^3.0.2",
     "tfx-cli": "^0.12.0",
