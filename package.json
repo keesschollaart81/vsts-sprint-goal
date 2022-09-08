@@ -16,7 +16,7 @@
   "author": "Case Online",
   "devDependencies": {
     "@types/applicationinsights-js": "^1.0.9",
-    "@types/tinycolor": "^1.1.27",
+    "@types/tinycolor2": "^1.4.3",
     "copy-webpack-plugin": "^7.0.0",
     "cpx": "^1.5.0",
     "ncp": "^2.0.0",
