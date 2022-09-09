@@ -2,8 +2,8 @@
     "manifestVersion": 1,
     "id": "sprint-goal-dev",
     "name": "Sprint Goal Dev",
-    "version": "5.2.3",
-    "publisher": "keesschollaart",
+    "version": "5.2.6",
+    "publisher": "pabramshrsdc",
     "public": false,
     "helpMarkDown": "[More Information](https://github.com/keesschollaart81/vsts-sprint-goal)",
     "targets": [
@@ -13,7 +13,7 @@
     ],
     "description": "This extension enables you to set a sprint goal",
     "categories": [
-        "Plan and track"
+        "Azure Boards"
     ],
     "tags": [
         "sprint",
