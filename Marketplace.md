@@ -12,6 +12,10 @@ After setting the goal, the goal will be shown in the tab-label on every page wi
 
 ## Release notes
 
+### Version 6.0 - 16-02-2025
+
+- Updated all dependencies / security patches
+
 ### Version 5.2 - 23-02-2021
 
 - Updated all dependencies / security patches

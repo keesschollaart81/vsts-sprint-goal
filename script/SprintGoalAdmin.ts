@@ -2,7 +2,6 @@ import { ExtensionDataService } from "VSS/SDK/Services/ExtensionData";
 import * as VSS_Service from "VSS/Service";
 import * as Tfs_Core_WebApi from "TFS/Core/RestClient";
 import * as Tfs_Work_WebApi from "TFS/Work/RestClient";
-import { TcmHttpClient } from "TFS/TestManagement/VSS.Tcm.WebApi";
 
 import * as contract from "TFS/Core/Contracts"
 import { Helpers } from "./helpers";

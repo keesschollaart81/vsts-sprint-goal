@@ -17,23 +17,24 @@
   "devDependencies": {
     "@types/applicationinsights-js": "1.0.9",
     "@types/tinycolor": "1.1.27",
-    "cpx": "1.5.0",
+    "copy-webpack-plugin": "12.0.2",
+    "cpx": "^1.2.1",
     "ncp": "2.0.0",
-    "rimraf": "3.0.2",
-    "typescript": "4.1.5",
-    "webpack": "^5.24.0",
-    "webpack-cli": "^4.5.0",
-    "tfx-cli": "0.8.3",
-    "copy-webpack-plugin": "7.0.0"
+    "rimraf": "6.0.1",
+    "tfx-cli": "^0.20.0",
+    "typescript": "5.7.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "6.0.1"
   },
   "dependencies": {
-    "@microsoft/applicationinsights-web": "2.5.11",
-    "applicationinsights-js": "1.0.20",
+    "@microsoft/applicationinsights-web": "3.3.5",
+    "applicationinsights-js": "1.0.21",
     "jscolor-picker": "2.0.4",
-    "moment": "2.29.1",
-    "moment-timezone": "0.5.33",
-    "roosterjs": "^8.0.1",
-    "tinycolor2": "1.4.2",
+    "moment": "2.30.1",
+    "moment-timezone": "0.5.47",
+    "roosterjs": "9.19.0",
+    "roosterjs-editor-adapter": "^8.63.2",
+    "tinycolor2": "1.6.0",
     "vanilla-emoji-picker": "^0.2.4",
     "vss-web-extension-sdk": "5.141.0"
   }
