@@ -306,6 +306,7 @@ export class SprintGoal {
 
             this.editor.setContent(sprintGoal.details);
         }
+        editorDiv.style.backgroundColor = "";
     }
 
     public setCookie = (key, value) => {
